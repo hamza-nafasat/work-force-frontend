@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import logo from "../../assets/images/logo/logo.png";
 import loginImg from "../../assets/images/login/login-img.png";
 import formImg from "../../assets/images/login/form-img.png";
@@ -14,9 +14,7 @@ const ForgetPassword = () => {
         <div className="px-[24px]">
           <div className="flex items-center justify-start md:gap-4">
             <img src={logo} alt="logo" className="w-[60px] md:w-[90px]" />
-            <h2 className="text-lg md:text-[30px] font-semibold text-white">
-              Workforce Ease
-            </h2>
+            <h2 className="text-lg md:text-[30px] font-semibold text-white">Workforce Ease</h2>
           </div>
           <h1 className="my-4 text-white font-semibold text-2xl md:text3xl lg:text-[50px] leading-none lg:leading-[65px] text-center md:text-left">
             Forget Password!
@@ -26,11 +24,7 @@ const ForgetPassword = () => {
           </p>
         </div>
         <div className="mt-12">
-          <img
-            src={loginImg}
-            alt="login image"
-            className="max-w-[100%] w-[600px]"
-          />
+          <img src={loginImg} alt="login image" className="max-w-[100%] w-[600px]" />
         </div>
       </div>
       <div className="bg-white relative my-[24px] lg:my-[90px] 2xl:my-[100px]">
@@ -41,7 +35,15 @@ const ForgetPassword = () => {
           <form className="mt-6 md:mt-[50px] w-full">
             <Input label="Email Address" type="email" id="email" />
             <div className="mt-4 md:mt-[50px]">
-                <Button type="submit" text="Send" bg="#e75d50" radius="14px" size="text-sm md:text-md" weight="500" mt="50" />
+              <Button
+                type="submit"
+                text="Send"
+                bg="#e75d50"
+                radius="14px"
+                size="text-sm md:text-md"
+                weight="500"
+                mt="50"
+              />
             </div>
           </form>
           <div className="mt-4 md:mt-[50px] flex justify-end items-end grow">
@@ -50,7 +52,7 @@ const ForgetPassword = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ForgetPassword
+export default ForgetPassword;
