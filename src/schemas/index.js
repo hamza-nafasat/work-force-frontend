@@ -9,12 +9,8 @@ export const usersSchema = Yup.object({
   gender: Yup.string().required("Gender is required"),
   profession: Yup.string().required("Profession is required"),
   workingStatus: Yup.string().required("Working Status is required"),
-  workingHoursStartTime: Yup.string().required(
-    "Working hours start time is required"
-  ),
-  workingHoursEndTime: Yup.string().required(
-    "Working hours end time is required"
-  ),
+  workingHoursStartTime: Yup.string().required("Working hours start time is required"),
+  workingHoursEndTime: Yup.string().required("Working hours end time is required"),
   image: Yup.mixed().required("Image is required"),
 });
 
@@ -30,9 +26,7 @@ export const projectSchema = Yup.object({
 export const vehicleSchema = Yup.object({
   vehicleName: Yup.string().required("Vehicle Name is required"),
   brand: Yup.string().required("Brand Name is required"),
-  identificationNumber: Yup.string().required(
-    "Identification Number is required"
-  ),
+  identificationNumber: Yup.string().required("Identification Number is required"),
   licensePlateNumber: Yup.string().required("License Plate Number is required"),
   project: Yup.string().required("Project is required"),
   color: Yup.string().required("Color is required"),
