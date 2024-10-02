@@ -1,7 +1,7 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit/react";
 import authApis from "./api/authApi";
-import authReducer from "./reducer/authReducer";
 import labourApis from "./api/labourApi";
+import authReducer from "./reducer/authReducer";
 
 const store = configureStore({
   reducer: {
