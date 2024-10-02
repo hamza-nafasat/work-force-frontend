@@ -8,24 +8,7 @@ import { useFormik } from "formik";
 import { usersSchema } from "../../../schemas";
 import { useAddLabourMutation } from "../../../redux/api/labourApi";
 import { toast } from "react-toastify";
-
-const workingStatusOptions = [
-  { option: "On leave", value: "on-leave" },
-  { option: "Working", value: "working" },
-];
-const professionOptions = [
-  { option: "Supervisor", value: "supervisor" },
-  { option: "Labour", value: "labour" },
-];
-const genderOptions = [
-  { option: "Male", value: "male" },
-  { option: "Female", value: "female" },
-];
-const nationalityOptions = [
-  { option: "Saudi Arabia", value: "saudi-arabia" },
-  { option: "Pakistan", value: "pakistan" },
-  { option: "UAE", value: "uae" },
-];
+import { genderOptions, nationalityOptions, professionOptions, workingStatusOptions } from "./option";
 
 const AddUser = ({ onClose, refetch }) => {
   const [imgSrc, setImgSrc] = useState(null);

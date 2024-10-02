@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChevronIcon from "../../../assets/svgs/vehicles/ChevronIcon";
 
-const Dropdown = ({ options, defaultText = "Select", onSelect }) => {
+const Dropdown = ({ options, defaultText = "Select", onSelect, initialValue }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const dropdownRef = useRef(null);

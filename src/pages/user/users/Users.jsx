@@ -53,10 +53,10 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
         <div className="cursor-pointer" onClick={() => navigate(`/user/users/${row.id}`)}>
           <IoEye fontSize={18} style={{ marginTop: "4px" }} />
         </div>
-        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler()}>
+        <div className="cursor-pointer" onClick={() => deleteHandler(row.id)}>
           <DeleteIcon />
         </div>
       </div>
@@ -67,12 +67,16 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
 const Users = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState({});
   const [usersData, setUsersData] = useState([]);
   const { data, isSuccess, isLoading, refetch } = useGetAllLaboursQuery("");
   const navigate = useNavigate();
 
   console.log(data);
-  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalOpenHandler = (modalType, row = false) => {
+    setModal(modalType);
+    if (row) setSelectedRow(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
   const deleteHandler = () => {
@@ -103,6 +107,8 @@ const Users = () => {
         profession: user.profession,
         status: user.status,
         workingHour: `${user.workingHour.startTime} To ${user.workingHour.endTime}`,
+        startTime: user.workingHour.startTime,
+        endTime: user.workingHour.endTime,
         phoneNumber: user.phoneNumber,
         dateOfBirth: user.dateOfBirth,
         passportOrId: user.passportOrID,
@@ -152,7 +158,7 @@ const Users = () => {
       )}
       {modal === "edit" && (
         <Modal title="Edit User" onClose={modalCloseHandler}>
-          <EditUser onClose={modalCloseHandler} />
+          <EditUser selectedRow={selectedRow} refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

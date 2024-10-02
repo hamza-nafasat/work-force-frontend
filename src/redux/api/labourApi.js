@@ -38,7 +38,7 @@ const labourApis = createApi({
     // ------------
     updateLabour: builder.mutation({
       query: ({ LabourId, data }) => ({
-        url: `/update/${LabourId}`,
+        url: `/single/${LabourId}`,
         method: "PUT",
         body: data,
       }),

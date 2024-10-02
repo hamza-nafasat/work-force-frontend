@@ -1,20 +1,23 @@
-import React, { useState } from "react";
-import Input from "../../../components/auth/Input";
-import Dropdown from "../../../components/shared/dropdown/Dropdown";
-import profileImg from "../../../assets/images/header/profilepic.webp";
-import Button from "../../../components/shared/button/Button";
-import { IoCamera } from "react-icons/io5";
 import { useFormik } from "formik";
-import { usersSchema } from "../../../schemas";
+import React, { useState } from "react";
+import { IoCamera } from "react-icons/io5";
+import profileImg from "../../../assets/images/header/profilepic.webp";
+import Input from "../../../components/auth/Input";
+import Button from "../../../components/shared/button/Button";
+import Dropdown from "../../../components/shared/dropdown/Dropdown";
+import { useUpdateLabourMutation } from "../../../redux/api/labourApi";
+import { genderOptions, nationalityOptions, professionOptions, workingStatusOptions } from "./option";
+import { toast } from "react-toastify";
 
-const EditUser = ({ onClose }) => {
-  const [imgSrc, setImgSrc] = useState(null);
+const EditUser = ({ selectedRow, refetch, onClose }) => {
+  const [updateLabour, { isLoading }] = useUpdateLabourMutation();
+  const [imgSrc, setImgSrc] = useState(selectedRow?.profilePhoto);
 
   // Handlers for dropdown selections
-  const nationalitySelectHandler = (option) => setFieldValue("nationality", option.option);
-  const genderSelectHandler = (option) => setFieldValue("gender", option.option);
-  const professionSelectHandler = (option) => setFieldValue("profession", option.option);
-  const workingStatusSelectHandler = (option) => setFieldValue("workingStatus", option.option);
+  const nationalitySelectHandler = (option) => setFieldValue("nationality", option);
+  const genderSelectHandler = (option) => setFieldValue("gender", option);
+  const professionSelectHandler = (option) => setFieldValue("profession", option);
+  const workingStatusSelectHandler = (option) => setFieldValue("workingStatus", option);
 
   const uploadImgHandler = (e) => {
     const file = e.target.files[0];
@@ -29,23 +32,49 @@ const EditUser = ({ onClose }) => {
   };
 
   const initialValues = {
-    fullName: "",
-    phoneNumber: "",
-    passportNumber: "",
-    dateOfBirth: "",
-    nationality: "",
-    gender: "",
-    profession: "",
-    workingStatus: "",
-    workingHoursStartTime: "",
-    workingHoursEndTime: "",
+    fullName: selectedRow?.fullName || "",
+    phoneNumber: selectedRow?.phoneNumber || "",
+    passportNumber: selectedRow?.passportOrId || "",
+    dateOfBirth: selectedRow?.dateOfBirth || "",
+    nationality: selectedRow?.nationality || "",
+    gender: selectedRow?.gender || "",
+    profession: selectedRow?.profession || "",
+    workingStatus: selectedRow?.status || "",
+    workingHoursStartTime: selectedRow?.startTime || "",
+    workingHoursEndTime: selectedRow?.endTime || "",
     image: "",
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
-    validationSchema: usersSchema,
-    onSubmit: async (values) => console.log(values),
+    // validationSchema: usersSchema,
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+        if (values.fullName) formData.append("fullName", values.fullName);
+        if (values.phoneNumber) formData.append("phoneNumber", values.phoneNumber);
+        if (values.passportNumber) formData.append("passportOrId", values.passportNumber);
+        if (values.dateOfBirth) formData.append("dateOfBirth", values.dateOfBirth);
+        if (values.nationality) formData.append("nationality", values.nationality);
+        if (values.gender) formData.append("gender", values.gender);
+        if (values.profession) formData.append("profession", values.profession);
+        if (values.workingStatus) formData.append("status", values.workingStatus);
+        if (values.workingHoursStartTime) formData.append("startTime", values.workingHoursStartTime);
+        if (values.workingHoursEndTime) formData.append("endTime", values.workingHoursEndTime);
+        if (values.image) formData.append("file", values.image);
+
+        const response = await updateLabour({ LabourId: selectedRow?.id, data: formData }).unwrap();
+        if (response?.success && response?.message) {
+          await refetch();
+          toast.success(response?.message);
+          // console.log("labour updated successfully", response);
+          onClose();
+        }
+      } catch (error) {
+        // console.log("error while updating Labour", error);
+        toast.error(error?.data?.message || "Some Error Occurred while updating Labour");
+      }
+    },
   });
 
   return (
@@ -63,9 +92,6 @@ const EditUser = ({ onClose }) => {
               onBlur={handleBlur}
               name="fullName"
             />
-            {errors.fullName && touched.fullName && (
-              <div className="text-red-500 text-xs mt-1">{errors.fullName}</div>
-            )}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -78,9 +104,6 @@ const EditUser = ({ onClose }) => {
               onBlur={handleBlur}
               name="phoneNumber"
             />
-            {errors.phoneNumber && touched.phoneNumber && (
-              <div className="text-red-500 text-xs mt-1">{errors.phoneNumber}</div>
-            )}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -92,9 +115,6 @@ const EditUser = ({ onClose }) => {
               onBlur={handleBlur}
               name="dateOfBirth"
             />
-            {errors.dateOfBirth && touched.dateOfBirth && (
-              <div className="text-red-500 text-xs mt-1">{errors.dateOfBirth}</div>
-            )}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -107,46 +127,38 @@ const EditUser = ({ onClose }) => {
               onBlur={handleBlur}
               name="passportNumber"
             />
-            {errors.passportNumber && touched.passportNumber && (
-              <div className="text-red-500 text-xs mt-1">{errors.passportNumber}</div>
-            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Nationality" />
             <Dropdown
-              options={[{ option: "Saudi Arabia" }, { option: "UAE" }]}
+              defaultText={selectedRow?.nationality}
+              options={nationalityOptions}
               onSelect={nationalitySelectHandler}
             />
-            {errors.nationality && touched.nationality && (
-              <div className="text-red-500 text-xs mt-1">{errors.nationality}</div>
-            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Gender" />
-            <Dropdown options={[{ option: "Male" }, { option: "Female" }]} onSelect={genderSelectHandler} />
-            {errors.gender && touched.gender && (
-              <div className="text-red-500 text-xs mt-1">{errors.gender}</div>
-            )}
+            <Dropdown
+              defaultText={selectedRow?.gender}
+              options={genderOptions}
+              onSelect={genderSelectHandler}
+            />
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Profession" />
             <Dropdown
-              options={[{ option: "Supervisor" }, { option: "Labour" }]}
+              defaultText={selectedRow?.profession}
+              options={professionOptions}
               onSelect={professionSelectHandler}
             />
-            {errors.profession && touched.profession && (
-              <div className="text-red-500 text-xs mt-1">{errors.profession}</div>
-            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Working Status" />
             <Dropdown
-              options={[{ option: "On leave" }, { option: "Working" }]}
+              defaultText={selectedRow?.status}
+              options={workingStatusOptions}
               onSelect={workingStatusSelectHandler}
             />
-            {errors.workingStatus && touched.workingStatus && (
-              <div className="text-red-500 text-xs mt-1">{errors.workingStatus}</div>
-            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Input
@@ -159,9 +171,6 @@ const EditUser = ({ onClose }) => {
               onBlur={handleBlur}
               name="workingHoursStartTime"
             />
-            {errors.workingHoursStartTime && touched.workingHoursStartTime && (
-              <div className="text-red-500 text-xs mt-1">{errors.workingHoursStartTime}</div>
-            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Input
@@ -174,9 +183,6 @@ const EditUser = ({ onClose }) => {
               onBlur={handleBlur}
               name="workingHoursEndTime"
             />
-            {errors.workingHoursEndTime && touched.workingHoursEndTime && (
-              <div className="text-red-500 text-xs mt-1">{errors.workingHoursEndTime}</div>
-            )}
           </div>
         </div>
       </div>
@@ -188,12 +194,12 @@ const EditUser = ({ onClose }) => {
         />
         <div className="flex flex-col justify-center">
           <ChangePhoto onChange={uploadImgHandler} />
-          {errors.image && touched.image && <div className="text-red-500 text-xs mt-1">{errors.image}</div>}
         </div>
       </div>
       <div className="lg:col-span-12">
         <div className="flex items-center justify-end gap-2">
           <Button
+            disabled={isLoading}
             text="Cancel"
             color="#111111b3"
             bg="#76767640"
