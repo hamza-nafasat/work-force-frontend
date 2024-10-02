@@ -3,7 +3,7 @@ import DeleteIcon from "../../../assets/svgs/DeleteIcon";
 import AddIcon from "../../../assets/svgs/AddIcon";
 import Title from "../../../components/shared/title/Title";
 import Modal from "../../../components/modals/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoEye } from "react-icons/io5";
 import EditIcon from "../../../assets/svgs/EditIcon";
 import { usersData, vehiclesData } from "../../../data/data";
@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import AddUser from "./AddUser";
 import EditUser from "./EditUser";
 import { confirmAlert } from "react-confirm-alert";
+import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
+import { useDispatch } from "react-redux";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
@@ -62,9 +64,13 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
 ];
 
 const Users = () => {
+  const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
+  const [usersData, setUsersData] = useState([]);
+  const { data, isSuccess, isLoading, isError } = useGetAllLaboursQuery("");
   const navigate = useNavigate();
 
+  console.log(data);
   const modalOpenHandler = (modalType) => setModal(modalType);
   const modalCloseHandler = () => setModal(false);
 
@@ -76,7 +82,7 @@ const Users = () => {
         {
           label: "Yes",
           onClick: () => {
-            // console.log("project deleted")
+            console.log("project deleted");
           },
         },
         {
@@ -85,6 +91,10 @@ const Users = () => {
       ],
     });
   };
+
+  useEffect(() => {
+    if (isSuccess) setUsersData(data?.data);
+  }, [dispatch, data, isSuccess]);
 
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
@@ -102,7 +112,7 @@ const Users = () => {
         </div>
       </div>
       <div className="mt-5">
-        <DataTable
+        {/* <DataTable
           columns={columns(modalOpenHandler, navigate, deleteHandler)}
           data={usersData}
           selectableRows
@@ -111,7 +121,7 @@ const Users = () => {
           pagination
           fixedHeader
           fixedHeaderScrollHeight="70vh"
-        />
+        /> */}
       </div>
       {modal === "add" && (
         <Modal title="Add User" onClose={modalCloseHandler}>

@@ -11,14 +11,10 @@ const EditUser = ({ onClose }) => {
   const [imgSrc, setImgSrc] = useState(null);
 
   // Handlers for dropdown selections
-  const nationalitySelectHandler = (option) =>
-    setFieldValue("nationality", option.option);
-  const genderSelectHandler = (option) =>
-    setFieldValue("gender", option.option);
-  const professionSelectHandler = (option) =>
-    setFieldValue("profession", option.option);
-  const workingStatusSelectHandler = (option) =>
-    setFieldValue("workingStatus", option.option);
+  const nationalitySelectHandler = (option) => setFieldValue("nationality", option.option);
+  const genderSelectHandler = (option) => setFieldValue("gender", option.option);
+  const professionSelectHandler = (option) => setFieldValue("profession", option.option);
+  const workingStatusSelectHandler = (option) => setFieldValue("workingStatus", option.option);
 
   const uploadImgHandler = (e) => {
     const file = e.target.files[0];
@@ -46,25 +42,14 @@ const EditUser = ({ onClose }) => {
     image: "",
   };
 
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-  } = useFormik({
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
     validationSchema: usersSchema,
-    onSubmit: async (values) => // console.log(values),
+    onSubmit: async (values) => console.log(values),
   });
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6"
-    >
+    <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
       <div className="lg:col-span-9">
         <div className="grid lg:grid-cols-12 gap-1 md:gap-4">
           <div className="lg:col-span-6">
@@ -94,9 +79,7 @@ const EditUser = ({ onClose }) => {
               name="phoneNumber"
             />
             {errors.phoneNumber && touched.phoneNumber && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.phoneNumber}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.phoneNumber}</div>
             )}
           </div>
           <div className="lg:col-span-6">
@@ -110,9 +93,7 @@ const EditUser = ({ onClose }) => {
               name="dateOfBirth"
             />
             {errors.dateOfBirth && touched.dateOfBirth && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.dateOfBirth}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.dateOfBirth}</div>
             )}
           </div>
           <div className="lg:col-span-6">
@@ -127,9 +108,7 @@ const EditUser = ({ onClose }) => {
               name="passportNumber"
             />
             {errors.passportNumber && touched.passportNumber && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.passportNumber}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.passportNumber}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
@@ -139,17 +118,12 @@ const EditUser = ({ onClose }) => {
               onSelect={nationalitySelectHandler}
             />
             {errors.nationality && touched.nationality && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.nationality}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.nationality}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Gender" />
-            <Dropdown
-              options={[{ option: "Male" }, { option: "Female" }]}
-              onSelect={genderSelectHandler}
-            />
+            <Dropdown options={[{ option: "Male" }, { option: "Female" }]} onSelect={genderSelectHandler} />
             {errors.gender && touched.gender && (
               <div className="text-red-500 text-xs mt-1">{errors.gender}</div>
             )}
@@ -161,9 +135,7 @@ const EditUser = ({ onClose }) => {
               onSelect={professionSelectHandler}
             />
             {errors.profession && touched.profession && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.profession}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.profession}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
@@ -173,9 +145,7 @@ const EditUser = ({ onClose }) => {
               onSelect={workingStatusSelectHandler}
             />
             {errors.workingStatus && touched.workingStatus && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.workingStatus}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.workingStatus}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
@@ -190,9 +160,7 @@ const EditUser = ({ onClose }) => {
               name="workingHoursStartTime"
             />
             {errors.workingHoursStartTime && touched.workingHoursStartTime && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.workingHoursStartTime}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.workingHoursStartTime}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
@@ -207,9 +175,7 @@ const EditUser = ({ onClose }) => {
               name="workingHoursEndTime"
             />
             {errors.workingHoursEndTime && touched.workingHoursEndTime && (
-              <div className="text-red-500 text-xs mt-1">
-                {errors.workingHoursEndTime}
-              </div>
+              <div className="text-red-500 text-xs mt-1">{errors.workingHoursEndTime}</div>
             )}
           </div>
         </div>
@@ -222,9 +188,7 @@ const EditUser = ({ onClose }) => {
         />
         <div className="flex flex-col justify-center">
           <ChangePhoto onChange={uploadImgHandler} />
-          {errors.image && touched.image && (
-            <div className="text-red-500 text-xs mt-1">{errors.image}</div>
-          )}
+          {errors.image && touched.image && <div className="text-red-500 text-xs mt-1">{errors.image}</div>}
         </div>
       </div>
       <div className="lg:col-span-12">
@@ -237,12 +201,7 @@ const EditUser = ({ onClose }) => {
             onClick={onClose}
             height="h-[45px] md:h-[60px]"
           />
-          <Button
-            type="submit"
-            text="Add"
-            width="w-[150px]"
-            height="h-[45px] md:h-[60px]"
-          />
+          <Button type="submit" text="Add" width="w-[150px]" height="h-[45px] md:h-[60px]" />
         </div>
       </div>
     </form>
@@ -252,9 +211,7 @@ const EditUser = ({ onClose }) => {
 export default EditUser;
 
 const Label = ({ label }) => (
-  <label className="text-[#000] text-base mb-2 block font-semibold">
-    {label}
-  </label>
+  <label className="text-[#000] text-base mb-2 block font-semibold">{label}</label>
 );
 
 const ChangePhoto = ({ onChange }) => (
@@ -264,10 +221,6 @@ const ChangePhoto = ({ onChange }) => (
   >
     Change Photo
     <IoCamera fontSize={20} />
-    <input
-      type="file"
-      onChange={onChange}
-      className="absolute inset-0 z-50 cursor-pointer opacity-0"
-    />
+    <input type="file" onChange={onChange} className="absolute inset-0 z-50 cursor-pointer opacity-0" />
   </button>
 );

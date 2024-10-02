@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authApis from "./api/authApi";
 import authReducer from "./reducer/authReducer";
+import labourApis from "./api/labourApi";
 
 const store = configureStore({
   reducer: {
@@ -8,9 +9,10 @@ const store = configureStore({
     [authReducer.reducerPath]: authReducer.reducer,
     // apis
     [authApis.reducerPath]: authApis.reducer,
+    [labourApis.reducerPath]: labourApis.reducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(authApis.middleware);
+    return getDefaultMiddleware().concat(authApis.middleware).concat(labourApis.middleware);
   },
 });
 

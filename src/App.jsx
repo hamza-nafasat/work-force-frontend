@@ -4,12 +4,13 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import GlobalLoader from "./components/layout/GlobalLoader";
 import ScrollToTop from "./components/shared/scrollToTop/ScrollToTop";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetMyProfileQuery } from "./redux/api/authApi";
 import { userExist, userNotExist } from "./redux/reducer/authReducer";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const User = lazy(() => import("./pages/user"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -56,9 +57,23 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute user={!user} redirect="/user">
+                <Login />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/user" element={<User />}>
+          <Route
+            path="/user"
+            element={
+              <ProtectedRoute user={user}>
+                <User />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate replace to="home" />} />
             <Route path="home" element={<Home />} />
             <Route path="active-devices" element={<ActiveDevices />} />
