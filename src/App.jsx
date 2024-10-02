@@ -4,7 +4,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import GlobalLoader from "./components/layout/GlobalLoader";
 import ScrollToTop from "./components/shared/scrollToTop/ScrollToTop";
@@ -43,7 +42,9 @@ const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
 const AdminDashboard = lazy(() => import("./admin/layout/index"));
 const Dashboard = lazy(() => import("./admin/pages/dashboard/Dashboard"));
 const AdminUsers = lazy(() => import("./admin/pages/users/Users"));
-const AdminTransactions = lazy(() => import("./admin/pages/transactions/Transactions"));
+const AdminTransactions = lazy(() =>
+  import("./admin/pages/transactions/Transactions")
+);
 const AddUser = lazy(() => import("./admin/pages/users/AddUser"));
 
 function App() {
