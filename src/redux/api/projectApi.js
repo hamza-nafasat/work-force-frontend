@@ -35,7 +35,7 @@ const projectApis = createApi({
 
     // update Project
     // --------------
-    updateLabour: builder.mutation({
+    updateProject: builder.mutation({
       query: ({ projectId, data }) => ({
         url: `/single/${projectId}`,
         method: "PUT",
@@ -45,9 +45,9 @@ const projectApis = createApi({
 
     // delete project
     // --------------
-    deleteLabour: builder.mutation({
+    deleteProject: builder.mutation({
       query: ({ projectId }) => ({
-        url: `/delete/${projectId}`,
+        url: `/single/${projectId}`,
         method: "DELETE",
       }),
     }),
@@ -58,7 +58,7 @@ export const {
   useAddProjectMutation,
   useGetAllProjectsQuery,
   useGetSingleProjectQuery,
-  useUpdateLabourMutation,
-  useDeleteLabourMutation,
+  useUpdateProjectMutation,
+  useDeleteProjectMutation,
 } = projectApis;
 export default projectApis;

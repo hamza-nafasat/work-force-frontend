@@ -1,21 +1,21 @@
-import Title from "../../../components/shared/title/Title";
+import { useEffect, useState } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import DataTable from "react-data-table-component";
+import { IoEye } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import AddIcon from "../../../assets/svgs/AddIcon";
 import DeleteIcon from "../../../assets/svgs/DeleteIcon";
-import { projectsData } from "../../../data/data";
-import DataTable from "react-data-table-component";
-import CircularProgressBar from "../../../components/home/CircularProgressBar";
-import DateIcon from "../../../assets/svgs/projects/DateIcon";
-import { Link, useNavigate } from "react-router-dom";
-import { IoEye } from "react-icons/io5";
 import EditIcon from "../../../assets/svgs/EditIcon";
-import { useEffect, useState } from "react";
-import Modal from "../../../components/modals/Modal";
-import EditProject from "./EditProject";
-import { confirmAlert } from "react-confirm-alert";
-import { useGetAllProjectsQuery } from "../../../redux/api/projectApi";
+import DateIcon from "../../../assets/svgs/projects/DateIcon";
+import CircularProgressBar from "../../../components/home/CircularProgressBar";
 import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Modal from "../../../components/modals/Modal";
+import Title from "../../../components/shared/title/Title";
+import { useDeleteProjectMutation, useGetAllProjectsQuery } from "../../../redux/api/projectApi";
+import EditProject from "./EditProject";
 
-const columns = (modalOpenHandler, navigate, deleteHandler) => [
+const columns = (modalOpenHandler, isDeleting, navigate, deleteHandler) => [
   {
     name: "Project Name",
     cell: (row) => <p className="text-sm text-[#111111] font-medium">{row.projectName}</p>,
@@ -94,10 +94,13 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
         <div className="cursor-pointer" onClick={() => navigate(`/user/projects/${row.id}`)}>
           <IoEye fontSize={18} style={{ marginTop: "4px" }} />
         </div>
-        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler()}>
+        <div
+          className={`${isDeleting ? "cursor-not-allowed" : "cursor-pointer"}`}
+          onClick={() => deleteHandler(row.id)}
+        >
           <DeleteIcon />
         </div>
       </div>
@@ -109,22 +112,36 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
 
 const Projects = () => {
   const navigate = useNavigate();
-  const { data, isSuccess, isLoading } = useGetAllProjectsQuery("");
+  const { data, isSuccess, isLoading, refetch } = useGetAllProjectsQuery("");
+  const [deleteProject, { isLoading: isDeleting }] = useDeleteProjectMutation();
+  const [selectedRow, setSelectedRow] = useState({});
   const [projectsData, setProjectsData] = useState([]);
   const [modal, setModal] = useState(false);
 
-  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalOpenHandler = (modalType, row) => {
+    setModal(modalType);
+    if (row) setSelectedRow(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
-  const deleteHandler = () => {
+  const deleteHandler = async (id) => {
     confirmAlert({
       title: "Delete Project",
       message: "Are you sure, you want to delete the project?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            // console.log("project deleted")
+          onClick: async () => {
+            try {
+              const response = await deleteProject({ projectId: id }).unwrap();
+              if (response?.success && response?.message) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("error while deleting project", error);
+              toast.error(error?.data?.message || "Some Error Occurred while deleting project");
+            }
           },
         },
         {
@@ -150,6 +167,8 @@ const Projects = () => {
           labours: labours,
           workforceCount: "85",
           action: "",
+          position: project.position,
+          area: project.area,
           projectDetail: project?.description,
         };
       });
@@ -177,7 +196,7 @@ const Projects = () => {
       </div>
       <div className="mt-5">
         <DataTable
-          columns={columns(modalOpenHandler, navigate, deleteHandler)}
+          columns={columns(modalOpenHandler, isDeleting, navigate, deleteHandler)}
           data={projectsData}
           selectableRows
           selectableRowsHighlight
@@ -189,7 +208,7 @@ const Projects = () => {
       </div>
       {modal === "edit" && (
         <Modal title="Edit Project" onClose={modalCloseHandler}>
-          <EditProject onClose={modalCloseHandler} />
+          <EditProject selectedRow={selectedRow} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

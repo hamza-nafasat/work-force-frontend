@@ -1,20 +1,39 @@
 import { useFormik } from "formik"; // Import useFormik
 import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { FeatureGroup, MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import Select from "react-select";
 import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
 import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
-import { projectSchema } from "../../../schemas";
 import { useAddProjectMutation } from "../../../redux/api/projectApi";
+import { projectSchema } from "../../../schemas";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 
-const position = [25.276987, 55.296249];
+function LocationMarker({ position }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (position) {
+      map.setView(position, map.getZoom());
+    }
+  }, [position, map]);
+
+  return position === null ? null : (
+    <Marker position={position}>
+      <Popup>You are here</Popup>
+    </Marker>
+  );
+}
 
 const AddProject = () => {
+  const navigate = useNavigate();
+  const [position, setPosition] = useState([25.276987, 55.296249]);
   const [labours, setLabours] = useState([]);
-  const { data, isLoading, isSuccess } = useGetAllLaboursQuery();
+  const { data, isLoading } = useGetAllLaboursQuery();
   const [addProject, { isLoading: isProjectAdding }] = useAddProjectMutation();
 
   const formik = useFormik({
@@ -25,12 +44,44 @@ const AddProject = () => {
       projectDescription: "",
       location: "",
       labours: [],
+      area: [],
     },
     validationSchema: projectSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const modifiedLabours = values?.labours?.map((labour) => labour.value);
+
+        const data = {
+          name: values.projectName,
+          startDate: values.startDate,
+          endDate: values.dueDate,
+          description: values.projectDescription,
+          location: values.location,
+          area: values.area,
+          labours: modifiedLabours,
+          position: position,
+        };
+
+        const response = await addProject(data).unwrap();
+        if (response?.success && response?.message) {
+          toast.success(response?.message);
+          // console.log("Project added successfully", response);
+          return navigate("/user/projects");
+        }
+      } catch (error) {
+        // console.log("error while adding new project", error);
+        toast.error(error?.data?.message || "Some Error Occurred while adding new Project");
+      }
     },
   });
+
+  // Function to handle creation of geofence
+  const handleGeofenceCreated = (e) => {
+    const layer = e.layer;
+    const geojson = layer.toGeoJSON();
+    const coordinates = geojson.geometry.coordinates;
+    formik.setFieldValue("area", coordinates[0]);
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -39,7 +90,9 @@ const AddProject = () => {
     }
   }, [data, isSuccess]);
 
-  return (
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
       <h2 className="text[#111111] text-lg 2xl:text-[20px] font-semibold">Add Project</h2>
       <form
@@ -142,13 +195,37 @@ const AddProject = () => {
             )}
           </div>
         </div>
+        <div className="lg:col-span-6">
+          <Input
+            label="Latitude"
+            type="number"
+            height="h-[50px] md:h-[60px]"
+            placeholder="23.453453"
+            labelWeight="font-semibold"
+            value={position[0]}
+            onChange={(e) => setPosition([parseFloat(e.target.value), position[1]])}
+            name="Latitude"
+          />
+        </div>
+        <div className="lg:col-span-6">
+          <Input
+            label="Longitude"
+            type="number"
+            height="h-[50px] md:h-[60px]"
+            placeholder="54.453453"
+            labelWeight="font-semibold"
+            value={position[1]}
+            onChange={(e) => setPosition([position[0], parseFloat(e.target.value)])}
+            name="Longitude"
+          />
+        </div>
         <div className="lg:col-span-12">
           <label className="text-[#000] text-base mb-2 block font-semibold">Geo Fencing</label>
           <div className="mt-4">
             <MapContainer
-              center={position}
-              zoom={6}
-              scrollWheelZoom={false}
+              center={{ lat: 51.505, lng: -0.09 }}
+              zoom={13}
+              scrollWheelZoom={true}
               style={{
                 height: "250px",
                 width: "100%",
@@ -168,22 +245,33 @@ const AddProject = () => {
                     marker: false,
                     circlemarker: false,
                   }}
+                  onCreated={handleGeofenceCreated}
                 />
               </FeatureGroup>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={position}>
-                <Popup>Location Dubai</Popup>
-              </Marker>
+              <LocationMarker position={position} />
             </MapContainer>
           </div>
         </div>
         <div className="lg:col-span-12 mt-4">
           <div className="flex items-center justify-end gap-2">
-            <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" />
-            <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
+            <Button
+              disabled={isProjectAdding}
+              text="Cancel"
+              color="#111111b3"
+              bg="#76767640"
+              width="w-[150px]"
+            />
+            <Button
+              disabled={isProjectAdding}
+              type="submit"
+              text="Add"
+              width="w-[150px]"
+              height="h-[50px] sm:h-[60px]"
+            />
           </div>
         </div>
       </form>

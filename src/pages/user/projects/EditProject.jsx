@@ -1,13 +1,12 @@
-import React from "react";
-import Input from "../../../components/auth/Input";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import Select from "react-select";
-import Button from "../../../components/shared/button/Button";
 import { useFormik } from "formik"; // Import useFormik
-import * as Yup from "yup"; // Import Yup
-import { projectSchema } from "../../../schemas";
+import React from "react";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
+import Select from "react-select";
+import Input from "../../../components/auth/Input";
+import Button from "../../../components/shared/button/Button";
+import { projectSchema } from "../../../schemas";
 
 const users = [
   { label: "Asif Zulfiqar", value: "asif" },
@@ -17,7 +16,8 @@ const users = [
   { label: "Abdul Wahid", value: "wahid" },
 ];
 
-const EditProject = ({ onClose }) => {
+const EditProject = ({ onClose, selectedRow }) => {
+  console.log("selected row", selectedRow);
   const position = [25.276987, 55.296249];
 
   const formik = useFormik({

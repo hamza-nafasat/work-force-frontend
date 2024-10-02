@@ -20,6 +20,8 @@ export const projectSchema = Yup.object({
   dueDate: Yup.date().required("Due date is required"),
   projectDescription: Yup.string().required("Project description is required"),
   location: Yup.string().required("Location is required"),
+  area: Yup.array().required("Geofence is required"),
+
   labours: Yup.array().min(1, "At least one labour must be selected"),
 });
 
