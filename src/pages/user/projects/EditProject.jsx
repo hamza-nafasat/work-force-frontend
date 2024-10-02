@@ -1,39 +1,66 @@
 import { useFormik } from "formik"; // Import useFormik
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { EditControl } from "react-leaflet-draw";
 import Select from "react-select";
+import { toast } from "react-toastify";
 import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
+import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
+import { useUpdateProjectMutation } from "../../../redux/api/projectApi";
 import { projectSchema } from "../../../schemas";
+import { MapComponent } from "./MapComponent";
 
-const users = [
-  { label: "Asif Zulfiqar", value: "asif" },
-  { label: "Hamza Nafasat", value: "hamza" },
-  { label: "Ahmad", value: "ahmad" },
-  { label: "Moiz", value: "moiz" },
-  { label: "Abdul Wahid", value: "wahid" },
-];
-
-const EditProject = ({ onClose, selectedRow }) => {
-  console.log("selected row", selectedRow);
-  const position = [25.276987, 55.296249];
+const EditProject = ({ onClose, refetch, selectedRow }) => {
+  const [position, setPosition] = useState(selectedRow?.position || [25.276987, 55.296249]);
+  const [labours, setLabours] = useState([]);
+  const { data, isLoading, isSuccess } = useGetAllLaboursQuery();
+  const [updateProject, { isLoading: isUpdating }] = useUpdateProjectMutation();
 
   const formik = useFormik({
     initialValues: {
-      projectName: "",
-      startDate: "",
-      dueDate: "",
-      projectDescription: "",
-      location: "",
-      labours: [],
+      projectName: selectedRow?.projectName || "",
+      startDate: selectedRow?.startDate || "",
+      area: selectedRow?.area || [],
+      dueDate: selectedRow?.dueDate || "",
+      projectDescription: selectedRow?.projectDetail || "",
+      location: selectedRow?.location || "",
+      labours: selectedRow?.labours.map((labour) => ({ label: labour?.name, value: labour?._id })) || "",
     },
     validationSchema: projectSchema,
-    onSubmit: (values) => {
-      // console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const modifiedLabours = values?.labours?.map((labour) => labour.value);
+        const data = {
+          name: values.projectName,
+          startDate: values.startDate,
+          endDate: values.dueDate,
+          description: values.projectDescription,
+          location: values.location,
+          area: values.area,
+          labours: modifiedLabours,
+          position: position,
+        };
+
+        const response = await updateProject({ projectId: selectedRow?.id, data: data }).unwrap();
+        if (response?.success && response?.message) {
+          await refetch();
+          toast.success(response?.message);
+          // console.log("Project added successfully", response);
+          onClose();
+        }
+      } catch (error) {
+        // console.log("error while adding new project", error);
+        toast.error(error?.data?.message || "Some Error Occurred while updating Project");
+      }
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      const labour = data?.data.map((labour) => ({ label: labour?.fullName, value: labour?._id }));
+      setLabours(labour);
+    }
+  }, [data, isSuccess]);
 
   return (
     <div>
@@ -131,54 +158,64 @@ const EditProject = ({ onClose, selectedRow }) => {
         <div className="lg:col-span-12">
           <label className="text-[#000] text-base mb-2 block font-semibold">Add Labours</label>
           <div>
-            <MultiSelectOption users={users} setFieldValue={formik.setFieldValue} name="labours" />
+            <MultiSelectOption
+              selectedValues={formik.values.labours}
+              users={labours}
+              setFieldValue={formik.setFieldValue}
+              name="labours"
+            />
             {formik.touched.labours && formik.errors.labours && (
               <div className="text-red-500 text-sm">{formik.errors.labours}</div>
             )}
           </div>
         </div>
+        <div className="lg:col-span-6">
+          <Input
+            label="Latitude"
+            type="number"
+            height="h-[50px] md:h-[60px]"
+            placeholder="23.453453"
+            labelWeight="font-semibold"
+            value={position[0]}
+            onChange={(e) => setPosition([parseFloat(e.target.value), position[1]])}
+            name="Latitude"
+          />
+        </div>
+        <div className="lg:col-span-6">
+          <Input
+            label="Longitude"
+            type="number"
+            height="h-[50px] md:h-[60px]"
+            placeholder="54.453453"
+            labelWeight="font-semibold"
+            value={position[1]}
+            onChange={(e) => setPosition([position[0], parseFloat(e.target.value)])}
+            name="Longitude"
+          />
+        </div>
         <div className="lg:col-span-12">
           <label className="text-[#000] text-base mb-2 block font-semibold">Geo Fencing</label>
           <div className="mt-4">
-            <MapContainer
-              center={position}
-              zoom={6}
-              scrollWheelZoom={false}
-              style={{
-                height: "250px",
-                width: "100%",
-                zIndex: 0,
-                borderRadius: "20px",
-              }}
-              attributionControl={false}
-            >
-              <FeatureGroup>
-                <EditControl
-                  position="topright"
-                  draw={{
-                    polygon: true,
-                    rectangle: false,
-                    circle: false,
-                    polyline: false,
-                    marker: false,
-                    circlemarker: false,
-                  }}
-                />
-              </FeatureGroup>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <Popup>Location Dubai</Popup>
-              </Marker>
-            </MapContainer>
+            <MapComponent position={position} formik={formik} area={formik.values.area} />
           </div>
         </div>
         <div className="lg:col-span-12 mt-4">
           <div className="flex items-center justify-end gap-2">
-            <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
-            <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
+            <Button
+              disabled={isUpdating}
+              text="Cancel"
+              color="#111111b3"
+              bg="#76767640"
+              width="w-[150px]"
+              onClick={onClose}
+            />
+            <Button
+              disabled={isUpdating}
+              type="submit"
+              text="Update"
+              width="w-[150px]"
+              height="h-[50px] sm:h-[60px]"
+            />
           </div>
         </div>
       </form>
@@ -188,10 +225,11 @@ const EditProject = ({ onClose, selectedRow }) => {
 
 export default EditProject;
 
-const MultiSelectOption = ({ users, setFieldValue, name }) => {
+const MultiSelectOption = ({ users, selectedValues, setFieldValue, name }) => {
   return (
     <Select
       options={users}
+      value={selectedValues}
       placeholder="Select User"
       isMulti={true}
       onChange={(selectedOptions) => {

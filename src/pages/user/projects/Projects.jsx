@@ -155,20 +155,22 @@ const Projects = () => {
     if (isSuccess && data?.data) {
       const projects = data?.data?.map((project) => {
         const labours = project?.labours?.map((labour) => ({
+          _id: labour?._id,
           name: labour?.fullName,
           image: labour?.image?.url,
           position: [25.276987 + Math.random(), 55.296249 + Math.random()],
         }));
         return {
-          id: project._id,
-          projectName: project.name,
-          startDate: project.startDate,
-          dueDate: project.endDate,
+          id: project?._id,
+          projectName: project?.name,
+          startDate: project?.startDate,
+          dueDate: project?.endDate,
           labours: labours,
           workforceCount: "85",
           action: "",
-          position: project.position,
-          area: project.area,
+          position: project?.position,
+          area: project?.area,
+          location: project?.location,
           projectDetail: project?.description,
         };
       });
@@ -208,7 +210,7 @@ const Projects = () => {
       </div>
       {modal === "edit" && (
         <Modal title="Edit Project" onClose={modalCloseHandler}>
-          <EditProject selectedRow={selectedRow} onClose={modalCloseHandler} />
+          <EditProject refetch={refetch} selectedRow={selectedRow} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

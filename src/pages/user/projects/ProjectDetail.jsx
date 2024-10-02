@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { alertRecords, projectsData, workersData } from "../../../data/data";
 import Title from "../../../components/shared/title/Title";
@@ -11,6 +11,8 @@ import L from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import TimeIcon from "../../../assets/svgs/projects/TimeIcon";
 import AlertSideIcon from "../../../assets/svgs/projects/AlertSideIcon";
+import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 
 const createCustomIcon = (imgUrl) => {
   return L.divIcon({
@@ -26,9 +28,36 @@ const createCustomIcon = (imgUrl) => {
 
 const ProjectDetail = () => {
   const { id } = useParams();
-  const project = projectsData.find((project) => project.id === id);
+  const [project, setProject] = useState({});
+  const { data, isLoading, isSuccess } = useGetSingleProjectQuery({ projectId: id });
 
-  return (
+  useEffect(() => {
+    if (isSuccess && data?.data) {
+      const singleProject = data?.data;
+      setProject({
+        id: singleProject?._id,
+        projectName: singleProject?.name,
+        startDate: singleProject?.startDate,
+        dueDate: singleProject?.endDate,
+        labours: singleProject?.labours.map((labour) => ({
+          _id: labour?._id,
+          name: labour?.fullName,
+          image: labour?.image?.url,
+          position: [25.276987 + Math.random(), 55.296249 + Math.random()],
+        })),
+        workforceCount: "85",
+        action: "",
+        position: singleProject?.position,
+        area: singleProject?.area,
+        location: singleProject?.location,
+        projectDetail: singleProject?.description,
+      });
+    }
+  }, [data, isSuccess]);
+
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
       <div className="flex items-center justify-between">
         <div>
@@ -40,30 +69,20 @@ const ProjectDetail = () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
         <div className="lg:col-span-8 bg-[#EBF6FE] p-4 rounded-xl">
-          <p className="text-base md:text-lg font-semibold">
-            {project.projectName}
-          </p>
+          <p className="text-base md:text-lg font-semibold">{project.projectName}</p>
           <div className="mt-4 md:mt-5">
             <p className="text-sm md:text-base text-[#111111cc]">Description</p>
-            <p className="text-sm text-[#111111] mt-1">
-              {project.projectDetail}
-            </p>
+            <p className="text-sm text-[#111111] mt-1">{project.projectDetail}</p>
           </div>
         </div>
         {/* second column */}
         <div className="lg:col-span-4">
           <div className="flex justify-between gap-4">
             <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md`}>
-              <p className="text-sm md:text-base text-[#111111cc]">
-                Start Date
-              </p>
-              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">
-                {project.startDate}
-              </p>
+              <p className="text-sm md:text-base text-[#111111cc]">Start Date</p>
+              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">{project.startDate}</p>
             </div>
-            <div
-              className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md`}
-            >
+            <div className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md`}>
               <p className="text-sm md:text-base text-white">Due Date</p>
               <p className="text-sm sm:text-base md:text-md font-semibold mt-1 text-white">
                 {project.dueDate}
@@ -75,9 +94,7 @@ const ProjectDetail = () => {
               <FaMapMarkerAlt />
               Location
             </div>
-            <p className="text-sm sm:text-md lg:text-lg">
-              Taetratech, Lakhpat Road, Lahore
-            </p>
+            <p className="text-sm sm:text-md lg:text-lg">Taetratech, Lakhpat Road, Lahore</p>
           </div>
         </div>
       </div>
@@ -111,7 +128,7 @@ const Workers = () => {
       <h6 className="text-sm md:text-lg text-[#292D32] font-bold border-b border-[#7B7B7B2B] pb-1 pl-2">
         Workers
       </h6>
-      {workersData.map((worker, i) => (
+      {workersData?.map((worker, i) => (
         <Worker
           key={i}
           name={worker.name}
@@ -137,7 +154,13 @@ const Worker = ({ name, img, id, gender, reason, designation }) => {
           <p className="text-[8px] text-[#41414199] leading-none mt-[2px]">{gender}</p>
         </div>
       </div>
-      <div className={`basis-[15%] flex justify-center ${reason === 'On leave' ? 'bg-transparent border border-[#084781] text-[#084781]':'bg-[#084781] text-white'} px-2 py-1 rounded-full text-[10px] font-semibold`}>
+      <div
+        className={`basis-[15%] flex justify-center ${
+          reason === "On leave"
+            ? "bg-transparent border border-[#084781] text-[#084781]"
+            : "bg-[#084781] text-white"
+        } px-2 py-1 rounded-full text-[10px] font-semibold`}
+      >
         {reason}
       </div>
       <p className="basis-[33%] text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
@@ -151,7 +174,7 @@ const Alerts = () => {
       <h6 className="text-sm md:text-lg text-[#292D32] font-bold border-b border-[#7B7B7B2B] pb-1 pl-2">
         Alerts
       </h6>
-      {alertRecords.map((alert, i) => (
+      {alertRecords?.map((alert, i) => (
         <Alert
           key={i}
           title={alert.title}
@@ -170,11 +193,7 @@ const Alert = ({ title, id, img, time, alert }) => {
     <div className="relative p-2 border-b border-[#e5e5e5]">
       <div className="flex justify-between gap-2 pl-2">
         <div className="flex items-center gap-2">
-          <img
-            src={img}
-            alt="image"
-            className="w-[30px] h-[30px] object-cover"
-          />
+          <img src={img} alt="image" className="w-[30px] h-[30px] object-cover" />
           <div>
             <p className="text-[10px] text-[#5C5B5B]">{title}</p>
             <p className="text-[6px] text-[#5C5B5B]">{id}</p>
@@ -196,7 +215,7 @@ const Alert = ({ title, id, img, time, alert }) => {
   );
 };
 
-const Map = ({ project }) => {    
+const Map = ({ project }) => {
   const position = [25.276987, 55.296249];
   return (
     <MapContainer
@@ -215,12 +234,8 @@ const Map = ({ project }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {project?.labours.map((labour, i) => (
-        <Marker
-          key={i}
-          position={labour?.position}
-          icon={createCustomIcon(labour?.image)}
-        ></Marker>
+      {project?.labours?.map((labour, i) => (
+        <Marker key={i} position={labour?.position} icon={createCustomIcon(labour?.image)}></Marker>
       ))}
     </MapContainer>
   );
@@ -230,9 +245,7 @@ const DetailWidget = ({ title, value, icon, bg }) => {
   return (
     <div className="border border-[#8E8E8E99] shadow-md rounded-2xl p-4 flex items-center justify-between gap-4 flex-1 relative">
       <div className="flex flex-col items-center gap-2">
-        <p className="text-sm md:text-base font-semibold text-[#112C5F]">
-          {title}
-        </p>
+        <p className="text-sm md:text-base font-semibold text-[#112C5F]">{title}</p>
         <h3 className="text-[28px] lg:text-[40px]">{value}</h3>
       </div>
       <img src={icon} className="w-20 md:w-[120px] h-20 md:h-[120px] object-contain" alt="image" />

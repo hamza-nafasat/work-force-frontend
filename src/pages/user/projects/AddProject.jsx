@@ -12,28 +12,13 @@ import { projectSchema } from "../../../schemas";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import GlobalLoader from "../../../components/layout/GlobalLoader";
-
-function LocationMarker({ position }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (position) {
-      map.setView(position, map.getZoom());
-    }
-  }, [position, map]);
-
-  return position === null ? null : (
-    <Marker position={position}>
-      <Popup>You are here</Popup>
-    </Marker>
-  );
-}
+import { MapComponent } from "./MapComponent";
 
 const AddProject = () => {
   const navigate = useNavigate();
   const [position, setPosition] = useState([25.276987, 55.296249]);
   const [labours, setLabours] = useState([]);
-  const { data, isLoading } = useGetAllLaboursQuery();
+  const { data, isLoading, isSuccess } = useGetAllLaboursQuery();
   const [addProject, { isLoading: isProjectAdding }] = useAddProjectMutation();
 
   const formik = useFormik({
@@ -74,14 +59,6 @@ const AddProject = () => {
       }
     },
   });
-
-  // Function to handle creation of geofence
-  const handleGeofenceCreated = (e) => {
-    const layer = e.layer;
-    const geojson = layer.toGeoJSON();
-    const coordinates = geojson.geometry.coordinates;
-    formik.setFieldValue("area", coordinates[0]);
-  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -222,38 +199,7 @@ const AddProject = () => {
         <div className="lg:col-span-12">
           <label className="text-[#000] text-base mb-2 block font-semibold">Geo Fencing</label>
           <div className="mt-4">
-            <MapContainer
-              center={{ lat: 51.505, lng: -0.09 }}
-              zoom={13}
-              scrollWheelZoom={true}
-              style={{
-                height: "250px",
-                width: "100%",
-                zIndex: 0,
-                borderRadius: "20px",
-              }}
-              attributionControl={false}
-            >
-              <FeatureGroup>
-                <EditControl
-                  position="topright"
-                  draw={{
-                    polygon: true,
-                    rectangle: false,
-                    circle: false,
-                    polyline: false,
-                    marker: false,
-                    circlemarker: false,
-                  }}
-                  onCreated={handleGeofenceCreated}
-                />
-              </FeatureGroup>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <LocationMarker position={position} />
-            </MapContainer>
+            <MapComponent position={position} formik={formik} />
           </div>
         </div>
         <div className="lg:col-span-12 mt-4">
@@ -331,3 +277,63 @@ const customStyles = {
     background: "rgba(112, 112, 112, 1)",
   }),
 };
+
+export const MapComponent = ({ position, formik, area, setArea }) => {
+  // Function to handle creation of geofence
+  const handleGeofenceCreated = (e) => {
+    const layer = e.layer;
+    const geojson = layer.toGeoJSON();
+    const coordinates = geojson.geometry.coordinates;
+    formik.setFieldValue("area", coordinates[0]);
+  };
+  return (
+    <MapContainer
+      center={{ lat: 51.505, lng: -0.09 }}
+      zoom={13}
+      scrollWheelZoom={true}
+      style={{
+        height: "250px",
+        width: "100%",
+        zIndex: 0,
+        borderRadius: "20px",
+      }}
+      attributionControl={false}
+    >
+      <FeatureGroup>
+        <EditControl
+          position="topright"
+          draw={{
+            polygon: true,
+            rectangle: false,
+            circle: false,
+            polyline: false,
+            marker: false,
+            circlemarker: false,
+          }}
+          onCreated={handleGeofenceCreated}
+        />
+      </FeatureGroup>
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <LocationMarker position={position} />
+    </MapContainer>
+  );
+};
+
+function LocationMarker({ position }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (position) {
+      map.setView(position, map.getZoom());
+    }
+  }, [position, map]);
+
+  return position === null ? null : (
+    <Marker position={position}>
+      <Popup>You are here</Popup>
+    </Marker>
+  );
+}
