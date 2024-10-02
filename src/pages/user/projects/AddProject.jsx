@@ -1,24 +1,21 @@
-import React from "react";
-import Input from "../../../components/auth/Input";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import Select from "react-select";
-import Button from "../../../components/shared/button/Button";
 import { useFormik } from "formik"; // Import useFormik
-import * as Yup from "yup"; // Import Yup
-import { projectSchema } from "../../../schemas";
+import React, { useEffect, useState } from "react";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
+import Select from "react-select";
+import Input from "../../../components/auth/Input";
+import Button from "../../../components/shared/button/Button";
+import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
+import { projectSchema } from "../../../schemas";
+import { useAddProjectMutation } from "../../../redux/api/projectApi";
 
-const users = [
-  { label: "Asif Zulfiqar", value: "asif" },
-  { label: "Hamza Nafasat", value: "hamza" },
-  { label: "Ahmad", value: "ahmad" },
-  { label: "Moiz", value: "moiz" },
-  { label: "Abdul Wahid", value: "wahid" },
-];
+const position = [25.276987, 55.296249];
 
 const AddProject = () => {
-  const position = [25.276987, 55.296249];
+  const [labours, setLabours] = useState([]);
+  const { data, isLoading, isSuccess } = useGetAllLaboursQuery();
+  const [addProject, { isLoading: isProjectAdding }] = useAddProjectMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -31,9 +28,16 @@ const AddProject = () => {
     },
     validationSchema: projectSchema,
     onSubmit: (values) => {
-      // console.log(values);
+      console.log(values);
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      const labour = data?.data.map((labour) => ({ label: labour?.fullName, value: labour?._id }));
+      setLabours(labour);
+    }
+  }, [data, isSuccess]);
 
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
@@ -132,7 +136,7 @@ const AddProject = () => {
         <div className="lg:col-span-12">
           <label className="text-[#000] text-base mb-2 block font-semibold">Add Labours</label>
           <div>
-            <MultiSelectOption users={users} setFieldValue={formik.setFieldValue} name="labours" />
+            <MultiSelectOption users={labours} setFieldValue={formik.setFieldValue} name="labours" />
             {formik.touched.labours && formik.errors.labours && (
               <div className="text-red-500 text-sm">{formik.errors.labours}</div>
             )}

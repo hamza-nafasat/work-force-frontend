@@ -4,7 +4,6 @@ import getEnv from "../../config/config.js";
 const labourApis = createApi({
   reducerPath: "labourApi",
   baseQuery: fetchBaseQuery({ baseUrl: `${getEnv("SERVER_URL")}/api/labour`, credentials: "include" }),
-
   endpoints: (builder) => ({
     // add new labour
     // --------------

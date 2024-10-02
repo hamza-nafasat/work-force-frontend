@@ -47,7 +47,6 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
-<<<<<<< Updated upstream
     // validationSchema: usersSchema,
     onSubmit: async (values) => {
       try {
@@ -76,10 +75,6 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
         toast.error(error?.data?.message || "Some Error Occurred while updating Labour");
       }
     },
-=======
-    validationSchema: usersSchema,
-    onSubmit: async (values) => console.log(values),
->>>>>>> Stashed changes
   });
 
   return (

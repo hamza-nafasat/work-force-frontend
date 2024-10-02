@@ -4,16 +4,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
-<<<<<<< Updated upstream
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-=======
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
->>>>>>> Stashed changes
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import GlobalLoader from "./components/layout/GlobalLoader";
 import ScrollToTop from "./components/shared/scrollToTop/ScrollToTop";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,18 +17,10 @@ const User = lazy(() => import("./pages/user"));
 const Login = lazy(() => import("./pages/auth/Login"));
 const ForgetPassword = lazy(() => import("./pages/auth/ForgetPassword"));
 const Home = lazy(() => import("./pages/user/dashboard/home/Home"));
-const ActiveDevices = lazy(() =>
-  import("./pages/user/dashboard/activeDevices/ActiveDevices")
-);
-const Workforce = lazy(() =>
-  import("./pages/user/dashboard/workforce/Workforce")
-);
-const DeviceData = lazy(() =>
-  import("./pages/user/dashboard/deviceData/DeviceData")
-);
-const VehiclesData = lazy(() =>
-  import("./pages/user/dashboard/vehiclesData/VehiclesData")
-);
+const ActiveDevices = lazy(() => import("./pages/user/dashboard/activeDevices/ActiveDevices"));
+const Workforce = lazy(() => import("./pages/user/dashboard/workforce/Workforce"));
+const DeviceData = lazy(() => import("./pages/user/dashboard/deviceData/DeviceData"));
+const VehiclesData = lazy(() => import("./pages/user/dashboard/vehiclesData/VehiclesData"));
 const Sos = lazy(() => import("./pages/user/dashboard/sos/Sos"));
 const Projects = lazy(() => import("./pages/user/projects/Projects"));
 const Realtime = lazy(() => import("./pages/user/maps/realtime/Realtime"));
@@ -44,17 +28,11 @@ const Geofence = lazy(() => import("./pages/user/maps/geofence/Geofence"));
 const Vehicles = lazy(() => import("./pages/user/vehicles/Vehicles"));
 const Users = lazy(() => import("./pages/user/users/Users"));
 const Sensors = lazy(() => import("./pages/user/sensors/Sensors"));
-const UsersViolations = lazy(() =>
-  import("./pages/user/violations/UsersViolations")
-);
-const VehiclesViolations = lazy(() =>
-  import("./pages/user/violations/VehiclesViolations")
-);
+const UsersViolations = lazy(() => import("./pages/user/violations/UsersViolations"));
+const VehiclesViolations = lazy(() => import("./pages/user/violations/VehiclesViolations"));
 const ScoreCard = lazy(() => import("./pages/user/scoreCard/ScoreCard"));
 const Plans = lazy(() => import("./pages/user/plansAndPricing/Plans"));
-const Transactions = lazy(() =>
-  import("./pages/user/plansAndPricing/Transactions")
-);
+const Transactions = lazy(() => import("./pages/user/plansAndPricing/Transactions"));
 const AddProject = lazy(() => import("./pages/user/projects/AddProject"));
 const UpdateProfile = lazy(() => import("./pages/user/settings/UpdateProfile"));
 const VehicleDetail = lazy(() => import("./pages/user/vehicles/VehicleDetail"));
@@ -78,12 +56,11 @@ function App() {
     if (error) dispatch(userNotExist());
   }, [data, error, dispatch]);
 
-  const loader = <GlobalLoader />;
   return isLoading ? (
-    loader
+    <GlobalLoader />
   ) : (
     <Router>
-      <Suspense fallback={loader}>
+      <Suspense fallback={<GlobalLoader />}>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />

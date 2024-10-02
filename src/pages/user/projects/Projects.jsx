@@ -8,10 +8,12 @@ import DateIcon from "../../../assets/svgs/projects/DateIcon";
 import { Link, useNavigate } from "react-router-dom";
 import { IoEye } from "react-icons/io5";
 import EditIcon from "../../../assets/svgs/EditIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../../components/modals/Modal";
 import EditProject from "./EditProject";
 import { confirmAlert } from "react-confirm-alert";
+import { useGetAllProjectsQuery } from "../../../redux/api/projectApi";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
@@ -106,8 +108,10 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
 ];
 
 const Projects = () => {
-  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const { data, isSuccess, isLoading } = useGetAllProjectsQuery("");
+  const [projectsData, setProjectsData] = useState([]);
+  const [modal, setModal] = useState(false);
 
   const modalOpenHandler = (modalType) => setModal(modalType);
   const modalCloseHandler = () => setModal(false);
@@ -130,7 +134,33 @@ const Projects = () => {
     });
   };
 
-  return (
+  useEffect(() => {
+    if (isSuccess && data?.data) {
+      const projects = data?.data?.map((project) => {
+        const labours = project?.labours?.map((labour) => ({
+          name: labour?.fullName,
+          image: labour?.image?.url,
+          position: [25.276987 + Math.random(), 55.296249 + Math.random()],
+        }));
+        return {
+          id: project._id,
+          projectName: project.name,
+          startDate: project.startDate,
+          dueDate: project.endDate,
+          labours: labours,
+          workforceCount: "85",
+          action: "",
+          projectDetail: project?.description,
+        };
+      });
+      console.log(projects);
+      setProjectsData(projects);
+    }
+  }, [data, isSuccess]);
+
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
