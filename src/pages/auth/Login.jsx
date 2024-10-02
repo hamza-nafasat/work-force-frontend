@@ -29,7 +29,7 @@ const Login = () => {
       toast.success(response?.message);
       return navigate("/user");
     } catch (error) {
-      toast.error(error?.data?.message || "Some Error Occurred in Loin");
+      toast.error(error?.data?.message || "Some Error Occurred in login");
     }
   };
 

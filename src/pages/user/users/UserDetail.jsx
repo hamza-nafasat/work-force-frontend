@@ -1,50 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { usersData } from "../../../data/data";
-import Title from "../../../components/shared/title/Title";
 import EditIcon from "../../../assets/svgs/EditIcon";
-import ToggleButton from "../../../components/shared/toggle/ToggleButton";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Title from "../../../components/shared/title/Title";
+import { useGetSingleLabourQuery } from "../../../redux/api/labourApi";
 
 const UserDetail = () => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [singleUser, setSingleUser] = useState({});
   const { id } = useParams();
-  const user = usersData.find((user) => user.id === id);
-  // console.log('user', user)
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-  };
-  return (
+  const { data, isLoading, isSuccess } = useGetSingleLabourQuery({ labourId: id });
+
+  useEffect(() => {
+    if (isSuccess && data?.data) setSingleUser(data?.data);
+  }, [data, isSuccess]);
+
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
-      {!user && <p className="text-base">No vehicle data found..</p>}
-      <div className="flex items-center justify-between">
+      {!singleUser?._id ? (
+        <p className="text-base">No user data found..</p>
+      ) : (
         <div>
-          <Title title="User Detail" />
-        </div>
-        <div className="cursor-pointer">
-          <EditIcon />
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-8">
-        <div>
-          <LabelAndTitle label="Full Name" title={user.fullName} />
-          <div className="grid md:grid-cols-3 gap-5 mt-4">
-            <LabelAndTitle label="Phone Number" title={user.phoneNumber} />
-            <LabelAndTitle label="Date Of Birth" title={user.dateOfBirth} />
-            <LabelAndTitle label="Gender" title={user.gender} />
-            <LabelAndTitle label="Passport / ID" title={user.passportOrId} />
-            <LabelAndTitle label="Nationality" title={user.nationality} />
-            <LabelAndTitle label="Profession" title={user.profession} />
-            <LabelAndTitle label="Working Hours" title={user.workingHour} />
-            <LabelAndTitle label="Working Status" title={user.status} />
+          <div className="flex items-center justify-between">
+            <div>
+              <Title title="User Detail" />
+            </div>
+            <div className="cursor-pointer">
+              <EditIcon />
+            </div>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-8">
+            <div>
+              <LabelAndTitle label="Full Name" title={singleUser?.fullName} />
+              <div className="grid md:grid-cols-3 gap-5 mt-4">
+                <LabelAndTitle label="Phone Number" title={singleUser?.phoneNumber} />
+                <LabelAndTitle label="Date Of Birth" title={singleUser?.dateOfBirth} />
+                <LabelAndTitle label="Gender" title={singleUser?.gender} />
+                <LabelAndTitle label="Passport / ID" title={singleUser?.passportOrID} />
+                <LabelAndTitle label="Nationality" title={singleUser?.nationality} />
+                <LabelAndTitle label="Profession" title={singleUser?.profession} />
+                <LabelAndTitle
+                  label="Working Hours"
+                  title={`${singleUser?.workingHour?.startTime} - ${singleUser?.workingHour?.endTime}`}
+                />
+                <LabelAndTitle label="Working Status" title={singleUser?.status} />
+              </div>
+            </div>
+            <div>
+              <img
+                src={singleUser?.image?.url}
+                className="w-full md:w-[70%] h-[full] object-cover rounded-lg m-auto"
+              />
+            </div>
           </div>
         </div>
-        <div>
-          <img
-            src={user.profilePhoto}
-            className="w-full md:w-[70%] h-[full] object-cover rounded-lg m-auto"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

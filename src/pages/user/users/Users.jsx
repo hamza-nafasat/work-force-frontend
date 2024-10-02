@@ -13,6 +13,7 @@ import EditUser from "./EditUser";
 import { confirmAlert } from "react-confirm-alert";
 import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
 import { useDispatch } from "react-redux";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
@@ -67,7 +68,7 @@ const Users = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [usersData, setUsersData] = useState([]);
-  const { data, isSuccess, isLoading, isError } = useGetAllLaboursQuery("");
+  const { data, isSuccess, isLoading, refetch } = useGetAllLaboursQuery("");
   const navigate = useNavigate();
 
   console.log(data);
@@ -93,10 +94,29 @@ const Users = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) setUsersData(data?.data);
+    if (isSuccess && data?.data) {
+      const users = data?.data.map((user) => ({
+        id: user._id,
+        profilePhoto: user.image.url,
+        fullName: user.fullName,
+        nationality: user.nationality,
+        profession: user.profession,
+        status: user.status,
+        workingHour: `${user.workingHour.startTime} To ${user.workingHour.endTime}`,
+        phoneNumber: user.phoneNumber,
+        dateOfBirth: user.dateOfBirth,
+        passportOrId: user.passportOrID,
+        gender: user.gender,
+        action: "",
+      }));
+
+      setUsersData(users);
+    }
   }, [dispatch, data, isSuccess]);
 
-  return (
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
@@ -112,20 +132,22 @@ const Users = () => {
         </div>
       </div>
       <div className="mt-5">
-        {/* <DataTable
-          columns={columns(modalOpenHandler, navigate, deleteHandler)}
-          data={usersData}
-          selectableRows
-          selectableRowsHighlight
-          customStyles={tableStyles}
-          pagination
-          fixedHeader
-          fixedHeaderScrollHeight="70vh"
-        /> */}
+        {usersData && (
+          <DataTable
+            columns={columns(modalOpenHandler, navigate, deleteHandler)}
+            data={usersData}
+            selectableRows
+            selectableRowsHighlight
+            customStyles={tableStyles}
+            pagination
+            fixedHeader
+            fixedHeaderScrollHeight="70vh"
+          />
+        )}
       </div>
       {modal === "add" && (
         <Modal title="Add User" onClose={modalCloseHandler}>
-          <AddUser onClose={modalCloseHandler} />
+          <AddUser refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (

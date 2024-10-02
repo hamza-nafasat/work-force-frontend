@@ -6,15 +6,36 @@ import Button from "../../../components/shared/button/Button";
 import { IoCamera } from "react-icons/io5";
 import { useFormik } from "formik";
 import { usersSchema } from "../../../schemas";
+import { useAddLabourMutation } from "../../../redux/api/labourApi";
+import { toast } from "react-toastify";
 
-const AddUser = ({ onClose }) => {
+const workingStatusOptions = [
+  { option: "On leave", value: "on-leave" },
+  { option: "Working", value: "working" },
+];
+const professionOptions = [
+  { option: "Supervisor", value: "supervisor" },
+  { option: "Labour", value: "labour" },
+];
+const genderOptions = [
+  { option: "Male", value: "male" },
+  { option: "Female", value: "female" },
+];
+const nationalityOptions = [
+  { option: "Saudi Arabia", value: "saudi-arabia" },
+  { option: "Pakistan", value: "pakistan" },
+  { option: "UAE", value: "uae" },
+];
+
+const AddUser = ({ onClose, refetch }) => {
   const [imgSrc, setImgSrc] = useState(null);
+  const [addLabour, { isLoading }] = useAddLabourMutation();
 
   // Handlers for dropdown selections
-  const nationalitySelectHandler = (option) => setFieldValue("nationality", option.option);
-  const genderSelectHandler = (option) => setFieldValue("gender", option.option);
-  const professionSelectHandler = (option) => setFieldValue("profession", option.option);
-  const workingStatusSelectHandler = (option) => setFieldValue("workingStatus", option.option);
+  const nationalitySelectHandler = (option) => setFieldValue("nationality", option);
+  const genderSelectHandler = (option) => setFieldValue("gender", option);
+  const professionSelectHandler = (option) => setFieldValue("profession", option);
+  const workingStatusSelectHandler = (option) => setFieldValue("workingStatus", option);
 
   const uploadImgHandler = (e) => {
     const file = e.target.files[0];
@@ -45,7 +66,32 @@ const AddUser = ({ onClose }) => {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
     validationSchema: usersSchema,
-    onSubmit: async (values) => console.log(values),
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+        formData.append("fullName", values.fullName);
+        formData.append("phoneNumber", values.phoneNumber);
+        formData.append("passportOrID", values.passportNumber);
+        formData.append("dateOfBirth", values.dateOfBirth);
+        formData.append("nationality", values.nationality);
+        formData.append("gender", values.gender);
+        formData.append("profession", values.profession);
+        formData.append("status", values.workingStatus);
+        formData.append("startTime", values.workingHoursStartTime);
+        formData.append("endTime", values.workingHoursEndTime);
+        formData.append("file", values.image);
+        const response = await addLabour(formData).unwrap();
+        if (response?.success && response?.message) {
+          await refetch();
+          toast.success(response?.message);
+          // console.log("labour added successfully", response);
+          onClose();
+        }
+      } catch (error) {
+        console.log("error while adding new labour", error);
+        toast.error(error?.data?.message || "Some Error Occurred while adding new Labour");
+      }
+    },
   });
 
   return (
@@ -113,37 +159,28 @@ const AddUser = ({ onClose }) => {
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Nationality" />
-            <Dropdown
-              options={[{ option: "Saudi Arabia" }, { option: "UAE" }]}
-              onSelect={nationalitySelectHandler}
-            />
+            <Dropdown options={nationalityOptions} onSelect={nationalitySelectHandler} />
             {errors.nationality && touched.nationality && (
               <div className="text-red-500 text-xs mt-1">{errors.nationality}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Gender" />
-            <Dropdown options={[{ option: "Male" }, { option: "Female" }]} onSelect={genderSelectHandler} />
+            <Dropdown options={genderOptions} onSelect={genderSelectHandler} />
             {errors.gender && touched.gender && (
               <div className="text-red-500 text-xs mt-1">{errors.gender}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Profession" />
-            <Dropdown
-              options={[{ option: "Supervisor" }, { option: "Labour" }]}
-              onSelect={professionSelectHandler}
-            />
+            <Dropdown options={professionOptions} onSelect={professionSelectHandler} />
             {errors.profession && touched.profession && (
               <div className="text-red-500 text-xs mt-1">{errors.profession}</div>
             )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Working Status" />
-            <Dropdown
-              options={[{ option: "On leave" }, { option: "Working" }]}
-              onSelect={workingStatusSelectHandler}
-            />
+            <Dropdown options={workingStatusOptions} onSelect={workingStatusSelectHandler} />
             {errors.workingStatus && touched.workingStatus && (
               <div className="text-red-500 text-xs mt-1">{errors.workingStatus}</div>
             )}
@@ -201,7 +238,13 @@ const AddUser = ({ onClose }) => {
             onClick={onClose}
             height="h-[45px] md:h-[60px]"
           />
-          <Button type="submit" text="Add" width="w-[150px]" height="h-[45px] md:h-[60px]" />
+          <Button
+            disabled={isLoading}
+            type="submit"
+            text="Add"
+            width="w-[150px]"
+            height="h-[45px] md:h-[60px]"
+          />
         </div>
       </div>
     </form>
