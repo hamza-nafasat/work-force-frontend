@@ -28,6 +28,17 @@
 .nav::-webkit-scrollbar, .no-scrollbar::-webkit-scrollbar, .sc-eEPDDI::-webkit-scrollbar {
     width: 0;
 }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px !important;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #C4DDF4 !important;
+    border-radius: 10px !important;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #084984 !important;
+    border-radius: 10px !important;
+}
 .css-1yntybz-control, .css-fbhat2-control {
     background: rgba(123, 192, 247, 0.15) !important;
     border-radius: 14px !important;

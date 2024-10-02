@@ -4,7 +4,7 @@ import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
 
 const AddNewScorecard = ({ onClose }) => {
-  const violationNameSelect = (option) => // console.log(option);
+  const violationNameSelect = (option) => console.log(option);
   return (
     <form className="mt-4 md:mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4">
       <div className="lg:col-span-8">

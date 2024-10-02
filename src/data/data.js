@@ -293,43 +293,55 @@ export const workforcesZone = [
 export const projectLabours = [
   {
     name: "Hamza",
-    image: profileImg,
+    image: "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    position: [25.276987, 55.296249],
+  },
+  {
+    name: "Hamza",
+    image:
+      "https://images.pexels.com/photos/16038942/pexels-photo-16038942/free-photo-of-black-and-white-portrait-of-woman-wearing-flower-crown.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    position: [24.453884, 51.377344],
+  },
+  {
+    name: "Hamza",
+    image:
+      "https://images.pexels.com/photos/14862041/pexels-photo-14862041.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    position: [25.258169, 52.304718],
   },
   {
     name: "Hamza",
     image: profileImg,
+    position: [23.424076, 53.847818],
   },
   {
     name: "Hamza",
     image: profileImg,
+    position: [25.8, 55.95],
+  },
+  {
+    name: "Hamza",
+    image: "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    position: [25.066667, 56.113333],
   },
   {
     name: "Hamza",
     image: profileImg,
+    position: [25.321178, 55.587276],
   },
   {
     name: "Hamza",
     image: profileImg,
+    position: [25.321178, 55.387276],
   },
   {
     name: "Hamza",
     image: profileImg,
+    position: [25.066667, 56.333333],
   },
   {
     name: "Hamza",
-    image: profileImg,
-  },
-  {
-    name: "Hamza",
-    image: profileImg,
-  },
-  {
-    name: "Hamza",
-    image: profileImg,
-  },
-  {
-    name: "Hamza",
-    image: profileImg,
+    image: "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    position: [25.321178, 55.287276],
   },
 ];
 
@@ -844,6 +856,7 @@ export const planCards = [
     color: "#FFC24A",
   },
 ];
+
 export const geofencingListData = [
   {
     _id: "64d6hbn1loopf1mdvvak8yt01",
@@ -899,6 +912,7 @@ export const trackerConnectivityData = [
     fill: "rgba(255, 191, 191, 1)",
   },
 ];
+
 export const vehiclesProfileData = [
   {
     name: "Connected",
@@ -970,5 +984,123 @@ export const usersViolationData = [
     contractor: "Sigma",
     nationality: "Egypt",
     plateNumber: "OPQ 1357",
+  },
+];
+
+export const alertRecords = [
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+  {
+    title: "Asif Zulfiqar",
+    id: "82783792700182",
+    img: profileImg,
+    alertTime: "July 30 09:00 AM",
+    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+  },
+];
+
+export const workersData = [
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "Working",
+    designation: "Supervisor",
+  },
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "On leave",
+    designation: "Designer",
+  },
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "Working",
+    designation: "Labor",
+  },
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "Working",
+    designation: "Analyst",
+  },
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "Working",
+    designation: "Designer",
+  },
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "On leave",
+    designation: "Technician",
+  },
+  {
+    name: "Asif Zulfiqar",
+    img: profileImg,
+    id: "82787392700182",
+    gender: "Male",
+    reason: "Working",
+    designation: "Engineer",
   },
 ];

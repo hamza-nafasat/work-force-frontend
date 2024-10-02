@@ -48,7 +48,7 @@ function App() {
   }, [data, error, dispatch]);
 
   const loader = <GlobalLoader />;
-  return isLoading || !user ? (
+  return isLoading ? (
     loader
   ) : (
     <Router>

@@ -1,15 +1,32 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { projectsData } from "../../../data/data";
+import { alertRecords, projectsData, workersData } from "../../../data/data";
 import Title from "../../../components/shared/title/Title";
 import EditIcon from "../../../assets/svgs/EditIcon";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import VehicleImg from "../../../assets/images/vehicles/vehicle.png";
+import workersImg from "../../../assets/images/projects/worker.png";
+import sensorImg from "../../../assets/images/projects/sensors.png";
+import L from "leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import TimeIcon from "../../../assets/svgs/projects/TimeIcon";
+import AlertSideIcon from "../../../assets/svgs/projects/AlertSideIcon";
+
+const createCustomIcon = (imgUrl) => {
+  return L.divIcon({
+    html: `
+      <div class="w-[45px] h-[45px] rounded-full overflow-hidden">
+        <img src="${imgUrl}" class="!w-full !h-full object-cover" />
+      </div>
+    `,
+    iconAnchor: [15, 45],
+    popupAnchor: [0, -45],
+  });
+};
 
 const ProjectDetail = () => {
   const { id } = useParams();
   const project = projectsData.find((project) => project.id === id);
-  const displayImages = project.labours.slice(0, 7);
-  const extraCount = project.labours.length - displayImages.length;
 
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
@@ -22,12 +39,11 @@ const ProjectDetail = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
-        <div className="lg:col-span-7">
-          <p className="text-sm md:text-base text-[#111111cc]">Project Name</p>
-          <p className="text-base md:text-lg font-semibold mt-1">
+        <div className="lg:col-span-8 bg-[#EBF6FE] p-4 rounded-xl">
+          <p className="text-base md:text-lg font-semibold">
             {project.projectName}
           </p>
-          <div className="mt-5 md:mt-8">
+          <div className="mt-4 md:mt-5">
             <p className="text-sm md:text-base text-[#111111cc]">Description</p>
             <p className="text-sm text-[#111111] mt-1">
               {project.projectDetail}
@@ -35,9 +51,9 @@ const ProjectDetail = () => {
           </div>
         </div>
         {/* second column */}
-        <div className="lg:col-span-5">
-          <div className="flex justify-between gap-5">
-            <div>
+        <div className="lg:col-span-4">
+          <div className="flex justify-between gap-4">
+            <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md`}>
               <p className="text-sm md:text-base text-[#111111cc]">
                 Start Date
               </p>
@@ -45,35 +61,41 @@ const ProjectDetail = () => {
                 {project.startDate}
               </p>
             </div>
-            <div>
-              <p className="text-sm md:text-base text-[#111111cc]">Due Date</p>
-              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">
+            <div
+              className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md`}
+            >
+              <p className="text-sm md:text-base text-white">Due Date</p>
+              <p className="text-sm sm:text-base md:text-md font-semibold mt-1 text-white">
                 {project.dueDate}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm md:text-base text-[#111111cc] mt-5 md:mt-8">
-            <FaMapMarkerAlt />
-            Location
+          <div className="border border-[#8E8E8E] rounded-xl p-2 shadow-md mt-4">
+            <div className="flex items-center gap-2 text-sm md:text-base text-[#111111cc]">
+              <FaMapMarkerAlt />
+              Location
+            </div>
+            <p className="text-sm sm:text-md lg:text-lg">
+              Taetratech, Lakhpat Road, Lahore
+            </p>
           </div>
-          <p className="text-sm sm:text-md lg:text-lg">Taetratech, Lakhpat Road, Lahore</p>
-          <p className="text-sm md:text-base text-[#111111cc] mt-5 md:mt-8">
-            Labours
-          </p>
-          <div className="mt-2 flex items-center ml-[10px]">
-            {displayImages.map((image, i) => (
-              <img
-                key={i}
-                src={image.image}
-                alt="profile"
-                className="w-[35px] h-[35px] rounded-full object-cover ml-[-10px]"
-              />
-            ))}
-            {extraCount > 0 && (
-              <div className="w-[35px] h-[35px] rounded-full ml-[-10px] flex items-center justify-center bg-[#d3d3d3] font-semibold">
-                +{extraCount}
-              </div>
-            )}
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
+        <div className="lg:col-span-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <DetailWidget title="Total Vehicles" value="60" icon={VehicleImg} />
+            <DetailWidget title="Total Sensors" value="112" icon={sensorImg} />
+            <DetailWidget title="Total Workers" value="60" icon={workersImg} />
+          </div>
+          <div className="mt-4">
+            <Map project={project} />
+          </div>
+        </div>
+        <div className="lg:col-span-4">
+          <Alerts />
+          <div className="mt-4">
+            <Workers />
           </div>
         </div>
       </div>
@@ -82,3 +104,138 @@ const ProjectDetail = () => {
 };
 
 export default ProjectDetail;
+
+const Workers = () => {
+  return (
+    <div className="border border-[#CFCFCF4D] rounded-xl p-4 shadow-md h-[338px] overflow-y-scroll custom-scrollbar">
+      <h6 className="text-sm md:text-lg text-[#292D32] font-bold border-b border-[#7B7B7B2B] pb-1 pl-2">
+        Workers
+      </h6>
+      {workersData.map((worker, i) => (
+        <Worker
+          key={i}
+          name={worker.name}
+          img={worker.img}
+          id={worker.id}
+          gender={worker.gender}
+          reason={worker.reason}
+          designation={worker.designation}
+        />
+      ))}
+    </div>
+  );
+};
+
+const Worker = ({ name, img, id, gender, reason, designation }) => {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 border-b border-[#e5e5e5]">
+      <div className="flex items-center gap-2 basis-[50%]">
+        <img src={img} alt="image" className="w-[45px] h-[45px] object-cover" />
+        <div>
+          <p className="text-sm md:text-base text-[#5C5B5B] leading-none">{name}</p>
+          <p className="text-[12px] text-[#5C5B5B] leading-none">{id}</p>
+          <p className="text-[8px] text-[#41414199] leading-none mt-[2px]">{gender}</p>
+        </div>
+      </div>
+      <div className={`basis-[15%] flex justify-center ${reason === 'On leave' ? 'bg-transparent border border-[#084781] text-[#084781]':'bg-[#084781] text-white'} px-2 py-1 rounded-full text-[10px] font-semibold`}>
+        {reason}
+      </div>
+      <p className="basis-[33%] text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
+    </div>
+  );
+};
+
+const Alerts = () => {
+  return (
+    <div className="border border-[#CFCFCF4D] rounded-xl p-4 shadow-md h-[300px] overflow-y-scroll custom-scrollbar">
+      <h6 className="text-sm md:text-lg text-[#292D32] font-bold border-b border-[#7B7B7B2B] pb-1 pl-2">
+        Alerts
+      </h6>
+      {alertRecords.map((alert, i) => (
+        <Alert
+          key={i}
+          title={alert.title}
+          id={alert.id}
+          img={alert.img}
+          time={alert.alertTime}
+          alert={alert.alert}
+        />
+      ))}
+    </div>
+  );
+};
+
+const Alert = ({ title, id, img, time, alert }) => {
+  return (
+    <div className="relative p-2 border-b border-[#e5e5e5]">
+      <div className="flex justify-between gap-2 pl-2">
+        <div className="flex items-center gap-2">
+          <img
+            src={img}
+            alt="image"
+            className="w-[30px] h-[30px] object-cover"
+          />
+          <div>
+            <p className="text-[10px] text-[#5C5B5B]">{title}</p>
+            <p className="text-[6px] text-[#5C5B5B]">{id}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-[2px]">
+          <TimeIcon />
+          <div className="text-[8px] text-[#5C5B5B]">{time}</div>
+        </div>
+      </div>
+      <p className="text-[12px] font-medium text-[#5C5B5B] pl-2">
+        <span className="font-semibold text-[#FF0000]">Attention: </span>A is
+        {alert}
+      </p>
+      <div className="absolute top-[11%] left-0">
+        <AlertSideIcon />
+      </div>
+    </div>
+  );
+};
+
+const Map = ({ project }) => {    
+  const position = [25.276987, 55.296249];
+  return (
+    <MapContainer
+      center={position}
+      zoom={9}
+      scrollWheelZoom={false}
+      style={{
+        height: "480px",
+        width: "100%",
+        zIndex: 0,
+        borderRadius: "20px",
+      }}
+      attributionControl={false}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {project?.labours.map((labour, i) => (
+        <Marker
+          key={i}
+          position={labour?.position}
+          icon={createCustomIcon(labour?.image)}
+        ></Marker>
+      ))}
+    </MapContainer>
+  );
+};
+
+const DetailWidget = ({ title, value, icon, bg }) => {
+  return (
+    <div className="border border-[#8E8E8E99] shadow-md rounded-2xl p-4 flex items-center justify-between gap-4 flex-1 relative">
+      <div className="flex flex-col items-center gap-2">
+        <p className="text-sm md:text-base font-semibold text-[#112C5F]">
+          {title}
+        </p>
+        <h3 className="text-[28px] lg:text-[40px]">{value}</h3>
+      </div>
+      <img src={icon} className="w-20 md:w-[120px] h-20 md:h-[120px] object-contain" alt="image" />
+    </div>
+  );
+};
