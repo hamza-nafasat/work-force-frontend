@@ -1,23 +1,24 @@
-import { useFormik } from "formik";
 import React, { useState } from "react";
-import { IoCamera } from "react-icons/io5";
-import profileImg from "../../../assets/images/header/profilepic.webp";
 import Input from "../../../components/auth/Input";
-import Button from "../../../components/shared/button/Button";
 import Dropdown from "../../../components/shared/dropdown/Dropdown";
-import { useUpdateLabourMutation } from "../../../redux/api/labourApi";
-import { genderOptions, nationalityOptions, professionOptions, workingStatusOptions } from "./option";
-import { toast } from "react-toastify";
+import profileImg from "../../../assets/images/header/profilepic.webp";
+import Button from "../../../components/shared/button/Button";
+import { IoCamera } from "react-icons/io5";
+import { useFormik } from "formik";
+import { usersSchema } from "../../../schemas";
 
-const EditUser = ({ selectedRow, refetch, onClose }) => {
-  const [updateLabour, { isLoading }] = useUpdateLabourMutation();
-  const [imgSrc, setImgSrc] = useState(selectedRow?.profilePhoto);
+const AddUser = () => {
+  const [imgSrc, setImgSrc] = useState(null);
 
   // Handlers for dropdown selections
-  const nationalitySelectHandler = (option) => setFieldValue("nationality", option);
-  const genderSelectHandler = (option) => setFieldValue("gender", option);
-  const professionSelectHandler = (option) => setFieldValue("profession", option);
-  const workingStatusSelectHandler = (option) => setFieldValue("workingStatus", option);
+  const nationalitySelectHandler = (option) =>
+    setFieldValue("nationality", option.option);
+  const genderSelectHandler = (option) =>
+    setFieldValue("gender", option.option);
+  const professionSelectHandler = (option) =>
+    setFieldValue("profession", option.option);
+  const workingStatusSelectHandler = (option) =>
+    setFieldValue("workingStatus", option.option);
 
   const uploadImgHandler = (e) => {
     const file = e.target.files[0];
@@ -32,58 +33,38 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
   };
 
   const initialValues = {
-    fullName: selectedRow?.fullName || "",
-    phoneNumber: selectedRow?.phoneNumber || "",
-    passportNumber: selectedRow?.passportOrId || "",
-    dateOfBirth: selectedRow?.dateOfBirth || "",
-    nationality: selectedRow?.nationality || "",
-    gender: selectedRow?.gender || "",
-    profession: selectedRow?.profession || "",
-    workingStatus: selectedRow?.status || "",
-    workingHoursStartTime: selectedRow?.startTime || "",
-    workingHoursEndTime: selectedRow?.endTime || "",
+    fullName: "",
+    phoneNumber: "",
+    passportNumber: "",
+    dateOfBirth: "",
+    nationality: "",
+    gender: "",
+    profession: "",
+    workingStatus: "",
+    workingHoursStartTime: "",
+    workingHoursEndTime: "",
     image: "",
   };
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
     initialValues,
-<<<<<<< Updated upstream
-    // validationSchema: usersSchema,
-    onSubmit: async (values) => {
-      try {
-        const formData = new FormData();
-        if (values.fullName) formData.append("fullName", values.fullName);
-        if (values.phoneNumber) formData.append("phoneNumber", values.phoneNumber);
-        if (values.passportNumber) formData.append("passportOrId", values.passportNumber);
-        if (values.dateOfBirth) formData.append("dateOfBirth", values.dateOfBirth);
-        if (values.nationality) formData.append("nationality", values.nationality);
-        if (values.gender) formData.append("gender", values.gender);
-        if (values.profession) formData.append("profession", values.profession);
-        if (values.workingStatus) formData.append("status", values.workingStatus);
-        if (values.workingHoursStartTime) formData.append("startTime", values.workingHoursStartTime);
-        if (values.workingHoursEndTime) formData.append("endTime", values.workingHoursEndTime);
-        if (values.image) formData.append("file", values.image);
-
-        const response = await updateLabour({ LabourId: selectedRow?.id, data: formData }).unwrap();
-        if (response?.success && response?.message) {
-          await refetch();
-          toast.success(response?.message);
-          // console.log("labour updated successfully", response);
-          onClose();
-        }
-      } catch (error) {
-        // console.log("error while updating Labour", error);
-        toast.error(error?.data?.message || "Some Error Occurred while updating Labour");
-      }
-    },
-=======
     validationSchema: usersSchema,
     onSubmit: async (values) => console.log(values),
->>>>>>> Stashed changes
   });
 
   return (
-    <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 bg-white rounded-lg p-4 md:p-6"
+    >
       <div className="lg:col-span-9">
         <div className="grid lg:grid-cols-12 gap-1 md:gap-4">
           <div className="lg:col-span-6">
@@ -97,6 +78,9 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
               onBlur={handleBlur}
               name="fullName"
             />
+            {errors.fullName && touched.fullName && (
+              <div className="text-red-500 text-xs mt-1">{errors.fullName}</div>
+            )}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -109,6 +93,11 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
               onBlur={handleBlur}
               name="phoneNumber"
             />
+            {errors.phoneNumber && touched.phoneNumber && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.phoneNumber}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -120,6 +109,11 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
               onBlur={handleBlur}
               name="dateOfBirth"
             />
+            {errors.dateOfBirth && touched.dateOfBirth && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.dateOfBirth}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -132,38 +126,57 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
               onBlur={handleBlur}
               name="passportNumber"
             />
+            {errors.passportNumber && touched.passportNumber && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.passportNumber}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Nationality" />
             <Dropdown
-              defaultText={selectedRow?.nationality}
-              options={nationalityOptions}
+              options={[{ option: "Saudi Arabia" }, { option: "UAE" }]}
               onSelect={nationalitySelectHandler}
             />
+            {errors.nationality && touched.nationality && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.nationality}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Gender" />
             <Dropdown
-              defaultText={selectedRow?.gender}
-              options={genderOptions}
+              options={[{ option: "Male" }, { option: "Female" }]}
               onSelect={genderSelectHandler}
             />
+            {errors.gender && touched.gender && (
+              <div className="text-red-500 text-xs mt-1">{errors.gender}</div>
+            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Profession" />
             <Dropdown
-              defaultText={selectedRow?.profession}
-              options={professionOptions}
+              options={[{ option: "Supervisor" }, { option: "Labour" }]}
               onSelect={professionSelectHandler}
             />
+            {errors.profession && touched.profession && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.profession}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Label label="Working Status" />
             <Dropdown
-              defaultText={selectedRow?.status}
-              options={workingStatusOptions}
+              options={[{ option: "On leave" }, { option: "Working" }]}
               onSelect={workingStatusSelectHandler}
             />
+            {errors.workingStatus && touched.workingStatus && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.workingStatus}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Input
@@ -176,6 +189,11 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
               onBlur={handleBlur}
               name="workingHoursStartTime"
             />
+            {errors.workingHoursStartTime && touched.workingHoursStartTime && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.workingHoursStartTime}
+              </div>
+            )}
           </div>
           <div className="lg:col-span-6 mb-4">
             <Input
@@ -188,10 +206,15 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
               onBlur={handleBlur}
               name="workingHoursEndTime"
             />
+            {errors.workingHoursEndTime && touched.workingHoursEndTime && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.workingHoursEndTime}
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <div className="lg:col-span-3">
+      <div className="lg:col-span-3 flex flex-col items-center">
         <img
           src={imgSrc || profileImg}
           alt=""
@@ -199,30 +222,31 @@ const EditUser = ({ selectedRow, refetch, onClose }) => {
         />
         <div className="flex flex-col justify-center">
           <ChangePhoto onChange={uploadImgHandler} />
+          {errors.image && touched.image && (
+            <div className="text-red-500 text-xs mt-1">{errors.image}</div>
+          )}
         </div>
       </div>
-      <div className="lg:col-span-12">
+      <div className="lg:col-span-9">
         <div className="flex items-center justify-end gap-2">
           <Button
-            disabled={isLoading}
-            text="Cancel"
-            color="#111111b3"
-            bg="#76767640"
+            type="submit"
+            text="Add"
             width="w-[150px]"
-            onClick={onClose}
             height="h-[45px] md:h-[60px]"
           />
-          <Button type="submit" text="Add" width="w-[150px]" height="h-[45px] md:h-[60px]" />
         </div>
       </div>
     </form>
   );
 };
 
-export default EditUser;
+export default AddUser;
 
 const Label = ({ label }) => (
-  <label className="text-[#000] text-base mb-2 block font-semibold">{label}</label>
+  <label className="text-[#000] text-base mb-2 block font-semibold">
+    {label}
+  </label>
 );
 
 const ChangePhoto = ({ onChange }) => (
@@ -232,6 +256,10 @@ const ChangePhoto = ({ onChange }) => (
   >
     Change Photo
     <IoCamera fontSize={20} />
-    <input type="file" onChange={onChange} className="absolute inset-0 z-50 cursor-pointer opacity-0" />
+    <input
+      type="file"
+      onChange={onChange}
+      className="absolute inset-0 z-50 cursor-pointer opacity-0"
+    />
   </button>
 );

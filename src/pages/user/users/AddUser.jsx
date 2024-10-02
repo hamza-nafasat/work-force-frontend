@@ -49,6 +49,7 @@ const AddUser = ({ onClose, refetch }) => {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
     validationSchema: usersSchema,
+<<<<<<< Updated upstream
     onSubmit: async (values) => {
       try {
         const formData = new FormData();
@@ -75,6 +76,9 @@ const AddUser = ({ onClose, refetch }) => {
         toast.error(error?.data?.message || "Some Error Occurred while adding new Labour");
       }
     },
+=======
+    onSubmit: async (values) => console.log(values),
+>>>>>>> Stashed changes
   });
 
   return (
@@ -200,7 +204,7 @@ const AddUser = ({ onClose, refetch }) => {
           </div>
         </div>
       </div>
-      <div className="lg:col-span-3">
+      <div className="lg:col-span-3 flex flex-col items-center">
         <img
           src={imgSrc || profileImg}
           alt=""

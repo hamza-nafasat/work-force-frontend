@@ -293,7 +293,8 @@ export const workforcesZone = [
 export const projectLabours = [
   {
     name: "Hamza",
-    image: "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    image:
+      "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     position: [25.276987, 55.296249],
   },
   {
@@ -320,7 +321,8 @@ export const projectLabours = [
   },
   {
     name: "Hamza",
-    image: "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    image:
+      "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     position: [25.066667, 56.113333],
   },
   {
@@ -340,7 +342,8 @@ export const projectLabours = [
   },
   {
     name: "Hamza",
-    image: "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    image:
+      "https://images.pexels.com/photos/3658708/pexels-photo-3658708.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     position: [25.321178, 55.287276],
   },
 ];
@@ -500,6 +503,7 @@ export const usersData = [
     dateOfBirth: "1988-03-21",
     passportOrId: "S12345678",
     gender: "Male",
+    project: "Workforce Project Number 1",
     action: "",
   },
   {
@@ -514,6 +518,7 @@ export const usersData = [
     dateOfBirth: "1990-06-15",
     passportOrId: "P98765432",
     gender: "Female",
+    project: "Workforce Project Number 2",
     action: "",
   },
   {
@@ -528,6 +533,7 @@ export const usersData = [
     dateOfBirth: "1992-08-10",
     passportOrId: "U76543210",
     gender: "Male",
+    project: "Workforce Project Number 3",
     action: "",
   },
   {
@@ -542,6 +548,7 @@ export const usersData = [
     dateOfBirth: "1991-12-05",
     passportOrId: "Q65432109",
     gender: "Female",
+    project: "Workforce Project Number 4",
     action: "",
   },
   {
@@ -555,6 +562,52 @@ export const usersData = [
     phoneNumber: "+973 39 876 5432",
     dateOfBirth: "1989-11-25",
     passportOrId: "B43210987",
+    project: "Workforce Project Number 4",
+    gender: "Male",
+    action: "",
+  },
+  {
+    id: "34526gh",
+    profilePhoto: profileImg,
+    fullName: "Ahmed Raza",
+    nationality: "United Arab Emirates",
+    profession: "Developer",
+    status: "Working",
+    workingHour: "10:00 am To 06:00 pm",
+    phoneNumber: "+971 50 654 3210",
+    dateOfBirth: "1992-08-10",
+    passportOrId: "U76543210",
+    gender: "Male",
+    project: "Workforce Project Number 3",
+    action: "",
+  },
+  {
+    id: "45637ij",
+    profilePhoto: profileImg,
+    fullName: "Aisha Ali",
+    nationality: "Qatar",
+    profession: "Designer",
+    status: "Working",
+    workingHour: "11:00 am To 07:00 pm",
+    phoneNumber: "+974 55 765 4321",
+    dateOfBirth: "1991-12-05",
+    passportOrId: "Q65432109",
+    gender: "Female",
+    project: "Workforce Project Number 4",
+    action: "",
+  },
+  {
+    id: "56748jk",
+    profilePhoto: profileImg,
+    fullName: "Omar Faruk",
+    nationality: "Bahrain",
+    profession: "Analyst",
+    status: "On Leave",
+    workingHour: "08:00 am To 04:00 pm",
+    phoneNumber: "+973 39 876 5432",
+    dateOfBirth: "1989-11-25",
+    passportOrId: "B43210987",
+    project: "Workforce Project Number 4",
     gender: "Male",
     action: "",
   },
@@ -760,6 +813,7 @@ export const subscriptionHistoryData = [
     amount: "19.99",
     status: "expired",
     invoice: "",
+    user: { userName: "Hassam Shah", userImg: profileImg },
   },
   {
     _id: "456456gh",
@@ -768,6 +822,7 @@ export const subscriptionHistoryData = [
     amount: "29.99",
     status: "active",
     invoice: "INV-2024-001",
+    user: { userName: "Hammas Munir", userImg: profileImg },
   },
   {
     _id: "789789jk",
@@ -776,6 +831,7 @@ export const subscriptionHistoryData = [
     amount: "19.99",
     status: "canceled",
     invoice: "INV-2024-002",
+    user: { userName: "Moiz Khan Badshah", userImg: profileImg },
   },
   {
     _id: "101010ab",
@@ -784,6 +840,7 @@ export const subscriptionHistoryData = [
     amount: "9.99",
     status: "active",
     invoice: "INV-2024-003",
+    user: { userName: "Hamza Nafasat", userImg: profileImg },
   },
   {
     _id: "121212cd",
@@ -792,6 +849,7 @@ export const subscriptionHistoryData = [
     amount: "29.99",
     status: "expired",
     invoice: "",
+    user: { userName: "Asif Zulfiqar", userImg: profileImg },
   },
   {
     _id: "131313ef",
@@ -800,6 +858,7 @@ export const subscriptionHistoryData = [
     amount: "19.99",
     status: "active",
     invoice: "INV-2024-004",
+    user: { userName: "Wahid Ahmad", userImg: profileImg },
   },
 ];
 
@@ -993,56 +1052,64 @@ export const alertRecords = [
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
   {
     title: "Asif Zulfiqar",
     id: "82783792700182",
     img: profileImg,
     alertTime: "July 30 09:00 AM",
-    alert: "A sensor is currently disconnected. Please check the device and reconnect.",
+    alert:
+      "A sensor is currently disconnected. Please check the device and reconnect.",
   },
 ];
 
