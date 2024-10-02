@@ -1,22 +1,40 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import getEnv from "../../config/config.js";
 
-export const authApiPoint = createApi({
-  reducerPath: "userApi",
-
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8090",
-    credentials: "include",
-  }),
+const authApis = createApi({
+  reducerPath: "authApi",
+  baseQuery: fetchBaseQuery({ baseUrl: `${getEnv("SERVER_URL")}/api`, credentials: "include" }),
 
   endpoints: (builder) => ({
+    // login
+    // -----
     login: builder.mutation({
       query: (data) => ({
-        url: "/api/v1/auth/login",
+        url: "/auth/login",
         method: "POST",
         body: data,
+      }),
+    }),
+
+    // get my profile
+    // --------------
+    getMyProfile: builder.query({
+      query: () => ({
+        url: "/auth/my-profile",
+        method: "GET",
+      }),
+    }),
+
+    // logout
+    // ------
+    logout: builder.query({
+      query: () => ({
+        url: "/auth/logout",
+        method: "GET",
       }),
     }),
   }),
 });
 
-export const { useLoginMutation } = authApiPoint;
+export const { useLoginMutation, useGetMyProfileQuery, useLogoutQuery } = authApis;
+export default authApis;

@@ -6,13 +6,13 @@ import EditIcon from "../../../assets/svgs/EditIcon";
 import ToggleButton from "../../../components/shared/toggle/ToggleButton";
 
 const UserDetail = () => {
-  const [isChecked, setIsChecked] = useState(false)
+  const [isChecked, setIsChecked] = useState(false);
   const { id } = useParams();
   const user = usersData.find((user) => user.id === id);
-    console.log('user', user)
+  // console.log('user', user)
   const handleToggle = () => {
-    setIsChecked(!isChecked)
-  }
+    setIsChecked(!isChecked);
+  };
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
       {!user && <p className="text-base">No vehicle data found..</p>}
@@ -28,14 +28,8 @@ const UserDetail = () => {
         <div>
           <LabelAndTitle label="Full Name" title={user.fullName} />
           <div className="grid md:grid-cols-3 gap-5 mt-4">
-            <LabelAndTitle
-              label="Phone Number"
-              title={user.phoneNumber}
-            />
-            <LabelAndTitle
-              label="Date Of Birth"
-              title={user.dateOfBirth}
-            />
+            <LabelAndTitle label="Phone Number" title={user.phoneNumber} />
+            <LabelAndTitle label="Date Of Birth" title={user.dateOfBirth} />
             <LabelAndTitle label="Gender" title={user.gender} />
             <LabelAndTitle label="Passport / ID" title={user.passportOrId} />
             <LabelAndTitle label="Nationality" title={user.nationality} />
@@ -45,7 +39,10 @@ const UserDetail = () => {
           </div>
         </div>
         <div>
-            <img src={user.profilePhoto} className="w-full md:w-[70%] h-[full] object-cover rounded-lg m-auto"/>
+          <img
+            src={user.profilePhoto}
+            className="w-full md:w-[70%] h-[full] object-cover rounded-lg m-auto"
+          />
         </div>
       </div>
     </div>
@@ -58,9 +55,7 @@ const LabelAndTitle = ({ label, title }) => {
   return (
     <div>
       <p className="text-sm text-[#111111cc]">{label}</p>
-      <h5 className="text-base md:text-md text-[#111111] font-semibold capitalize">
-        {title}
-      </h5>
+      <h5 className="text-base md:text-md text-[#111111] font-semibold capitalize">{title}</h5>
     </div>
   );
 };

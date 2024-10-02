@@ -49,10 +49,7 @@ const columns = (modalOpenHandler, sensorStatus, statusToggleHandler, deleteHand
     name: "Action",
     selector: () => (
       <div className="flex items-center gap-2">
-        <div
-          className="cursor-pointer"
-          onClick={() => modalOpenHandler("edit")}
-        >
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
           <EditIcon />
         </div>
         <div className="cursor-pointer" onClick={() => deleteHandler()}>
@@ -69,7 +66,7 @@ const Sensors = () => {
 
   const modalOpenHandler = (modalType) => setModal(modalType);
   const modalCloseHandler = () => setModal(false);
-  
+
   const statusToggleHandler = (sensorId) => {
     setSensorStatus((prevState) => ({
       ...prevState,
@@ -79,21 +76,21 @@ const Sensors = () => {
 
   const deleteHandler = () => {
     confirmAlert({
-      title: 'Delete Sensor',
-      message: 'Are you sure, you want to delete the sensor?',
+      title: "Delete Sensor",
+      message: "Are you sure, you want to delete the sensor?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: () => {
-            console.log("project deleted")
-          }
+            // console.log("project deleted")
+          },
         },
         {
-          label: 'No'
-        }
-      ]
-    })
-  }
+          label: "No",
+        },
+      ],
+    });
+  };
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
@@ -101,17 +98,14 @@ const Sensors = () => {
           <Title title="Sensors" />
         </div>
         <div className="flex items-center gap-2">
-          <div
-            className="cursor-pointer"
-            onClick={() => modalOpenHandler("add")}
-          >
+          <div className="cursor-pointer" onClick={() => modalOpenHandler("add")}>
             <AddIcon />
           </div>
           <div className="cursor-pointer">
             <DeleteIcon />
           </div>
         </div>
-      </div> 
+      </div>
       <div className="mt-5">
         <DataTable
           columns={columns(modalOpenHandler, sensorStatus, statusToggleHandler, deleteHandler)}
@@ -125,12 +119,12 @@ const Sensors = () => {
         />
       </div>
       {modal === "add" && (
-        <Modal title="Add Sensor" width='w-[300px] md:w-[650px]' onClose={modalCloseHandler}>
+        <Modal title="Add Sensor" width="w-[300px] md:w-[650px]" onClose={modalCloseHandler}>
           <AddSensor onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (
-        <Modal title="Edit Sensor" width='w-[300px] md:w-[650px]' onClose={modalCloseHandler}>
+        <Modal title="Edit Sensor" width="w-[300px] md:w-[650px]" onClose={modalCloseHandler}>
           <EditSensor onClose={modalCloseHandler} />
         </Modal>
       )}

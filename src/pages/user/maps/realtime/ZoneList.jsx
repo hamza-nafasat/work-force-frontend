@@ -3,27 +3,25 @@ import React from "react";
 const ZoneList = ({ labours, sensors }) => {
   return (
     <div>
-      <h4 className="text-sm md:text-base font-semibold text-primary">
-        Zone 1
-      </h4>
+      <h4 className="text-sm md:text-base font-semibold text-primary">Zone 1</h4>
       <div className="mt-4">
         <h4 className="text-sm md:text-base font-semibold">Labours</h4>
         <div className="mt-4">
           {labours.map((labour, i) => (
-            <>
-              <List key={i} title="Total Labour" value={labour.totalLabours} />
-              <List key={i} title="In Zone" value={labour.inZone} />
-              <List key={i} title="Out of Zone" value={labour.outZone} />
-            </>
+            <div key={i}>
+              <List title="Total Labour" value={labour.totalLabours} />
+              <List title="In Zone" value={labour.inZone} />
+              <List title="Out of Zone" value={labour.outZone} />
+            </div>
           ))}
         </div>
         <div className="mt-4">
-        <h4 className="text-sm md:text-base font-semibold mb-4">Sensors</h4>
+          <h4 className="text-sm md:text-base font-semibold mb-4">Sensors</h4>
           {sensors.map((sensor, i) => (
-            <>
-              <List key={i} title="Total Labour" value={sensor.totalSensors} />
-              <List key={i} title="In Zone" value={sensor.activeSensors} />
-            </>
+            <div key={i}>
+              <List title="Total Labour" value={sensor.totalSensors} />
+              <List title="In Zone" value={sensor.activeSensors} />
+            </div>
           ))}
         </div>
       </div>

@@ -1,49 +1,54 @@
-import React from 'react'
-import Title from '../../../components/shared/title/Title'
-import DeleteIcon from '../../../assets/svgs/DeleteIcon'
-import DataTable from 'react-data-table-component'
-import DownloadIcon from '../../../assets/svgs/DownloadIcon'
-import { subscriptionHistoryData } from '../../../data/data'
+import React from "react";
+import Title from "../../../components/shared/title/Title";
+import DeleteIcon from "../../../assets/svgs/DeleteIcon";
+import DataTable from "react-data-table-component";
+import DownloadIcon from "../../../assets/svgs/DownloadIcon";
+import { subscriptionHistoryData } from "../../../data/data";
 
 const columns = [
   {
-    name: 'Date',
+    name: "Date",
     selector: (row) => row.date,
   },
   {
-    name: 'Plan',
+    name: "Plan",
     selector: (row) => row.plan,
   },
   {
-    name: 'Amount',
-    selector: (row) => row.amount
+    name: "Amount",
+    selector: (row) => row.amount,
   },
   {
-    name: 'Status',
-    cell: (row) => (
-      row.status === 'active' ? (
-        <div className="bg-[rgba(80,212,80,1)] rounded-[6px] text-sm w-[90px] h-8 grid place-items-center capitalize">{row.status}</div>
-      ) : row.status === 'expired' ? (
-        <div className="bg-[rgba(255,0,0,1)] rounded-[6px] text-sm w-[90px] h-8 grid place-items-center text-white capitalize">{row.status}</div>
+    name: "Status",
+    cell: (row) =>
+      row.status === "active" ? (
+        <div className="bg-[rgba(80,212,80,1)] rounded-[6px] text-sm w-[90px] h-8 grid place-items-center capitalize">
+          {row.status}
+        </div>
+      ) : row.status === "expired" ? (
+        <div className="bg-[rgba(255,0,0,1)] rounded-[6px] text-sm w-[90px] h-8 grid place-items-center text-white capitalize">
+          {row.status}
+        </div>
       ) : (
-        <div className="bg-[rgba(255,184,39,1)] rounded-[6px] text-sm w-[90px] h-8 grid place-items-center capitalize">{row.status}</div>
-      )
-    )
+        <div className="bg-[rgba(255,184,39,1)] rounded-[6px] text-sm w-[90px] h-8 grid place-items-center capitalize">
+          {row.status}
+        </div>
+      ),
   },
   {
-    name: 'Invoice',
+    name: "Invoice",
     selector: () => (
-      <div className='cursor-pointer'>
+      <div className="cursor-pointer">
         <DownloadIcon />
       </div>
-    )
+    ),
   },
-]
+];
 
 const Transactions = () => {
-  console.log('data', subscriptionHistoryData)
+  // console.log('data', subscriptionHistoryData)
   return (
-    <div className='bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden'>
+    <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
           <Title title="Subscription History" />
@@ -67,10 +72,10 @@ const Transactions = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Transactions
+export default Transactions;
 
 const tableStyles = {
   headCells: {
@@ -86,13 +91,13 @@ const tableStyles = {
       borderRadius: "6px",
       padding: "14px 0",
       margin: "10px 0",
-      borderBottomWidth: '0 !important'
+      borderBottomWidth: "0 !important",
     },
   },
   cells: {
     style: {
-      color: 'rgba(17, 17, 17, 1)',
-      fontSize: '14px'
-    }
-  }
+      color: "rgba(17, 17, 17, 1)",
+      fontSize: "14px",
+    },
+  },
 };

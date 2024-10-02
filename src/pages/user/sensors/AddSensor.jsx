@@ -4,9 +4,9 @@ import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Button from "../../../components/shared/button/Button";
 
-const AddSensor = ({onClose}) => {
-  const topicSelectHander = (option) => console.log(option);
-  const portSelectHander = (option) => console.log(option);
+const AddSensor = ({ onClose }) => {
+  const topicSelectHandler = (option) => console.log(option);
+  const portSelectHandler = (option) => console.log(option);
   return (
     <form className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <div className="lg:col-span-8">
@@ -21,23 +21,15 @@ const AddSensor = ({onClose}) => {
         <Label label="Topic" />
         <Dropdown
           options={[{ option: "Temperature" }, { option: "Humidity" }]}
-          onSelect={topicSelectHander}
+          onSelect={topicSelectHandler}
         />
       </div>
       <div className="lg:col-span-6">
-        <Input
-          type="text"
-          label="IP"
-          labelWeight="font-semibold"
-          placeholder="192.168.1.1"
-        />
+        <Input type="text" label="IP" labelWeight="font-semibold" placeholder="192.168.1.1" />
       </div>
       <div className="lg:col-span-6">
         <Label label="Port" />
-        <Dropdown
-          options={[{ option: "8080" }, { option: "6766" }]}
-          onSelect={portSelectHander}
-        />
+        <Dropdown options={[{ option: "8080" }, { option: "6766" }]} onSelect={portSelectHandler} />
       </div>
       <div className="lg:col-span-6">
         <Input
@@ -62,11 +54,11 @@ const AddSensor = ({onClose}) => {
         </div>
       </div>
       <div className="lg:col-span-12 mt-4">
-          <div className="flex items-center justify-end gap-2">
-            <Button text='Cancel' color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
-            <Button text='Add' width="w-[150px]" />
-          </div>
+        <div className="flex items-center justify-end gap-2">
+          <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
+          <Button text="Add" width="w-[150px]" />
         </div>
+      </div>
     </form>
   );
 };

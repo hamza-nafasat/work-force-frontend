@@ -13,12 +13,10 @@ import Modal from "../../../components/modals/Modal";
 import EditProject from "./EditProject";
 import { confirmAlert } from "react-confirm-alert";
 
-const columns = (modalOpenHandler,navigate, deleteHandler) => [
+const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
     name: "Project Name",
-    cell: (row) => (
-      <p className="text-sm text-[#111111] font-medium">{row.projectName}</p>
-    ),
+    cell: (row) => <p className="text-sm text-[#111111] font-medium">{row.projectName}</p>,
     width: "auto",
   },
   {
@@ -28,9 +26,7 @@ const columns = (modalOpenHandler,navigate, deleteHandler) => [
         <DateIcon />
         <div>
           <p className="text-[12px] text-[#11111199]">Start Date:</p>
-          <p className="text-sm font-medium text-[#11111199] mt-1">
-            {row.startDate}
-          </p>
+          <p className="text-sm font-medium text-[#11111199] mt-1">{row.startDate}</p>
         </div>
       </div>
     ),
@@ -38,14 +34,12 @@ const columns = (modalOpenHandler,navigate, deleteHandler) => [
   },
   {
     name: "Due Date",
-    cell: (row) => ( 
+    cell: (row) => (
       <div className="flex items-center gap-1">
         <DateIcon />
         <div>
           <p className="text-[12px] text-[#11111199]">Due Date:</p>
-          <p className="text-sm font-medium text-[#11111199] mt-1">
-            {row.dueDate}
-          </p>
+          <p className="text-sm font-medium text-[#11111199] mt-1">{row.dueDate}</p>
         </div>
       </div>
     ),
@@ -89,16 +83,16 @@ const columns = (modalOpenHandler,navigate, deleteHandler) => [
       </div>
     ),
     width: "170px",
-    center: true
+    $center: true,
   },
   {
     name: " Action",
     cell: (row) => (
       <div className="flex items-center gap-2">
         <div className="cursor-pointer" onClick={() => navigate(`/user/projects/${row.id}`)}>
-          <IoEye fontSize={18} style={{marginTop:'4px'}} />
+          <IoEye fontSize={18} style={{ marginTop: "4px" }} />
         </div>
-        <div className="cursor-pointer" onClick={() => modalOpenHandler('edit')}>
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
           <EditIcon />
         </div>
         <div className="cursor-pointer" onClick={() => deleteHandler()}>
@@ -107,35 +101,34 @@ const columns = (modalOpenHandler,navigate, deleteHandler) => [
       </div>
     ),
     width: "100px",
-    center: true
+    $center: true,
   },
 ];
-
 
 const Projects = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  
-  const modalOpenHandler = modalType => setModal(modalType)
-  const modalCloseHandler = () => setModal(false)
+
+  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalCloseHandler = () => setModal(false);
 
   const deleteHandler = () => {
     confirmAlert({
-      title: 'Delete Project',
-      message: 'Are you sure, you want to delete the project?',
+      title: "Delete Project",
+      message: "Are you sure, you want to delete the project?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: () => {
-            console.log("project deleted")
-          }
+            // console.log("project deleted")
+          },
         },
         {
-          label: 'No'
-        }
-      ]
-    })
-  }
+          label: "No",
+        },
+      ],
+    });
+  };
 
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
@@ -144,17 +137,17 @@ const Projects = () => {
           <Title title="Projects" />
         </div>
         <div className="flex items-center gap-2">
-          <Link to='/user/add-project'>
+          <Link to="/user/add-project">
             <AddIcon />
           </Link>
           <div className="cursor-pointer">
-            <DeleteIcon /> 
+            <DeleteIcon />
           </div>
         </div>
       </div>
       <div className="mt-5">
         <DataTable
-          columns={columns(modalOpenHandler,navigate, deleteHandler)}
+          columns={columns(modalOpenHandler, navigate, deleteHandler)}
           data={projectsData}
           selectableRows
           selectableRowsHighlight
@@ -164,8 +157,8 @@ const Projects = () => {
           fixedHeaderScrollHeight="100vh"
         />
       </div>
-      {modal === 'edit' && (
-        <Modal title='Edit Project' onClose={modalCloseHandler}>
+      {modal === "edit" && (
+        <Modal title="Edit Project" onClose={modalCloseHandler}>
           <EditProject onClose={modalCloseHandler} />
         </Modal>
       )}
@@ -189,7 +182,7 @@ const tableStyles = {
       borderRadius: "6px",
       padding: "14px 0",
       margin: "10px 0",
-      borderBottomWidth: '0 !important'
+      borderBottomWidth: "0 !important",
     },
   },
 };

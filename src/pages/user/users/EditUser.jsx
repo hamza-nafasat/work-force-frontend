@@ -57,7 +57,7 @@ const EditUser = ({ onClose }) => {
   } = useFormik({
     initialValues,
     validationSchema: usersSchema,
-    onSubmit: async (values) => console.log(values),
+    onSubmit: async (values) => // console.log(values),
   });
 
   return (

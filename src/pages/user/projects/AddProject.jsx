@@ -6,13 +6,7 @@ import Button from "../../../components/shared/button/Button";
 import { useFormik } from "formik"; // Import useFormik
 import * as Yup from "yup"; // Import Yup
 import { projectSchema } from "../../../schemas";
-import {
-  FeatureGroup,
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-} from "react-leaflet";
+import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 
 const users = [
@@ -37,15 +31,13 @@ const AddProject = () => {
     },
     validationSchema: projectSchema,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
     },
   });
 
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6">
-      <h2 className="text[#111111] text-lg 2xl:text-[20px] font-semibold">
-        Add Project
-      </h2>
+      <h2 className="text[#111111] text-lg 2xl:text-[20px] font-semibold">Add Project</h2>
       <form
         onSubmit={formik.handleSubmit}
         className="mt-4 md:mt-6 lg:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-4"
@@ -63,9 +55,7 @@ const AddProject = () => {
             name="projectName"
           />
           {formik.touched.projectName && formik.errors.projectName && (
-            <div className="text-red-500 text-sm">
-              {formik.errors.projectName}
-            </div>
+            <div className="text-red-500 text-sm">{formik.errors.projectName}</div>
           )}
         </div>
         <div className="lg:col-span-4">
@@ -81,9 +71,7 @@ const AddProject = () => {
             name="startDate"
           />
           {formik.touched.startDate && formik.errors.startDate && (
-            <div className="text-red-500 text-sm">
-              {formik.errors.startDate}
-            </div>
+            <div className="text-red-500 text-sm">{formik.errors.startDate}</div>
           )}
         </div>
         <div className="lg:col-span-4">
@@ -103,9 +91,7 @@ const AddProject = () => {
           )}
         </div>
         <div className="lg:col-span-12">
-          <label className="text-[#000] text-base mb-2 block font-semibold">
-            Project Description
-          </label>
+          <label className="text-[#000] text-base mb-2 block font-semibold">Project Description</label>
           <textarea
             cols={12}
             rows={5}
@@ -116,12 +102,9 @@ const AddProject = () => {
             onBlur={formik.handleBlur}
             name="projectDescription"
           />
-          {formik.touched.projectDescription &&
-            formik.errors.projectDescription && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.projectDescription}
-              </div>
-            )}
+          {formik.touched.projectDescription && formik.errors.projectDescription && (
+            <div className="text-red-500 text-sm">{formik.errors.projectDescription}</div>
+          )}
         </div>
         <div className="lg:col-span-12">
           <div>
@@ -142,33 +125,21 @@ const AddProject = () => {
               </div>
             </div>
             {formik.touched.location && formik.errors.location && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.location}
-              </div>
+              <div className="text-red-500 text-sm">{formik.errors.location}</div>
             )}
           </div>
         </div>
         <div className="lg:col-span-12">
-          <label className="text-[#000] text-base mb-2 block font-semibold">
-            Add Labours
-          </label>
+          <label className="text-[#000] text-base mb-2 block font-semibold">Add Labours</label>
           <div>
-            <MultiSelectOption
-              users={users}
-              setFieldValue={formik.setFieldValue}
-              name="labours"
-            />
+            <MultiSelectOption users={users} setFieldValue={formik.setFieldValue} name="labours" />
             {formik.touched.labours && formik.errors.labours && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.labours}
-              </div>
+              <div className="text-red-500 text-sm">{formik.errors.labours}</div>
             )}
           </div>
         </div>
         <div className="lg:col-span-12">
-          <label className="text-[#000] text-base mb-2 block font-semibold">
-            Geo Fencing
-          </label>
+          <label className="text-[#000] text-base mb-2 block font-semibold">Geo Fencing</label>
           <div className="mt-4">
             <MapContainer
               center={position}
@@ -207,18 +178,8 @@ const AddProject = () => {
         </div>
         <div className="lg:col-span-12 mt-4">
           <div className="flex items-center justify-end gap-2">
-            <Button
-              text="Cancel"
-              color="#111111b3"
-              bg="#76767640"
-              width="w-[150px]"
-            />
-            <Button
-              type="submit"
-              text="Add"
-              width="w-[150px]"
-              height="h-[50px] sm:h-[60px]"
-            />
+            <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" />
+            <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
           </div>
         </div>
       </form>

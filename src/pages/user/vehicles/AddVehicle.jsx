@@ -24,15 +24,7 @@ const AddVehicle = ({ onClose }) => {
     }
   };
 
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    setFieldValue,
-  } = useFormik({
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
       vehicleName: "",
       brand: "",
@@ -46,16 +38,15 @@ const AddVehicle = ({ onClose }) => {
     },
     validationSchema: vehicleSchema,
     onSubmit: (values) => {
-      console.log("Form submitted successfully:", values);
+      // console.log("Form submitted successfully:", values);
     },
   });
 
-  const brandSelectHandler = (option) => setFieldValue('brand', option.value)
-  const projectSelectHandler = (option) => setFieldValue('project', option.value)
-  const colorSelectHandler = (option) => setFieldValue('color', option.value)
-  const assignToSelectHandler = (option) => setFieldValue('assignTo', option.value)
-  const sensorSelectHandler = (option) => setFieldValue('sensor', option.value)
-
+  const brandSelectHandler = (option) => setFieldValue("brand", option.value);
+  const projectSelectHandler = (option) => setFieldValue("project", option.value);
+  const colorSelectHandler = (option) => setFieldValue("color", option.value);
+  const assignToSelectHandler = (option) => setFieldValue("assignTo", option.value);
+  const sensorSelectHandler = (option) => setFieldValue("sensor", option.value);
 
   return (
     <form
@@ -69,9 +60,7 @@ const AddVehicle = ({ onClose }) => {
           className="w-full sm:w-[400px] h-[300px] mx-auto object-cover rounded-md"
         />
         <UploadImage onChange={imgSrcHandler} />
-        {touched.image && errors.image && (
-          <p className="text-red-500">{errors.image}</p>
-        )}
+        {touched.image && errors.image && <p className="text-red-500">{errors.image}</p>}
       </div>
       <div className="md:col-span-6">
         <Input
@@ -90,9 +79,7 @@ const AddVehicle = ({ onClose }) => {
       <div className="md:col-span-3">
         <Label label="Brand" />
         <Dropdown options={brandOptions} onSelect={brandSelectHandler} />
-        {touched.brand && errors.brand && (
-          <p className="text-red-500 text-xs mt-4">{errors.brand}</p>
-        )}
+        {touched.brand && errors.brand && <p className="text-red-500 text-xs mt-4">{errors.brand}</p>}
       </div>
       <div className="md:col-span-3">
         <Input
@@ -125,16 +112,12 @@ const AddVehicle = ({ onClose }) => {
       <div className="md:col-span-6">
         <Label label="Project" />
         <Dropdown options={brandOptions} onSelect={projectSelectHandler} />
-        {touched.project && errors.project && (
-          <p className="text-red-500 text-xs mt-4">{errors.project}</p>
-        )}
+        {touched.project && errors.project && <p className="text-red-500 text-xs mt-4">{errors.project}</p>}
       </div>
       <div className="md:col-span-4">
         <Label label="Color" />
         <Dropdown options={brandOptions} onSelect={colorSelectHandler} />
-        {touched.color && errors.color && (
-          <p className="text-red-500 text-xs mt-4">{errors.color}</p>
-        )}
+        {touched.color && errors.color && <p className="text-red-500 text-xs mt-4">{errors.color}</p>}
       </div>
       <div className="md:col-span-4">
         <Label label="Assign To" />
@@ -146,9 +129,7 @@ const AddVehicle = ({ onClose }) => {
       <div className="md:col-span-4">
         <Label label="Add Sensor" />
         <Dropdown options={brandOptions} onSelect={sensorSelectHandler} />
-        {touched.sensor && errors.sensor && (
-          <p className="text-red-500 text-xs mt-4">{errors.sensor}</p>
-        )}
+        {touched.sensor && errors.sensor && <p className="text-red-500 text-xs mt-4">{errors.sensor}</p>}
       </div>
       <div className="md:col-span-12">
         <div className="flex items-center justify-end gap-2">
@@ -160,12 +141,7 @@ const AddVehicle = ({ onClose }) => {
             width="w-[150px]"
             onClick={onClose}
           />
-          <Button
-            type="submit"
-            text="Add"
-            width="w-[150px]"
-            height="h-[50px] sm:h-[60px]"
-          />
+          <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
         </div>
       </div>
     </form>
@@ -191,9 +167,5 @@ const UploadImage = ({ onChange }) => {
 };
 
 const Label = ({ label }) => {
-  return (
-    <label className="text-[#000] text-base mb-2 block font-semibold">
-      {label}
-    </label>
-  );
+  return <label className="text-[#000] text-base mb-2 block font-semibold">{label}</label>;
 };

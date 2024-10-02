@@ -17,7 +17,7 @@ const users = [
   { label: "Abdul Wahid", value: "wahid" },
 ];
 
-const EditProject = ({onClose}) => {
+const EditProject = ({ onClose }) => {
   const position = [25.276987, 55.296249];
 
   const formik = useFormik({
@@ -31,7 +31,7 @@ const EditProject = ({onClose}) => {
     },
     validationSchema: projectSchema,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
     },
   });
 
@@ -54,9 +54,7 @@ const EditProject = ({onClose}) => {
             name="projectName"
           />
           {formik.touched.projectName && formik.errors.projectName && (
-            <div className="text-red-500 text-sm">
-              {formik.errors.projectName}
-            </div>
+            <div className="text-red-500 text-sm">{formik.errors.projectName}</div>
           )}
         </div>
         <div className="lg:col-span-4">
@@ -72,9 +70,7 @@ const EditProject = ({onClose}) => {
             name="startDate"
           />
           {formik.touched.startDate && formik.errors.startDate && (
-            <div className="text-red-500 text-sm">
-              {formik.errors.startDate}
-            </div>
+            <div className="text-red-500 text-sm">{formik.errors.startDate}</div>
           )}
         </div>
         <div className="lg:col-span-4">
@@ -94,9 +90,7 @@ const EditProject = ({onClose}) => {
           )}
         </div>
         <div className="lg:col-span-12">
-          <label className="text-[#000] text-base mb-2 block font-semibold">
-            Project Description
-          </label>
+          <label className="text-[#000] text-base mb-2 block font-semibold">Project Description</label>
           <textarea
             cols={12}
             rows={5}
@@ -107,12 +101,9 @@ const EditProject = ({onClose}) => {
             onBlur={formik.handleBlur}
             name="projectDescription"
           />
-          {formik.touched.projectDescription &&
-            formik.errors.projectDescription && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.projectDescription}
-              </div>
-            )}
+          {formik.touched.projectDescription && formik.errors.projectDescription && (
+            <div className="text-red-500 text-sm">{formik.errors.projectDescription}</div>
+          )}
         </div>
         <div className="lg:col-span-12">
           <div>
@@ -133,33 +124,21 @@ const EditProject = ({onClose}) => {
               </div>
             </div>
             {formik.touched.location && formik.errors.location && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.location}
-              </div>
+              <div className="text-red-500 text-sm">{formik.errors.location}</div>
             )}
           </div>
         </div>
         <div className="lg:col-span-12">
-          <label className="text-[#000] text-base mb-2 block font-semibold">
-            Add Labours
-          </label>
+          <label className="text-[#000] text-base mb-2 block font-semibold">Add Labours</label>
           <div>
-            <MultiSelectOption
-              users={users}
-              setFieldValue={formik.setFieldValue}
-              name="labours"
-            />
+            <MultiSelectOption users={users} setFieldValue={formik.setFieldValue} name="labours" />
             {formik.touched.labours && formik.errors.labours && (
-              <div className="text-red-500 text-sm">
-                {formik.errors.labours}
-              </div>
+              <div className="text-red-500 text-sm">{formik.errors.labours}</div>
             )}
           </div>
         </div>
         <div className="lg:col-span-12">
-          <label className="text-[#000] text-base mb-2 block font-semibold">
-            Geo Fencing
-          </label>
+          <label className="text-[#000] text-base mb-2 block font-semibold">Geo Fencing</label>
           <div className="mt-4">
             <MapContainer
               center={position}
@@ -198,19 +177,8 @@ const EditProject = ({onClose}) => {
         </div>
         <div className="lg:col-span-12 mt-4">
           <div className="flex items-center justify-end gap-2">
-            <Button
-              text="Cancel"
-              color="#111111b3"
-              bg="#76767640"
-              width="w-[150px]"
-              onClick={onClose}
-            />
-            <Button
-              type="submit"
-              text="Add"
-              width="w-[150px]"
-              height="h-[50px] sm:h-[60px]"
-            />
+            <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
+            <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
           </div>
         </div>
       </form>

@@ -22,11 +22,11 @@ const Button = ({
   return (
     <button
       style={style}
-      className={`flex items-center justify-center text-nowrap px-2 ${
-        width ? width : "w-full"
-      } ${height ? height : "h-[50px] sm:h-[60px]"} ${
-        size ? size : "text-xs sm:text-sm md:text-base"
-      } ${cursor ? cursor : "pointer"}`}
+      className={`flex items-center justify-center text-nowrap px-2 ${width ? width : "w-full"} ${
+        height ? height : "h-[50px] sm:h-[60px]"
+      } ${size ? size : "text-xs sm:text-sm md:text-base"} ${
+        cursor ? cursor : "pointer"
+      } disabled:opacity-50 disabled:cursor-not-allowed`}
       {...rest}
     >
       {text}
