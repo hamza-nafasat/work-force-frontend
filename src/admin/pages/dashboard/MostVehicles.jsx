@@ -10,19 +10,19 @@ const icons = [OneIcon, TwoIcon, ThreeIcon];
 const data = [
   {
     name: 'MKS',
-    value: 60,
-    color: "#537C78",
+    value: 70,
+    color: "#0B67BC",
   },
-  { name: 'TetraTech', value: 20, color: "#FAA41B" },
-  { name: 'Tech Xpert', value: 20, color: "#CC222B" },
+  { name: 'TetraTech', value: 10, color: "#3DC1A1" },
+  { name: 'Tech Xpert', value: 20, color: "#F15B4C" },
 ];
 
-const MostDirversHave = () => {
+const MostVehicles = () => {
   return (
-    <div className="shadow-md p-4 rounded-lg bg-white">
+    <div className="shadow-md p-4 rounded-lg bg-white h-full">
       <div className="flex items-center justify-between">
         <h2 className="text-sm sm:text-base lg:text-lg font-semibold">
-          Most Drivers Have
+          Most Vehicles Have
         </h2>
         <select className="text-sm md:text-base bg-[#f0f9fc] p-2 rounded-lg focus:outline-none">
             <option>Last 7 days</option>
@@ -52,7 +52,7 @@ const MostDirversHave = () => {
   );
 };
 
-export default MostDirversHave;
+export default MostVehicles;
 
 const DataList = ({ data, }) => {
   return (

@@ -504,6 +504,8 @@ export const usersData = [
     passportOrId: "S12345678",
     gender: "Male",
     project: "Workforce Project Number 1",
+    subscription: 'Subscribed',
+    vehicles: '3',
     action: "",
   },
   {
@@ -519,6 +521,8 @@ export const usersData = [
     passportOrId: "P98765432",
     gender: "Female",
     project: "Workforce Project Number 2",
+    subscription: 'Free Trail',
+    vehicles: '6',
     action: "",
   },
   {
@@ -534,6 +538,8 @@ export const usersData = [
     passportOrId: "U76543210",
     gender: "Male",
     project: "Workforce Project Number 3",
+    subscription: 'Subscribed',
+    vehicles: '2',
     action: "",
   },
   {
@@ -549,6 +555,8 @@ export const usersData = [
     passportOrId: "Q65432109",
     gender: "Female",
     project: "Workforce Project Number 4",
+    subscription: 'Unsubscribed',
+    vehicles: '1',
     action: "",
   },
   {
@@ -563,7 +571,9 @@ export const usersData = [
     dateOfBirth: "1989-11-25",
     passportOrId: "B43210987",
     project: "Workforce Project Number 4",
+    subscription: 'Subscribed',
     gender: "Male",
+    vehicles: '1',
     action: "",
   },
   {
@@ -579,6 +589,8 @@ export const usersData = [
     passportOrId: "U76543210",
     gender: "Male",
     project: "Workforce Project Number 3",
+    subscription: 'Free Trail',
+    vehicles: '3',
     action: "",
   },
   {
@@ -594,6 +606,8 @@ export const usersData = [
     passportOrId: "Q65432109",
     gender: "Female",
     project: "Workforce Project Number 4",
+    subscription: 'Subscribed',
+    vehicles: '5',
     action: "",
   },
   {
@@ -608,7 +622,9 @@ export const usersData = [
     dateOfBirth: "1989-11-25",
     passportOrId: "B43210987",
     project: "Workforce Project Number 4",
+    subscription: 'Subscribed',
     gender: "Male",
+    vehicles: '2',
     action: "",
   },
 ];
@@ -1169,5 +1185,96 @@ export const workersData = [
     gender: "Male",
     reason: "Working",
     designation: "Engineer",
+  },
+];
+
+export const totalUsersData = [
+  {
+    name: "5",
+    users: "10",
+  },
+  {
+    name: "10",
+    users: "250",
+  },
+  {
+    name: "15",
+    users: "150",
+  },
+  {
+    name: "20",
+    users: "400",
+  },
+  {
+    name: "25",
+    users: "300",
+  },
+  {
+    name: "30",
+    users: "400",
+  },
+  {
+    name: "35",
+    users: "555",
+  },
+];
+export const totalSensorsData = [
+  {
+    name: "5",
+    sensors: "10",
+  },
+  {
+    name: "10",
+    sensors: "250",
+  },
+  {
+    name: "15",
+    sensors: "150",
+  },
+  {
+    name: "20",
+    sensors: "400",
+  },
+  {
+    name: "25",
+    sensors: "300",
+  },
+  {
+    name: "30",
+    sensors: "400",
+  },
+  {
+    name: "35",
+    sensors: "555",
+  },
+];
+export const totalSubscriptionPlansData = [
+  {
+    name: "5",
+    plans: "10",
+  },
+  {
+    name: "10",
+    plans: "250",
+  },
+  {
+    name: "15",
+    plans: "150",
+  },
+  {
+    name: "20",
+    plans: "400",
+  },
+  {
+    name: "25",
+    plans: "300",
+  },
+  {
+    name: "30",
+    plans: "400",
+  },
+  {
+    name: "35",
+    plans: "555",
   },
 ];
