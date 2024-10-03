@@ -32,14 +32,25 @@ const BarChartComponent = ({
         }}
       >
         <defs>
-          <linearGradient id={gradientID ? gradientID : "colorUv"} x1="1" y1="1" x2="1" y2="0">
+          <linearGradient
+            id={gradientID ? gradientID : "colorUv"}
+            x1="1"
+            y1="1"
+            x2="1"
+            y2="0"
+          >
             <stop offset="0%" stopColor={colors ? colors.start : "#0d59a1"} />
             <stop offset="100%" stopColor={colors ? colors.end : "#0f88f799"} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" tick={{ fontSize: "12px" }} />
-        <YAxis tick={{ fontSize: "12px" }} />
+        <XAxis
+          axisLine={false}
+          tickLine={false}
+          dataKey="name"
+          tick={{ fontSize: "12px" }}
+        />
+        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: "12px" }} />
         <Tooltip />
         <Legend />
         <Bar

@@ -87,7 +87,7 @@ const Transactions = () => {
         <div>
           <Title title="Transactions" />
         </div>
-        <div className="flex flex-wrap items-center gap-2 relative z-[999]">
+        <div className="flex flex-wrap items-center gap-2 relative z-[9]">
           {/* User Multi-select */}
           <Select
             isMulti

@@ -10,7 +10,7 @@ const Users = () => {
         <h2 className="text-lg md:text-[22px] text-[#414141] font-semibold">
           Users
         </h2>
-        <Link to='add-user' className="w-[107px] h-[37px] grid place-items-center border border-[#007aff] rounded-xl text-[#007aff]
+        <Link to='add-user' className="w-[107px] h-[37px] grid place-items-center border border-[#0C6AC1] rounded-xl text-[#0C6AC1]
         text-sm">
           + Add User
         </Link>

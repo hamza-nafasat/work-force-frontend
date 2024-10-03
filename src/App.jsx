@@ -34,6 +34,7 @@ const Plans = lazy(() => import("./pages/user/plansAndPricing/Plans"));
 const Transactions = lazy(() => import("./pages/user/plansAndPricing/Transactions"));
 const AddProject = lazy(() => import("./pages/user/projects/AddProject"));
 const UpdateProfile = lazy(() => import("./pages/user/settings/UpdateProfile"));
+const Configuration = lazy(() => import("./pages/user/settings/Configuration"));
 const VehicleDetail = lazy(() => import("./pages/user/vehicles/VehicleDetail"));
 const UserDetail = lazy(() => import("./pages/user/users/UserDetail"));
 const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
@@ -42,10 +43,12 @@ const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
 const AdminDashboard = lazy(() => import("./admin/layout/index"));
 const Dashboard = lazy(() => import("./admin/pages/dashboard/Dashboard"));
 const AdminUsers = lazy(() => import("./admin/pages/users/Users"));
+const AdminUserDetail = lazy(() => import("./admin/pages/users/UserDetail"));
 const AdminTransactions = lazy(() =>
   import("./admin/pages/transactions/Transactions")
 );
 const AddUser = lazy(() => import("./admin/pages/users/AddUser"));
+const EditUser = lazy(() => import("./admin/pages/users/EditUser"));
 
 function App() {
   const dispatch = useDispatch();
@@ -103,6 +106,7 @@ function App() {
             <Route path="plans" element={<Plans />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="update-profile" element={<UpdateProfile />} />
+            <Route path="configuration" element={<Configuration />} />
             <Route path="Sos" element={<Sos />} />
             <Route path="add-project" element={<AddProject />} />
           </Route>
@@ -110,7 +114,9 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="users/user-detail/:id" element={<AdminUserDetail />} />
             <Route path="users/add-user" element={<AddUser />} />
+            <Route path="users/edit-user" element={<EditUser />} />
             <Route path="transactions" element={<AdminTransactions />} />
           </Route>
         </Routes>

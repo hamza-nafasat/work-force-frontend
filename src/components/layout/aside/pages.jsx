@@ -115,6 +115,10 @@ export const pages = [
                 title: 'Update Profile',
                 link: '/user/update-profile'
             },
+            {
+                title: 'Configuration',
+                link: '/user/configuration'
+            },
         ]
     },
 ]
