@@ -45,10 +45,10 @@ const UserDetail = () => {
         </h6>
       </div>
       <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="lg:col-span-4 bg-white rounded-xl shadow-md p-4 border flex items-center">
+        <div className="col-span-12 lg:col-span-4 bg-white rounded-xl shadow-md p-4 border flex items-center">
           <User user={user} />
         </div>
-        <div className="lg:col-span-8 bg-white rounded-xl shadow-md p-4 border">
+        <div className="col-span-12 lg:col-span-8 bg-white rounded-xl shadow-md p-4 border">
           <Performance />
         </div>
         <div className="col-span-12 bg-white rounded-xl shadow-md p-4 border">
@@ -78,14 +78,14 @@ const Performance = () => {
       <div className="my-4">
         <BarChartComponent data={data} barSize={30} colors={barColors} />
       </div>
-      <div className="flex gap-5">
+      <div className="flex flex-wrap gap-5">
         <div className="w-full">
-          <h3 className="text-sm font-medium text-[#047cff]">Buildings</h3>
+          <h3 className="text-sm font-medium text-[#047cff]">Projects</h3>
           <div className="mt-3 bg-[rgba(243,249,255,1)] flex items-center justify-between relative px-4 py-6 rounded-md">
             <div className="flex items-center gap-2">
               {/* <BuildingSvg /> */}
               <p className="text-sm font-medium text-[rgba(95,95,95,1)]">
-                Numbers Of Buildings
+                Numbers Of Projects
               </p>
             </div>
             <p className="text-lg md:text-2xl font-semibold text-[#047cff]">
@@ -128,7 +128,7 @@ const User = ({ user }) => {
         </div>
         <h3 className="text-lg font-bold text-[#202020]">{user?.fullName}</h3>
         <p className="mt-[10px] text-[#a5a5a5] text-xs font-semibold">
-          Building Owner at{" "}
+          Assigned to project{" "}
           <span className="text-[#0C6AC1]">{user?.project}</span>
         </p>
       </div>
