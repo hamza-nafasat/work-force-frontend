@@ -1,21 +1,21 @@
-import DataTable from "react-data-table-component";
-import DeleteIcon from "../../../assets/svgs/DeleteIcon";
-import AddIcon from "../../../assets/svgs/AddIcon";
-import Title from "../../../components/shared/title/Title";
-import Modal from "../../../components/modals/Modal";
 import { useEffect, useState } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import DataTable from "react-data-table-component";
 import { IoEye } from "react-icons/io5";
-import EditIcon from "../../../assets/svgs/EditIcon";
-import { usersData, vehiclesData } from "../../../data/data";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import AddIcon from "../../../assets/svgs/AddIcon";
+import DeleteIcon from "../../../assets/svgs/DeleteIcon";
+import EditIcon from "../../../assets/svgs/EditIcon";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Modal from "../../../components/modals/Modal";
+import Title from "../../../components/shared/title/Title";
+import { useDeleteLabourMutation, useGetAllLaboursQuery } from "../../../redux/api/labourApi";
 import AddUser from "./AddUser";
 import EditUser from "./EditUser";
-import { confirmAlert } from "react-confirm-alert";
-import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
-import { useDispatch } from "react-redux";
-import GlobalLoader from "../../../components/layout/GlobalLoader";
 
-const columns = (modalOpenHandler, navigate, deleteHandler) => [
+const columns = (modalOpenHandler, navigate, deleteHandler, isDeleting) => [
   {
     name: "Profile Photo",
     selector: (row) => (
@@ -56,7 +56,10 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
         <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler(row.id)}>
+        <div
+          className={`${isDeleting ? "cursor-not-allowed" : "cursor-pointer "}`}
+          onClick={() => deleteHandler(row?.id)}
+        >
           <DeleteIcon />
         </div>
       </div>
@@ -70,24 +73,33 @@ const Users = () => {
   const [selectedRow, setSelectedRow] = useState({});
   const [usersData, setUsersData] = useState([]);
   const { data, isSuccess, isLoading, refetch } = useGetAllLaboursQuery("");
+  const [deleteLabour, { isLoading: isDeleting }] = useDeleteLabourMutation();
   const navigate = useNavigate();
 
-  console.log(data);
   const modalOpenHandler = (modalType, row = false) => {
     setModal(modalType);
     if (row) setSelectedRow(row);
   };
   const modalCloseHandler = () => setModal(false);
 
-  const deleteHandler = () => {
+  const deleteHandler = (id) => {
     confirmAlert({
       title: "Delete User",
       message: "Are you sure, you want to delete the user?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            console.log("project deleted");
+          onClick: async () => {
+            try {
+              const response = await deleteLabour({ LabourId: id }).unwrap();
+              if (response?.success && response?.message) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("error while deleting user", error);
+              toast.error(error?.data?.message || "Some Error Occurred while deleting user");
+            }
           },
         },
         {
@@ -140,7 +152,7 @@ const Users = () => {
       <div className="mt-5">
         {usersData && (
           <DataTable
-            columns={columns(modalOpenHandler, navigate, deleteHandler)}
+            columns={columns(modalOpenHandler, navigate, deleteHandler, isDeleting)}
             data={usersData}
             selectableRows
             selectableRowsHighlight

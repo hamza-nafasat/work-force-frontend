@@ -47,7 +47,7 @@ const labourApis = createApi({
     // ------------
     deleteLabour: builder.mutation({
       query: ({ LabourId }) => ({
-        url: `/delete/${LabourId}`,
+        url: `/single/${LabourId}`,
         method: "DELETE",
       }),
     }),
