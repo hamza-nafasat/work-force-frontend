@@ -78,7 +78,7 @@ const Performance = () => {
       <div className="my-4">
         <BarChartComponent data={data} barSize={30} colors={barColors} />
       </div>
-      <div className="flex flex-wrap gap-5">
+      <div className="flex flex-wrap sm:flex-nowrap gap-5">
         <div className="w-full">
           <h3 className="text-sm font-medium text-[#047cff]">Projects</h3>
           <div className="mt-3 bg-[rgba(243,249,255,1)] flex items-center justify-between relative px-4 py-6 rounded-md">
