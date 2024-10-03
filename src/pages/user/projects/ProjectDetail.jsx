@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { alertRecords, projectsData, workersData } from "../../../data/data";
-import Title from "../../../components/shared/title/Title";
-import EditIcon from "../../../assets/svgs/EditIcon";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import VehicleImg from "../../../assets/images/vehicles/vehicle.png";
-import workersImg from "../../../assets/images/projects/worker.png";
-import sensorImg from "../../../assets/images/projects/sensors.png";
+/* eslint-disable react/prop-types */
 import L from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import TimeIcon from "../../../assets/svgs/projects/TimeIcon";
+import { useEffect, useState } from "react";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { MapContainer, Marker, Polygon, TileLayer } from "react-leaflet";
+import { useParams } from "react-router-dom";
+import sensorImg from "../../../assets/images/projects/sensors.png";
+import workersImg from "../../../assets/images/projects/worker.png";
+import VehicleImg from "../../../assets/images/vehicles/vehicle.png";
+import EditIcon from "../../../assets/svgs/EditIcon";
 import AlertSideIcon from "../../../assets/svgs/projects/AlertSideIcon";
-import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
+import TimeIcon from "../../../assets/svgs/projects/TimeIcon";
 import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Title from "../../../components/shared/title/Title";
+import { alertRecords } from "../../../data/data";
+import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
 
 const createCustomIcon = (imgUrl) => {
   return L.divIcon({
@@ -31,6 +32,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState({});
   const { data, isLoading, isSuccess } = useGetSingleProjectQuery({ projectId: id });
 
+  // console.log("project", project);
   useEffect(() => {
     if (isSuccess && data?.data) {
       const singleProject = data?.data;
@@ -40,10 +42,11 @@ const ProjectDetail = () => {
         startDate: singleProject?.startDate,
         dueDate: singleProject?.endDate,
         labours: singleProject?.labours.map((labour) => ({
+          ...labour,
           _id: labour?._id,
           name: labour?.fullName,
           image: labour?.image?.url,
-          position: [25.276987 + Math.random(), 55.296249 + Math.random()],
+          position: labour?.position || [25.16987, 55.296249],
         })),
         workforceCount: "85",
         action: "",
@@ -51,9 +54,12 @@ const ProjectDetail = () => {
         area: singleProject?.area,
         location: singleProject?.location,
         projectDetail: singleProject?.description,
+        status: singleProject?.status,
       });
     }
   }, [data, isSuccess]);
+
+  console.log("project", project);
 
   return isLoading ? (
     <GlobalLoader />
@@ -69,10 +75,10 @@ const ProjectDetail = () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
         <div className="lg:col-span-8 bg-[#EBF6FE] p-4 rounded-xl">
-          <p className="text-base md:text-lg font-semibold">{project.projectName}</p>
+          <p className="text-base md:text-lg font-semibold">{project?.projectName}</p>
           <div className="mt-4 md:mt-5">
             <p className="text-sm md:text-base text-[#111111cc]">Description</p>
-            <p className="text-sm text-[#111111] mt-1">{project.projectDetail}</p>
+            <p className="text-sm text-[#111111] mt-1">{project?.projectDetail}</p>
           </div>
         </div>
         {/* second column */}
@@ -80,12 +86,12 @@ const ProjectDetail = () => {
           <div className="flex justify-between gap-4">
             <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md`}>
               <p className="text-sm md:text-base text-[#111111cc]">Start Date</p>
-              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">{project.startDate}</p>
+              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">{project?.startDate}</p>
             </div>
             <div className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md`}>
               <p className="text-sm md:text-base text-white">Due Date</p>
               <p className="text-sm sm:text-base md:text-md font-semibold mt-1 text-white">
-                {project.dueDate}
+                {project?.dueDate}
               </p>
             </div>
           </div>
@@ -101,18 +107,18 @@ const ProjectDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
         <div className="lg:col-span-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <DetailWidget title="Total Vehicles" value="60" icon={VehicleImg} />
-            <DetailWidget title="Total Sensors" value="112" icon={sensorImg} />
-            <DetailWidget title="Total Workers" value="60" icon={workersImg} />
+            <DetailWidget title="Total Vehicles" value="0" icon={VehicleImg} />
+            <DetailWidget title="Total Sensors" value="0" icon={sensorImg} />
+            <DetailWidget title="Total Workers" value={project?.labours?.length} icon={workersImg} />
           </div>
           <div className="mt-4">
-            <Map project={project} />
+            <Map position={project?.position} area={project?.area} labours={project?.labours} />
           </div>
         </div>
         <div className="lg:col-span-4">
           <Alerts />
           <div className="mt-4">
-            <Workers />
+            <Workers labours={project?.labours} />
           </div>
         </div>
       </div>
@@ -122,28 +128,28 @@ const ProjectDetail = () => {
 
 export default ProjectDetail;
 
-const Workers = () => {
+const Workers = ({ labours }) => {
   return (
     <div className="border border-[#CFCFCF4D] rounded-xl p-4 shadow-md h-[338px] overflow-y-scroll custom-scrollbar">
       <h6 className="text-sm md:text-lg text-[#292D32] font-bold border-b border-[#7B7B7B2B] pb-1 pl-2">
         Workers
       </h6>
-      {workersData?.map((worker, i) => (
+      {labours?.map((worker, i) => (
         <Worker
           key={i}
           name={worker.name}
-          img={worker.img}
-          id={worker.id}
+          img={worker.image}
+          id={worker._id}
           gender={worker.gender}
-          reason={worker.reason}
-          designation={worker.designation}
+          status={worker.status}
+          designation={worker.profession}
         />
       ))}
     </div>
   );
 };
 
-const Worker = ({ name, img, id, gender, reason, designation }) => {
+const Worker = ({ name, img, id, gender, status, designation }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 border-b border-[#e5e5e5]">
       <div className="flex items-center gap-2 basis-[50%]">
@@ -156,12 +162,12 @@ const Worker = ({ name, img, id, gender, reason, designation }) => {
       </div>
       <div
         className={`basis-[15%] flex justify-center ${
-          reason === "On leave"
+          status === "on-leave"
             ? "bg-transparent border border-[#084781] text-[#084781]"
             : "bg-[#084781] text-white"
         } px-2 py-1 rounded-full text-[10px] font-semibold`}
       >
-        {reason}
+        {status}
       </div>
       <p className="basis-[33%] text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
     </div>
@@ -215,13 +221,12 @@ const Alert = ({ title, id, img, time, alert }) => {
   );
 };
 
-const Map = ({ project }) => {
-  const position = [25.276987, 55.296249];
+const Map = ({ area, labours }) => {
   return (
     <MapContainer
-      center={position}
-      zoom={9}
-      scrollWheelZoom={false}
+      center={[25.256987, 55.296249]}
+      zoom={10}
+      scrollWheelZoom={true}
       style={{
         height: "480px",
         width: "100%",
@@ -234,14 +239,15 @@ const Map = ({ project }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {project?.labours?.map((labour, i) => (
+      {labours?.map((labour, i) => (
         <Marker key={i} position={labour?.position} icon={createCustomIcon(labour?.image)}></Marker>
       ))}
+      {area && area.length > 0 && <Polygon positions={area.map(([lat, lng]) => [lng, lat])} color="blue" />}
     </MapContainer>
   );
 };
 
-const DetailWidget = ({ title, value, icon, bg }) => {
+const DetailWidget = ({ title, value, icon }) => {
   return (
     <div className="border border-[#8E8E8E99] shadow-md rounded-2xl p-4 flex items-center justify-between gap-4 flex-1 relative">
       <div className="flex flex-col items-center gap-2">

@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { FeatureGroup, MapContainer, Marker, Polygon, Popup, TileLayer, useMap } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 
