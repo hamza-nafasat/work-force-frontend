@@ -26,7 +26,7 @@ const Aside = () => {
   };
 
   return (
-    <nav className="w-[250px] sm:w-[300px] bg-primary rounded-[16px] p-4 md:p-6 nav h-full overflow-y-scroll">
+    <nav className="w-[250px] 2xl:w-[300px] bg-primary rounded-[16px] p-4 md:p-6 nav h-full overflow-y-scroll">
       <div className="flex flex-col nav overflow-y-scroll">
         <div>
           <div className="flex items-center justify-center gap-2">

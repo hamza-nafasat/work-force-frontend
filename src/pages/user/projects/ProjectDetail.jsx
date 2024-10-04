@@ -84,11 +84,11 @@ const ProjectDetail = () => {
         {/* second column */}
         <div className="lg:col-span-4">
           <div className="flex justify-between gap-4">
-            <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md`}>
+            <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md grow text-center`}>
               <p className="text-sm md:text-base text-[#111111cc]">Start Date</p>
               <p className="text-sm sm:text-base md:text-md font-semibold mt-1">{project?.startDate}</p>
             </div>
-            <div className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md`}>
+            <div className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md grow text-center`}>
               <p className="text-sm md:text-base text-white">Due Date</p>
               <p className="text-sm sm:text-base md:text-md font-semibold mt-1 text-white">
                 {project?.dueDate}
@@ -151,8 +151,8 @@ const Workers = ({ labours }) => {
 
 const Worker = ({ name, img, id, gender, status, designation }) => {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 border-b border-[#e5e5e5]">
-      <div className="flex items-center gap-2 basis-[50%]">
+    <div className="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4 py-2 border-b border-[#e5e5e5]">
+      <div className="flex items-center gap-2">
         <img src={img} alt="image" className="w-[45px] h-[45px] object-cover" />
         <div>
           <p className="text-sm md:text-base text-[#5C5B5B] leading-none">{name}</p>
@@ -161,7 +161,7 @@ const Worker = ({ name, img, id, gender, status, designation }) => {
         </div>
       </div>
       <div
-        className={`basis-[15%] flex justify-center ${
+        className={`flex justify-center ${
           status === "on-leave"
             ? "bg-transparent border border-[#084781] text-[#084781]"
             : "bg-[#084781] text-white"
@@ -169,7 +169,7 @@ const Worker = ({ name, img, id, gender, status, designation }) => {
       >
         {status}
       </div>
-      <p className="basis-[33%] text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
+      <p className="text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
     </div>
   );
 };
@@ -254,7 +254,7 @@ const DetailWidget = ({ title, value, icon }) => {
         <p className="text-sm md:text-base font-semibold text-[#112C5F]">{title}</p>
         <h3 className="text-[28px] lg:text-[40px]">{value}</h3>
       </div>
-      <img src={icon} className="w-20 md:w-[120px] h-20 md:h-[120px] object-contain" alt="image" />
+      <img src={icon} className="w-20 2xl:w-[120px] h-20 md:h-[120px] object-contain" alt="image" />
     </div>
   );
 };
