@@ -8,6 +8,7 @@ import ViolationsIcon from '../../../assets/svgs/pagesIcons/ViolationsIcon';
 import ScoreCardIcon from '../../../assets/svgs/pagesIcons/ScoreCardIcon';
 import PlansAndPricingIcon from '../../../assets/svgs/pagesIcons/PlansAndPricingIcon';
 import SettingsIcon from '../../../assets/svgs/pagesIcons/SettingsIcon';
+import AttendanceIcon from '../../../assets/svgs/pagesIcons/AttendanceIcon';
 
 export const pages = [
     {
@@ -68,6 +69,11 @@ export const pages = [
         title: 'Users',
         link: '/user/users',
         icon: <UsersIcon />,
+    },  
+    {
+        title: 'Attendance',
+        link: '/user/attendance',
+        icon: <AttendanceIcon />,
     },  
     {
         title: 'Sensors',

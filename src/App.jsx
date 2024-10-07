@@ -38,6 +38,7 @@ const Configuration = lazy(() => import("./pages/user/settings/Configuration"));
 const VehicleDetail = lazy(() => import("./pages/user/vehicles/VehicleDetail"));
 const UserDetail = lazy(() => import("./pages/user/users/UserDetail"));
 const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
+const Attendance = lazy(() => import("./pages/user/attendance/Attendance"));
 
 // Admin Routes
 const AdminDashboard = lazy(() => import("./admin/layout/index"));
@@ -109,6 +110,7 @@ function App() {
             <Route path="configuration" element={<Configuration />} />
             <Route path="Sos" element={<Sos />} />
             <Route path="add-project" element={<AddProject />} />
+            <Route path="attendance" element={<Attendance />} />
           </Route>
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<Navigate replace to="dashboard" />} />
