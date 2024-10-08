@@ -21,7 +21,7 @@ const portOptions = [
   { option: "6766", value: "6766" },
 ];
 
-const topicOptions = [
+const sensorTypeOptions = [
   { option: "Temperature", value: "Temperature" },
   { option: "Humidity", value: "Humidity" },
 ];
@@ -49,7 +49,7 @@ export {
   genderOptions,
   nationalityOptions,
   portOptions,
-  topicOptions,
+  sensorTypeOptions,
   violationCategoryOptions,
   violationNameOptions,
   timeIntervalOptions,

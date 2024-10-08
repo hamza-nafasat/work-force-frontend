@@ -1,17 +1,16 @@
+/* eslint-disable react/prop-types */
 import { useFormik } from "formik"; // Import useFormik
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { FeatureGroup, MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
-import { EditControl } from "react-leaflet-draw";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { toast } from "react-toastify";
 import Input from "../../../components/auth/Input";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 import Button from "../../../components/shared/button/Button";
 import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
 import { useAddProjectMutation } from "../../../redux/api/projectApi";
 import { projectSchema } from "../../../schemas";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import GlobalLoader from "../../../components/layout/GlobalLoader";
 import { MapComponent } from "./MapComponent";
 
 const AddProject = () => {

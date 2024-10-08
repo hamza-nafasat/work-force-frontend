@@ -9,12 +9,8 @@ export const usersSchema = Yup.object({
   gender: Yup.string().required("Gender is required"),
   profession: Yup.string().required("Profession is required"),
   workingStatus: Yup.string().required("Working Status is required"),
-  workingHoursStartTime: Yup.string().required(
-    "Working hours start time is required"
-  ),
-  workingHoursEndTime: Yup.string().required(
-    "Working hours end time is required"
-  ),
+  workingHoursStartTime: Yup.string().required("Working hours start time is required"),
+  workingHoursEndTime: Yup.string().required("Working hours end time is required"),
   image: Yup.mixed().required("Image is required"),
 });
 
@@ -32,9 +28,7 @@ export const projectSchema = Yup.object({
 export const vehicleSchema = Yup.object({
   vehicleName: Yup.string().required("Vehicle Name is required"),
   brand: Yup.string().required("Brand Name is required"),
-  identificationNumber: Yup.string().required(
-    "Identification Number is required"
-  ),
+  identificationNumber: Yup.string().required("Identification Number is required"),
   licensePlateNumber: Yup.string().required("License Plate Number is required"),
   project: Yup.string().required("Project is required"),
   color: Yup.string().required("Color is required"),
@@ -45,11 +39,10 @@ export const vehicleSchema = Yup.object({
 
 export const sensorSchema = Yup.object({
   sensorName: Yup.string().required("Sensor Name is required"),
-  topic: Yup.string().required("Topic is required"),
+  type: Yup.string().required("Topic is required"),
   ip: Yup.string().required("Ip is required"),
   port: Yup.string().required("Port is required"),
   url: Yup.string().required("URL is required"),
-  location: Yup.string().required("Location is required"),
 });
 
 export const scoreCardSchema = Yup.object({
@@ -64,10 +57,7 @@ export const profileSchema = Yup.object({
   password: Yup.string().required("password is required"),
   confirmPassword: Yup.string()
     .required("confirm Password is required")
-    .oneOf(
-      [Yup.ref("password"), null],
-      "password and confirm password must match"
-    ),
+    .oneOf([Yup.ref("password"), null], "password and confirm password must match"),
 });
 
 export const configurationSchema = Yup.object({
