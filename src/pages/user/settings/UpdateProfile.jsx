@@ -4,6 +4,8 @@ import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
 import profileImg from "../../../assets/images/header/profilepic.webp";
 import { IoCamera } from "react-icons/io5";
+import { profileSchema } from "../../../schemas";
+import { useFormik } from "formik";
 
 const UpdateProfile = () => {
   const [imgSrc, setImgSrc] = useState(null);
@@ -19,10 +21,38 @@ const UpdateProfile = () => {
     }
   };
 
+  const initialValues = {
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+  };
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    initialValues,
+    validationSchema: profileSchema,
+    onSubmit: async (values) => {
+      try {
+        console.log("Form Values: ", values);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 mt-4">
       <Title title="Edit Profile" />
-      <form className="mt-4 md:mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-4 md:mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4"
+      >
         <div className="lg:col-span-8">
           <div className="p-4 rounded-md shadow-lg">
             <p className="text-sm md:text-base text-[#084984]">
@@ -37,21 +67,54 @@ const UpdateProfile = () => {
             />
           </div>
           <div className="mt-4 md:mt-8">
-            <Input
-              type="tel"
-              label="Phone Number"
-              labelWeight="font-semibold"
-            />
-            <Input
-              type="password"
-              label="Password"
-              labelWeight="font-semibold"
-            />
-            <Input
-              type="password"
-              label="Confirm Password"
-              labelWeight="font-semibold"
-            />
+            <div>
+              <Input
+                type="tel"
+                label="Phone Number"
+                labelWeight="font-semibold"
+                value={values.phoneNumber}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                name="phoneNumber"
+              />
+              {errors.phoneNumber && touched.phoneNumber && (
+                <div className="text-red-500 text-xs my-1">
+                  {errors.phoneNumber}
+                </div>
+              )}
+            </div>
+            <div>
+              <Input
+                type="password"
+                label="Password"
+                labelWeight="font-semibold"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                name="password"
+              />
+              {errors.password && touched.password && (
+                <div className="text-red-500 text-xs my-1">
+                  {errors.password}
+                </div>
+              )}
+            </div>
+            <div>
+              <Input
+                type="password"
+                label="Confirm Password"
+                labelWeight="font-semibold"
+                value={values.confirmPassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                name="confirmPassword"
+              />
+              {errors.confirmPassword && touched.confirmPassword && (
+                <div className="text-red-500 text-xs my-1">
+                  {errors.confirmPassword}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="lg:col-span-4 mx-auto">

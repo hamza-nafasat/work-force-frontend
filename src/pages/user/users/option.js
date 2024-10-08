@@ -16,4 +16,41 @@ const nationalityOptions = [
   { option: "UAE", value: "uae" },
 ];
 
-export { workingStatusOptions, professionOptions, genderOptions, nationalityOptions };
+const portOptions = [
+  { option: "8080", value: "8080" },
+  { option: "6766", value: "6766" },
+];
+
+const topicOptions = [
+  { option: "Temperature", value: "Temperature" },
+  { option: "Humidity", value: "Humidity" },
+];
+
+const violationCategoryOptions = [
+  { option: "Workforces", value: "Workforces" },
+  { option: "Vehicles", value: "Vehicles" },
+  { option: "Visitors", value: "Visitors" },
+];
+
+const violationNameOptions = [
+  { option: "Lost Badge", value: "Lost Badge" },
+  { option: "Use Someone Else Vehicle", value: "Lost Badge" },
+];
+
+const timeIntervalOptions = [
+  { option: "3 minutes", value: "3 minutes" },
+  { option: "5 minutes", value: "5 minutes" },
+  { option: "10 minutes", value: "10 minutes" },
+];
+
+export {
+  workingStatusOptions,
+  professionOptions,
+  genderOptions,
+  nationalityOptions,
+  portOptions,
+  topicOptions,
+  violationCategoryOptions,
+  violationNameOptions,
+  timeIntervalOptions,
+};
