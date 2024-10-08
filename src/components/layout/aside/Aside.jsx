@@ -27,45 +27,56 @@ const Aside = () => {
 
   return (
     <nav className="w-[250px] 2xl:w-[300px] bg-primary rounded-[16px] p-4 md:p-6 nav h-full overflow-y-scroll">
-      <div className="flex flex-col nav overflow-y-scroll">
+      <section className="flex flex-col nav overflow-y-scroll">
         <div>
           <div className="flex items-center justify-center gap-2">
             <img src={logo} alt="logo" className="w-[35px] sm:w-[50px]" />
-            <h2 className="text-base sm:text-lg font-semibold text-white">Workforce Ease</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-white">
+              Workforce Ease
+            </h2>
           </div>
           <div className="flex justify-center py-6 w-full">
-            <div className="flex flex-col">
-              {pages.map((page, i) => {
-                return (
-                  <div key={i}>
+            <nav className="flex flex-col">
+              <ul>
+                {pages.map((page, i) => (
+                  <li key={i}>
                     {page.link ? (
                       <Link
                         to={page.link}
-                        className={`flex items-center gap-2 my-1 py-2 px-4 rounded-[10px] ${
+                        className={`flex items-center gap-2 my-2 py-2 px-4 rounded-[10px] ${
                           page.link === url ? "bg-secondary" : "bg-transparent"
                         }`}
                       >
-                        <div> {page.icon} </div>
-                        <div className="text-white text-base">{page.title}</div>
+                        <span> {page.icon} </span>
+                        <span className="text-white text-base">
+                          {page.title}
+                        </span>
                       </Link>
                     ) : (
-                      <div
-                        className="flex items-center gap-2 cursor-pointer px-4 py-2"
+                      <button
+                        className="flex items-center gap-2 cursor-pointer px-4 py-2 w-full text-left"
                         onClick={() => handleSubpages(page.title)}
+                        aria-expanded={subPagesIsActive === page.title}
+                        aria-controls={`subpages-${i}`}
                       >
-                        <div> {page.icon} </div>
-                        <div className="text-white text-base">{page.title}</div>
-                        <div
-                          className={`trasnform transition-transform duration-300 ${
-                            subPagesIsActive === page.title ? "rotate-0" : "rotate-180"
+                        <span> {page.icon} </span>
+                        <span className="text-white text-base">
+                          {page.title}
+                        </span>
+                        <span
+                          className={`transform transition-transform duration-300 ${
+                            subPagesIsActive === page.title
+                              ? "rotate-0"
+                              : "rotate-180"
                           }`}
                         >
                           <ChevronIcon />
-                        </div>
-                      </div>
+                        </span>
+                      </button>
                     )}
                     {page.subPages && (
-                      <div
+                      <ul
+                        id={`subpages-${i}`}
                         className={`${
                           subPagesIsActive === page.title
                             ? "max-h-[280px] opacity-100 my-2"
@@ -73,26 +84,31 @@ const Aside = () => {
                         } transition-all duration-500 overflow-hidden flex flex-col gap-2`}
                       >
                         {page.subPages.map((subPage, index) => (
-                          <Link
-                            to={subPage.link}
-                            key={index}
-                            className={`flex items-center gap-3 ml-2 px-4 py-2 rounded-[10px] ${
-                              subPage.link === url ? "bg-secondary" : "bg-transparent"
-                            }`}
-                          >
-                            <div className="w-[5px] h-[5px] rounded-full block bg-white"></div>
-                            <div className="text-white text-sm sm:text-base">{subPage.title}</div>
-                          </Link>
+                          <li key={index}>
+                            <Link
+                              to={subPage.link}
+                              className={`flex items-center gap-3 ml-2 px-4 py-2 rounded-[10px] ${
+                                subPage.link === url
+                                  ? "bg-secondary"
+                                  : "bg-transparent"
+                              }`}
+                            >
+                              <span className="w-[5px] h-[5px] rounded-full block bg-white"></span>
+                              <span className="text-white text-sm sm:text-base">
+                                {subPage.title}
+                              </span>
+                            </Link>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     )}
-                  </div>
-                );
-              })}
-            </div>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </div>
-      </div>
+      </section>
     </nav>
   );
 };
