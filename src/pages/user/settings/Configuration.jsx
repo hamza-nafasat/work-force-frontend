@@ -203,7 +203,6 @@ const Configuration = () => {
               text="Save"
               width="w-[150px]"
               type="submit"
-              onClick={() => console.log("first")}
             />
           </div>
         </div>
