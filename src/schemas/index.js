@@ -80,3 +80,7 @@ export const configurationSchema = Yup.object({
   password: Yup.string().required("password is required"),
   db: Yup.string().required("database name is required"),
 });
+
+export const commentSchema = Yup.object({
+  comment: Yup.string().required("comment is required"),
+});
