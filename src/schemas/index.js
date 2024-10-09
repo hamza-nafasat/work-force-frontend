@@ -29,11 +29,8 @@ export const vehicleSchema = Yup.object({
   vehicleName: Yup.string().required("Vehicle Name is required"),
   brand: Yup.string().required("Brand Name is required"),
   identificationNumber: Yup.string().required("Identification Number is required"),
-  licensePlateNumber: Yup.string().required("License Plate Number is required"),
-  project: Yup.string().required("Project is required"),
+  plateNumber: Yup.string().required("License Plate Number is required"),
   color: Yup.string().required("Color is required"),
-  assignTo: Yup.string().required("Assign To is required"),
-  sensor: Yup.string().required("Sensor is required"),
   image: Yup.mixed().required("Image is required"),
 });
 

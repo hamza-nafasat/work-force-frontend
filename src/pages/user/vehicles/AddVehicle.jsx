@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import CameraIcon from "../../../assets/svgs/vehicles/CameraIcon";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
+import { useFormik } from "formik";
 import profile from "../../../assets/images/vehicles/vehicle.png";
-import Dropdown from "../../../components/shared/dropdown/Dropdown";
-import { brandOptions } from "../../../data/data";
+import CameraIcon from "../../../assets/svgs/vehicles/CameraIcon";
 import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import Dropdown from "../../../components/shared/dropdown/Dropdown";
+import { brandOptions } from "../../../data/data";
 import { vehicleSchema } from "../../../schemas";
 
 const AddVehicle = ({ onClose }) => {
@@ -29,8 +29,7 @@ const AddVehicle = ({ onClose }) => {
       vehicleName: "",
       brand: "",
       identificationNumber: "",
-      licensePlateNumber: "",
-      project: "",
+      plateNumber: "",
       color: "",
       assignTo: "",
       image: "",
@@ -38,13 +37,10 @@ const AddVehicle = ({ onClose }) => {
     },
     validationSchema: vehicleSchema,
     onSubmit: (values) => {
-      // console.log("Form submitted successfully:", values);
+      console.log("Form submitted successfully:", values);
     },
   });
 
-  const brandSelectHandler = (option) => setFieldValue("brand", option.value);
-  const projectSelectHandler = (option) => setFieldValue("project", option.value);
-  const colorSelectHandler = (option) => setFieldValue("color", option.value);
   const assignToSelectHandler = (option) => setFieldValue("assignTo", option.value);
   const sensorSelectHandler = (option) => setFieldValue("sensor", option.value);
 
@@ -62,9 +58,10 @@ const AddVehicle = ({ onClose }) => {
         <UploadImage onChange={imgSrcHandler} />
         {touched.image && errors.image && <p className="text-red-500">{errors.image}</p>}
       </div>
-      <div className="md:col-span-6">
+      <div className="md:col-span-4">
         <Input
           label="Vehicle Name"
+          type="text"
           placeholder="Vehicle Name"
           labelWeight="font-semibold"
           value={values.vehicleName}
@@ -76,14 +73,22 @@ const AddVehicle = ({ onClose }) => {
           <p className="text-red-500 text-xs">{errors.vehicleName}</p>
         )}
       </div>
-      <div className="md:col-span-3">
-        <Label label="Brand" />
-        <Dropdown options={brandOptions} onSelect={brandSelectHandler} />
+      <div className="md:col-span-4">
+        <Input
+          label="Brand"
+          type="text"
+          placeholder="Company Name"
+          labelWeight="font-semibold"
+          value={values.brand}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          name="brand"
+        />
         {touched.brand && errors.brand && <p className="text-red-500 text-xs mt-4">{errors.brand}</p>}
       </div>
-      <div className="md:col-span-3">
+      <div className="md:col-span-4">
         <Input
-          label="Identification Number"
+          label="ID Number"
           placeholder="Identification Number"
           labelWeight="font-semibold"
           value={values.identificationNumber}
@@ -97,39 +102,37 @@ const AddVehicle = ({ onClose }) => {
       </div>
       <div className="md:col-span-6">
         <Input
-          label="License Plate Number"
-          placeholder="License Plate Number"
+          label="Plate Number"
+          placeholder="Plate Number"
           labelWeight="font-semibold"
-          value={values.licensePlateNumber}
+          value={values.plateNumber}
           onChange={handleChange}
           onBlur={handleBlur}
-          name="licensePlateNumber"
+          name="plateNumber"
         />
-        {touched.licensePlateNumber && errors.licensePlateNumber && (
-          <p className="text-red-500 text-xs">{errors.licensePlateNumber}</p>
+        {touched.plateNumber && errors.plateNumber && (
+          <p className="text-red-500 text-xs">{errors.plateNumber}</p>
         )}
       </div>
       <div className="md:col-span-6">
-        <Label label="Project" />
-        <Dropdown options={brandOptions} onSelect={projectSelectHandler} />
-        {touched.project && errors.project && <p className="text-red-500 text-xs mt-4">{errors.project}</p>}
-      </div>
-      <div className="md:col-span-4">
-        <Label label="Color" />
-        <Dropdown options={brandOptions} onSelect={colorSelectHandler} />
+        <Input
+          label="Color"
+          placeholder="Color"
+          labelWeight="font-semibold"
+          value={values.color}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          name="color"
+        />
         {touched.color && errors.color && <p className="text-red-500 text-xs mt-4">{errors.color}</p>}
       </div>
-      <div className="md:col-span-4">
+      <div className="md:col-span-6">
         <Label label="Assign To" />
         <Dropdown options={brandOptions} onSelect={assignToSelectHandler} />
-        {touched.assignTo && errors.assignTo && (
-          <p className="text-red-500 text-xs mt-4">{errors.assignTo}</p>
-        )}
       </div>
-      <div className="md:col-span-4">
+      <div className="md:col-span-6">
         <Label label="Add Sensor" />
         <Dropdown options={brandOptions} onSelect={sensorSelectHandler} />
-        {touched.sensor && errors.sensor && <p className="text-red-500 text-xs mt-4">{errors.sensor}</p>}
       </div>
       <div className="md:col-span-12">
         <div className="flex items-center justify-end gap-2">
