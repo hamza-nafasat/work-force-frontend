@@ -1,16 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
 import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import profile from "../../../assets/images/vehicles/vehicle.png";
 import CameraIcon from "../../../assets/svgs/vehicles/CameraIcon";
 import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
 import Dropdown from "../../../components/shared/dropdown/Dropdown";
-import { brandOptions } from "../../../data/data";
+import { useGetAllSensorsQuery } from "../../../redux/api/sensorApi";
+import { useAddVehicleMutation } from "../../../redux/api/vehicleApi";
 import { vehicleSchema } from "../../../schemas";
 
 const AddVehicle = ({ onClose }) => {
+  const [sensorsOptions, setSensorsOptions] = useState([]);
+  const { data, isSuccess } = useGetAllSensorsQuery("");
   const [imgSrc, setImgSrc] = useState("");
+  const [AddVehicle, { isLoading }] = useAddVehicleMutation();
 
   const imgSrcHandler = (e) => {
     const file = e.target.files[0];
@@ -23,6 +28,7 @@ const AddVehicle = ({ onClose }) => {
       reader.readAsDataURL(file);
     }
   };
+  const sensorSelectHandler = (option) => setFieldValue("sensor", option);
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
@@ -31,18 +37,40 @@ const AddVehicle = ({ onClose }) => {
       identificationNumber: "",
       plateNumber: "",
       color: "",
-      assignTo: "",
       image: "",
       sensor: "",
     },
     validationSchema: vehicleSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted successfully:", values);
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+        formData.append("name", values.vehicleName);
+        formData.append("idNumber", values.identificationNumber);
+        formData.append("brand", values.brand);
+        formData.append("color", values.color);
+        formData.append("file", values.image);
+        formData.append("plateNumber", values.plateNumber);
+        formData.append("sensor", values.sensor);
+        const response = await AddVehicle(formData).unwrap();
+        if (response?.success) {
+          toast.success(response.message);
+        }
+      } catch (error) {
+        console.log("Error while adding new vehicle ", error);
+        toast.error(error?.data?.message || "Some Error Ocurred");
+      }
     },
   });
 
-  const assignToSelectHandler = (option) => setFieldValue("assignTo", option.value);
-  const sensorSelectHandler = (option) => setFieldValue("sensor", option.value);
+  useEffect(() => {
+    if (isSuccess) {
+      const newData = [];
+      data?.data?.forEach((sensor) => {
+        if (!sensor.isConnected) newData.push({ option: sensor?.name, value: sensor?._id });
+      });
+      setSensorsOptions(newData);
+    }
+  }, [data?.data, isSuccess]);
 
   return (
     <form
@@ -126,25 +154,20 @@ const AddVehicle = ({ onClose }) => {
         />
         {touched.color && errors.color && <p className="text-red-500 text-xs mt-4">{errors.color}</p>}
       </div>
-      <div className="md:col-span-6">
-        <Label label="Assign To" />
-        <Dropdown options={brandOptions} onSelect={assignToSelectHandler} />
-      </div>
-      <div className="md:col-span-6">
+      <div className="md:col-span-12">
         <Label label="Add Sensor" />
-        <Dropdown options={brandOptions} onSelect={sensorSelectHandler} />
+        <Dropdown options={sensorsOptions} onSelect={sensorSelectHandler} />
       </div>
       <div className="md:col-span-12">
         <div className="flex items-center justify-end gap-2">
+          <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
           <Button
-            type="button"
-            text="Cancel"
-            color="#111111b3"
-            bg="#76767640"
+            disabled={isLoading}
+            type="submit"
+            text="Add"
             width="w-[150px]"
-            onClick={onClose}
+            height="h-[50px] sm:h-[60px]"
           />
-          <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
         </div>
       </div>
     </form>
