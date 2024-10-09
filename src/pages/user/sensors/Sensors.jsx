@@ -3,18 +3,28 @@ import DeleteIcon from "../../../assets/svgs/DeleteIcon";
 import AddIcon from "../../../assets/svgs/AddIcon";
 import Title from "../../../components/shared/title/Title";
 import Modal from "../../../components/modals/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditIcon from "../../../assets/svgs/EditIcon";
-import { sensorData } from "../../../data/data";
 import AddSensor from "./AddSensor";
 import EditSensor from "./EditSensor";
 import ToggleButton from "../../../components/shared/toggle/ToggleButton";
 import { confirmAlert } from "react-confirm-alert";
+import {
+  useDeleteSingleSensorMutation,
+  useGetAllSensorsQuery,
+  useUpdateSingleSensorMutation,
+} from "../../../redux/api/sensorApi";
+import { toast } from "react-toastify";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 
-const columns = (modalOpenHandler, sensorStatus, statusToggleHandler, deleteHandler) => [
+const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
   {
-    name: "Sensor Name",
-    selector: (row) => row.sensorName,
+    name: "Name",
+    selector: (row) => row.name,
+  },
+  {
+    name: "Type",
+    selector: (row) => row.type,
   },
   {
     name: "IP",
@@ -25,34 +35,27 @@ const columns = (modalOpenHandler, sensorStatus, statusToggleHandler, deleteHand
     selector: (row) => row.url,
   },
   {
+    name: "Unique Id",
+    selector: (row) => row.uniqueId,
+  },
+  {
     name: "Port",
     selector: (row) => row.port,
   },
   {
-    name: "Topic",
-    selector: (row) => row.topic,
-  },
-  {
-    name: "Location",
-    selector: (row) => row.location,
-  },
-  {
     name: "Status",
     selector: (row) => (
-      <ToggleButton
-        isChecked={sensorStatus[row._id] || false}
-        onToggle={() => statusToggleHandler(row._id)}
-      />
+      <ToggleButton isChecked={row.status} onToggle={() => statusToggleHandler(row?._id, row?.status)} />
     ),
   },
   {
     name: "Action",
-    selector: () => (
+    selector: (row) => (
       <div className="flex items-center gap-2">
-        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler()}>
+        <div className="cursor-pointer" onClick={() => deleteHandler(row?._id)}>
           <DeleteIcon />
         </div>
       </div>
@@ -61,28 +64,54 @@ const columns = (modalOpenHandler, sensorStatus, statusToggleHandler, deleteHand
 ];
 
 const Sensors = () => {
+  const { data, isSuccess, isLoading, refetch } = useGetAllSensorsQuery("");
+  const [updateSensor] = useUpdateSingleSensorMutation();
+  const [deleteSensor] = useDeleteSingleSensorMutation();
+  const [sensorsData, setSensorsData] = useState([]);
   const [modal, setModal] = useState(false);
-  const [sensorStatus, setSensorStatus] = useState({});
+  const [selectedRow, setSelectedRow] = useState(null);
 
-  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalOpenHandler = (modalType, row) => {
+    setModal(modalType);
+    if (row) setSelectedRow(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
-  const statusToggleHandler = (sensorId) => {
-    setSensorStatus((prevState) => ({
-      ...prevState,
-      [sensorId]: !prevState[sensorId],
-    }));
+  const statusToggleHandler = async (id, status) => {
+    try {
+      const response = await updateSensor({
+        sensorId: id,
+        data: { status: status ? "false" : "true" },
+      }).unwrap();
+      if (response?.success) {
+        await refetch();
+        toast.success(response?.message);
+      }
+    } catch (error) {
+      console.log("Error while toggling sensor status", error);
+      toast.error(error?.data?.message || "Error while updating sensor status");
+    }
   };
 
-  const deleteHandler = () => {
+  const deleteHandler = (id) => {
     confirmAlert({
       title: "Delete Sensor",
       message: "Are you sure, you want to delete the sensor?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            // console.log("project deleted")
+          onClick: async () => {
+            if (!id) return toast.error("Error while deleting sensor");
+            try {
+              const response = await deleteSensor({ sensorId: id }).unwrap();
+              if (response?.success) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("Error while deleting sensor", error);
+              toast.error(error?.data?.message || "Error while deleting sensor");
+            }
           },
         },
         {
@@ -91,7 +120,16 @@ const Sensors = () => {
       ],
     });
   };
-  return (
+
+  useEffect(() => {
+    if (isSuccess) {
+      const sensors = data?.data;
+      setSensorsData(sensors);
+    }
+  }, [data, isSuccess, refetch]);
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
@@ -108,8 +146,8 @@ const Sensors = () => {
       </div>
       <div className="mt-5">
         <DataTable
-          columns={columns(modalOpenHandler, sensorStatus, statusToggleHandler, deleteHandler)}
-          data={sensorData}
+          columns={columns(modalOpenHandler, statusToggleHandler, deleteHandler)}
+          data={sensorsData}
           selectableRows
           selectableRowsHighlight
           customStyles={tableStyles}
@@ -120,12 +158,12 @@ const Sensors = () => {
       </div>
       {modal === "add" && (
         <Modal title="Add Sensor" width="w-[300px] md:w-[650px]" onClose={modalCloseHandler}>
-          <AddSensor onClose={modalCloseHandler} />
+          <AddSensor refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (
         <Modal title="Edit Sensor" width="w-[300px] md:w-[650px]" onClose={modalCloseHandler}>
-          <EditSensor onClose={modalCloseHandler} />
+          <EditSensor selectedSensor={selectedRow} refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

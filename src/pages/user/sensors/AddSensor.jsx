@@ -8,9 +8,9 @@ import { useAddSensorMutation } from "../../../redux/api/sensorApi";
 import { sensorSchema } from "../../../schemas";
 import { sensorTypeOptions } from "../users/option";
 
-const AddSensor = ({ onClose }) => {
+const AddSensor = ({ refetch, onClose }) => {
   const [addNewSensor, { isLoading }] = useAddSensorMutation("");
-  const topicSelectHandler = (option) => setFieldValue("topic", option);
+  const topicSelectHandler = (option) => setFieldValue("type", option);
 
   const initialValues = {
     sensorName: "",
@@ -18,6 +18,7 @@ const AddSensor = ({ onClose }) => {
     ip: "",
     port: "",
     url: "",
+    uniqueId: "",
   };
   const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
@@ -30,10 +31,12 @@ const AddSensor = ({ onClose }) => {
           ip: values.ip,
           port: values.port,
           url: values.url,
+          uniqueId: values.uniqueId,
         };
         const response = await addNewSensor(data).unwrap();
         if (response?.success) {
           toast.success(response?.message);
+          await refetch();
           onClose();
           // console.log("Sensor added successfully", response);
         }
@@ -92,7 +95,22 @@ const AddSensor = ({ onClose }) => {
 
         {errors.port && touched.port && <div className="text-red-500 text-xs mt-1">{errors.port}</div>}
       </div>
-      <div className="lg:col-span-12">
+      <div className="lg:col-span-6">
+        <Input
+          type="text"
+          label="Unique Id"
+          labelWeight="font-semibold"
+          placeholder="45HG-FJ43"
+          value={values.uniqueId}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          name="uniqueId"
+        />
+        {errors.uniqueId && touched.uniqueId && (
+          <div className="text-red-500 text-xs mt-1">{errors.uniqueId}</div>
+        )}
+      </div>
+      <div className="lg:col-span-6">
         <Input
           type="text"
           label="URL"

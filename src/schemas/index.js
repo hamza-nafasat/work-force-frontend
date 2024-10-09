@@ -39,10 +39,11 @@ export const vehicleSchema = Yup.object({
 
 export const sensorSchema = Yup.object({
   sensorName: Yup.string().required("Sensor Name is required"),
-  type: Yup.string().required("Topic is required"),
+  type: Yup.string().required("Type is required"),
   ip: Yup.string().required("Ip is required"),
   port: Yup.string().required("Port is required"),
   url: Yup.string().required("URL is required"),
+  uniqueId: Yup.string().required("Unique Id is required"),
 });
 
 export const scoreCardSchema = Yup.object({

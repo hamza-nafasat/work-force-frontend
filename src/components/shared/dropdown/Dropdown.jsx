@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useRef, useState } from "react";
 import ChevronIcon from "../../../assets/svgs/vehicles/ChevronIcon";
 
-const Dropdown = ({ options, defaultText = "Select", onSelect, initialValue }) => {
+const Dropdown = ({ options, defaultText = "Select", onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const dropdownRef = useRef(null);

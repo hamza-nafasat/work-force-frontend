@@ -1,55 +1,59 @@
-import React from "react";
-import Input from "../../../components/auth/Input";
-import Dropdown from "../../../components/shared/dropdown/Dropdown";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import Button from "../../../components/shared/button/Button";
+/* eslint-disable react/prop-types */
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import Input from "../../../components/auth/Input";
+import Button from "../../../components/shared/button/Button";
+import Dropdown from "../../../components/shared/dropdown/Dropdown";
+import { useUpdateSingleSensorMutation } from "../../../redux/api/sensorApi";
 import { sensorSchema } from "../../../schemas";
-import { portOptions, topicOptions } from "../users/option";
+import { sensorTypeOptions } from "../users/option";
 
-const EditSensor = ({ onClose }) => {
-  const topicSelectHandler = (option) => setFieldValue("topic", option);
-  const portSelectHandler = (option) => setFieldValue("port", option);
+const EditSensor = ({ selectedSensor, refetch, onClose }) => {
+  const [updateSensor, { isLoading }] = useUpdateSingleSensorMutation();
+  const topicSelectHandler = (option) => setFieldValue("type", option);
 
   const initialValues = {
-    sensorName: "",
-    topic: "",
-    ip: "",
-    port: "",
-    url: "",
-    location: "",
+    sensorName: selectedSensor?.name,
+    type: selectedSensor?.type,
+    ip: selectedSensor?.ip,
+    port: selectedSensor?.port,
+    url: selectedSensor?.url,
+    uniqueId: selectedSensor?.uniqueId,
   };
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-  } = useFormik({
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
     validationSchema: sensorSchema,
     onSubmit: async (values) => {
       try {
-        console.log("Form Values: ", values);
-        onClose();
+        const data = {
+          name: values.sensorName,
+          type: values.type,
+          ip: values.ip,
+          port: values.port,
+          url: values.url,
+          location: values.location,
+        };
+
+        const response = await updateSensor({ sensorId: selectedSensor?._id, data }).unwrap();
+        if (response?.success) {
+          await refetch();
+          toast.success(response?.message);
+          onClose();
+        }
       } catch (error) {
-        console.log(error);
+        console.log("Error while adding sensor", error);
+        toast.error(error?.data?.message || "Error while updating sensor");
       }
     },
   });
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="grid grid-cols-1 lg:grid-cols-12 gap-4"
-    >
-      <div className="lg:col-span-8">
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div className="lg:col-span-6">
         <Input
           type="text"
-          label="Sensor Name"
+          label="Name"
           labelWeight="font-semibold"
-          placeholder="Temperature Sensor 01"
+          placeholder="Enter Sensor Name"
           value={values.sensorName}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -59,12 +63,14 @@ const EditSensor = ({ onClose }) => {
           <div className="text-red-500 text-xs mt-1">{errors.sensorName}</div>
         )}
       </div>
-      <div className="lg:col-span-4">
-        <Label label="Topic" />
-        <Dropdown options={topicOptions} onSelect={topicSelectHandler} />
-        {errors.topic && touched.topic && (
-          <div className="text-red-500 text-xs mt-1">{errors.topic}</div>
-        )}
+      <div className="lg:col-span-6">
+        <Label label="Type" />
+        <Dropdown
+          defaultText={values?.type?.toUpperCase()}
+          options={sensorTypeOptions}
+          onSelect={topicSelectHandler}
+        />
+        {errors.type && touched.type && <div className="text-red-500 text-xs mt-1">{errors.type}</div>}
       </div>
       <div className="lg:col-span-6">
         <Input
@@ -77,48 +83,47 @@ const EditSensor = ({ onClose }) => {
           onBlur={handleBlur}
           name="ip"
         />
-        {errors.ip && touched.ip && (
-          <div className="text-red-500 text-xs mt-1">{errors.ip}</div>
-        )}
+        {errors.ip && touched.ip && <div className="text-red-500 text-xs mt-1">{errors.ip}</div>}
       </div>
       <div className="lg:col-span-6">
-        <Label label="Port" />
-        <Dropdown options={portOptions} onSelect={portSelectHandler} />
-        {errors.port && touched.port && (
-          <div className="text-red-500 text-xs mt-1">{errors.port}</div>
-        )}
+        <Input
+          type="number"
+          label="Port"
+          labelWeight="font-semibold"
+          placeholder="5455"
+          value={values.port}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          name="port"
+        />
+        {errors.port && touched.port && <div className="text-red-500 text-xs mt-1">{errors.port}</div>}
       </div>
       <div className="lg:col-span-6">
         <Input
           type="text"
           label="URL"
           labelWeight="font-semibold"
-          placeholder="http://example.com/sensors"
+          placeholder="http://example.com"
           value={values.url}
           onChange={handleChange}
           onBlur={handleBlur}
           name="url"
         />
-        {errors.url && touched.url && (
-          <div className="text-red-500 text-xs mt-1">{errors.url}</div>
-        )}
+        {errors.url && touched.url && <div className="text-red-500 text-xs mt-1">{errors.url}</div>}
       </div>
       <div className="lg:col-span-6">
         <div className="relative">
           <Input
-            label="Location"
+            label="Unique Id"
             labelWeight="font-semibold"
             type="text"
-            placeholder="Warehouse A"
+            placeholder="Enter Unique Id"
             height="h-[50px] md:h-[60px]"
-            value={values.location}
+            value={values.uniqueId}
             onChange={handleChange}
             onBlur={handleBlur}
-            name="location"
+            name="uniqueId"
           />
-          <div className="absolute right-2 lg:right-5 bottom-[25%]">
-            <FaMapMarkerAlt />
-          </div>
         </div>
         {errors.location && touched.location && (
           <div className="text-red-500 text-xs mt-1">{errors.location}</div>
@@ -126,15 +131,8 @@ const EditSensor = ({ onClose }) => {
       </div>
       <div className="lg:col-span-12 mt-4">
         <div className="flex items-center justify-end gap-2">
-          <Button
-            type="submit"
-            text="Cancel"
-            color="#111111b3"
-            bg="#76767640"
-            width="w-[150px]"
-            onClick={onClose}
-          />
-          <Button text="Add" width="w-[150px]" />
+          <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
+          <Button disabled={isLoading} type="submit" text="Add" width="w-[150px]" />
         </div>
       </div>
     </form>
@@ -144,9 +142,5 @@ const EditSensor = ({ onClose }) => {
 export default EditSensor;
 
 const Label = ({ label }) => {
-  return (
-    <label class="text-[#000] text-base mb-2 block font-semibold">
-      {label}
-    </label>
-  );
+  return <label className="text-[#000] text-base mb-2 block font-semibold">{label}</label>;
 };

@@ -22,8 +22,8 @@ const portOptions = [
 ];
 
 const sensorTypeOptions = [
-  { option: "Temperature", value: "Temperature" },
-  { option: "Humidity", value: "Humidity" },
+  { option: "GPS", value: "gps" },
+  { option: "Attendance", value: "attendance" },
 ];
 
 const violationCategoryOptions = [

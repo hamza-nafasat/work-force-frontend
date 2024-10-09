@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IoMenuOutline } from "react-icons/io5";
 import NotificationIcon from "../../../assets/svgs/pagesIcons/NotificationIcon";
@@ -93,10 +93,7 @@ const Header = () => {
                 aria-label="Toggle Profile Menu"
               >
                 MKS
-                <FaChevronDown
-                  size={10}
-                  className={profileActive ? "rotate-180" : ""}
-                />
+                <FaChevronDown size={10} className={profileActive ? "rotate-180" : ""} />
               </button>
               {profileActive && (
                 <div className="absolute top-[40px] right-0 bg-white shadow-md rounded-lg w-[150px] z-10 border">
