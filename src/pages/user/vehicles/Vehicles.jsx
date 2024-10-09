@@ -3,47 +3,51 @@ import DeleteIcon from "../../../assets/svgs/DeleteIcon";
 import AddIcon from "../../../assets/svgs/AddIcon";
 import Title from "../../../components/shared/title/Title";
 import Modal from "../../../components/modals/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddVehicle from "./AddVehicle";
 import { IoEye } from "react-icons/io5";
 import EditIcon from "../../../assets/svgs/EditIcon";
 import EditVehicle from "./EditVehicle";
-import { vehiclesData } from "../../../data/data";
 import { useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
+import { useGetAllVehiclesQuery } from "../../../redux/api/vehicleApi";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
-    name: "Vehicle name",
-    selector: (row) => row.vehicleName,
+    name: "Name",
+    selector: (row) => row.name,
   },
   {
     name: "Brand",
     selector: (row) => row.brand,
   },
   {
-    name: "Car Registration",
-    selector: (row) => row.carRegistration,
+    name: "Plate No",
+    selector: (row) => row.plateNumber,
   },
   {
-    name: "Assign to",
-    selector: (row) => row.assignTo,
+    name: "ID Number",
+    selector: (row) => row.idNumber,
   },
   {
-    name: "Project",
-    selector: (row) => row.project,
+    name: "Driver",
+    selector: (row) => row?.driver?.fullName || "Not Assigned",
+  },
+  {
+    name: "Color",
+    selector: (row) => row.color,
   },
   {
     name: "Action",
     selector: (row) => (
       <div className="flex items-center gap-2">
-        <div className="cursor-pointer" onClick={() => navigate(`/user/vehicles/${row.id}`)}>
+        <div className="cursor-pointer" onClick={() => navigate(`/user/vehicles/${row?._id}`)}>
           <IoEye fontSize={18} style={{ marginTop: "4px" }} />
         </div>
-        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler()}>
+        <div className="cursor-pointer" onClick={() => deleteHandler(row?._id)}>
           <DeleteIcon />
         </div>
       </div>
@@ -52,10 +56,16 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
 ];
 
 const Vehicles = () => {
+  const [vehiclesData, setVehiclesData] = useState([]);
+  const { data, isSuccess, refetch } = useGetAllVehiclesQuery("");
   const [modal, setModal] = useState(false);
+  const [selectedTruck, setSelectedTruck] = useState({});
   const navigate = useNavigate();
 
-  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalOpenHandler = (modalType, row) => {
+    setModal(modalType);
+    if (row) setSelectedTruck(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
   const deleteHandler = () => {
@@ -75,6 +85,12 @@ const Vehicles = () => {
       ],
     });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setVehiclesData(data?.data);
+    }
+  }, [data, isSuccess]);
 
   return (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
@@ -105,12 +121,12 @@ const Vehicles = () => {
       </div>
       {modal === "add" && (
         <Modal title="Add Vehicle" onClose={modalCloseHandler}>
-          <AddVehicle onClose={modalCloseHandler} />
+          <AddVehicle vehicleRefetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (
         <Modal title="Edit Vehicle" onClose={modalCloseHandler}>
-          <EditVehicle onClose={modalCloseHandler} />
+          <EditVehicle vehicleRefetch={refetch} selectedTruck={selectedTruck} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

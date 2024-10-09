@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import CameraIcon from "../../../assets/svgs/vehicles/CameraIcon";
+/* eslint-disable react/prop-types */
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
 import profile from "../../../assets/images/vehicles/vehicle.png";
-import Dropdown from "../../../components/shared/dropdown/Dropdown";
-import { brandOptions } from "../../../data/data";
+import CameraIcon from "../../../assets/svgs/vehicles/CameraIcon";
 import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { vehicleSchema } from "../../../schemas";
+import Dropdown from "../../../components/shared/dropdown/Dropdown";
+import { useGetAllSensorsQuery } from "../../../redux/api/sensorApi";
+import { useAddVehicleMutation } from "../../../redux/api/vehicleApi";
+import { toast } from "react-toastify";
 
-const EditVehicle = ({ onClose }) => {
-  const [imgSrc, setImgSrc] = useState("");
+const EditVehicle = ({ vehicleRefetch, selectedTruck, onClose }) => {
+  const [imgSrc, setImgSrc] = useState(selectedTruck?.image?.url);
+  const [sensorsOptions, setSensorsOptions] = useState([]);
+  const { data, isSuccess, refetch } = useGetAllSensorsQuery("");
+  const [updateVehicle, { isLoading }] = useAddVehicleMutation();
 
   const imgSrcHandler = (e) => {
     const file = e.target.files[0];
@@ -26,28 +30,49 @@ const EditVehicle = ({ onClose }) => {
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
-      vehicleName: "",
-      brand: "",
-      identificationNumber: "",
-      licensePlateNumber: "",
-      project: "",
-      color: "",
-      assignTo: "",
+      vehicleName: selectedTruck?.name,
+      brand: selectedTruck?.brand,
+      identificationNumber: selectedTruck?.idNumber,
+      plateNumber: selectedTruck?.plateNumber,
+      color: selectedTruck?.color,
       image: "",
       sensor: "",
     },
-    validationSchema: vehicleSchema,
-    onSubmit: (values) => {
-      // console.log("Form submitted successfully:", values);
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+        formData.append("name", values.vehicleName);
+        formData.append("idNumber", values.identificationNumber);
+        formData.append("brand", values.brand);
+        formData.append("color", values.color);
+        if (values.image) formData.append("file", values.image);
+        formData.append("plateNumber", values.plateNumber);
+        const response = await updateVehicle({ vehicleId: selectedTruck?._id, data: formData }).unwrap();
+        if (response?.success) {
+          await Promise.all([refetch(), vehicleRefetch()]);
+          toast.success(response?.message);
+          onClose();
+        }
+      } catch (error) {
+        console.log("Error while adding new vehicle ", error);
+        toast.error(error?.data?.message || "Some Error Ocurred");
+      }
     },
   });
 
-  const brandSelectHandler = (option) => setFieldValue("brand", option.value);
-  const projectSelectHandler = (option) => setFieldValue("project", option.value);
-  const colorSelectHandler = (option) => setFieldValue("color", option.value);
-  const assignToSelectHandler = (option) => setFieldValue("assignTo", option.value);
-  const sensorSelectHandler = (option) => setFieldValue("sensor", option.value);
+  const sensorSelectHandler = (option) => setFieldValue("sensor", option);
 
+  useEffect(() => {
+    if ((isSuccess, data?.data)) {
+      const newData = [];
+      data?.data?.forEach((sensor) => {
+        if (!sensor.isConnected)
+          newData.push({ option: sensor?.name, value: sensor?._id, isConnected: sensor.isConnected });
+      });
+      setSensorsOptions(newData);
+      if (newData?.length == 0) newData.push({ option: "Not Any Sensor Available", value: "" });
+    }
+  }, [data?.data, isSuccess]);
   return (
     <form
       onSubmit={handleSubmit}
@@ -62,9 +87,10 @@ const EditVehicle = ({ onClose }) => {
         <UploadImage onChange={imgSrcHandler} />
         {touched.image && errors.image && <p className="text-red-500">{errors.image}</p>}
       </div>
-      <div className="md:col-span-6">
+      <div className="md:col-span-4">
         <Input
           label="Vehicle Name"
+          type="text"
           placeholder="Vehicle Name"
           labelWeight="font-semibold"
           value={values.vehicleName}
@@ -76,14 +102,22 @@ const EditVehicle = ({ onClose }) => {
           <p className="text-red-500 text-xs">{errors.vehicleName}</p>
         )}
       </div>
-      <div className="md:col-span-3">
-        <Label label="Brand" />
-        <Dropdown options={brandOptions} onSelect={brandSelectHandler} />
+      <div className="md:col-span-4">
+        <Input
+          label="Brand"
+          type="text"
+          placeholder="Company Name"
+          labelWeight="font-semibold"
+          value={values.brand}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          name="brand"
+        />
         {touched.brand && errors.brand && <p className="text-red-500 text-xs mt-4">{errors.brand}</p>}
       </div>
-      <div className="md:col-span-3">
+      <div className="md:col-span-4">
         <Input
-          label="Identification Number"
+          label="ID Number"
           placeholder="Identification Number"
           labelWeight="font-semibold"
           value={values.identificationNumber}
@@ -97,51 +131,48 @@ const EditVehicle = ({ onClose }) => {
       </div>
       <div className="md:col-span-6">
         <Input
-          label="License Plate Number"
-          placeholder="License Plate Number"
+          label="Plate Number"
+          placeholder="Plate Number"
           labelWeight="font-semibold"
-          value={values.licensePlateNumber}
+          value={values.plateNumber}
           onChange={handleChange}
           onBlur={handleBlur}
-          name="licensePlateNumber"
+          name="plateNumber"
         />
-        {touched.licensePlateNumber && errors.licensePlateNumber && (
-          <p className="text-red-500 text-xs">{errors.licensePlateNumber}</p>
+        {touched.plateNumber && errors.plateNumber && (
+          <p className="text-red-500 text-xs">{errors.plateNumber}</p>
         )}
       </div>
       <div className="md:col-span-6">
-        <Label label="Project" />
-        <Dropdown options={brandOptions} onSelect={projectSelectHandler} />
-        {touched.project && errors.project && <p className="text-red-500 text-xs mt-4">{errors.project}</p>}
-      </div>
-      <div className="md:col-span-4">
-        <Label label="Color" />
-        <Dropdown options={brandOptions} onSelect={colorSelectHandler} />
+        <Input
+          label="Color"
+          placeholder="Color"
+          labelWeight="font-semibold"
+          value={values.color}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          name="color"
+        />
         {touched.color && errors.color && <p className="text-red-500 text-xs mt-4">{errors.color}</p>}
       </div>
-      <div className="md:col-span-4">
-        <Label label="Assign To" />
-        <Dropdown options={brandOptions} onSelect={assignToSelectHandler} />
-        {touched.assignTo && errors.assignTo && (
-          <p className="text-red-500 text-xs mt-4">{errors.assignTo}</p>
-        )}
-      </div>
-      <div className="md:col-span-4">
+      <div className="md:col-span-12">
         <Label label="Add Sensor" />
-        <Dropdown options={brandOptions} onSelect={sensorSelectHandler} />
-        {touched.sensor && errors.sensor && <p className="text-red-500 text-xs mt-4">{errors.sensor}</p>}
+        <Dropdown
+          defaultText={selectedTruck?.sensor?.name}
+          options={sensorsOptions}
+          onSelect={sensorSelectHandler}
+        />
       </div>
       <div className="md:col-span-12">
         <div className="flex items-center justify-end gap-2">
+          <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
           <Button
-            type="button"
-            text="Cancel"
-            color="#111111b3"
-            bg="#76767640"
+            disabled={isLoading}
+            type="submit"
+            text="Add"
             width="w-[150px]"
-            onClick={onClose}
+            height="h-[50px] sm:h-[60px]"
           />
-          <Button type="submit" text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
         </div>
       </div>
     </form>

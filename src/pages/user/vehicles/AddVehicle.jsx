@@ -11,9 +11,9 @@ import { useGetAllSensorsQuery } from "../../../redux/api/sensorApi";
 import { useAddVehicleMutation } from "../../../redux/api/vehicleApi";
 import { vehicleSchema } from "../../../schemas";
 
-const AddVehicle = ({ onClose }) => {
+const AddVehicle = ({ vehicleRefetch, onClose }) => {
   const [sensorsOptions, setSensorsOptions] = useState([]);
-  const { data, isSuccess } = useGetAllSensorsQuery("");
+  const { data, isSuccess, refetch } = useGetAllSensorsQuery("");
   const [imgSrc, setImgSrc] = useState("");
   const [AddVehicle, { isLoading }] = useAddVehicleMutation();
 
@@ -28,6 +28,7 @@ const AddVehicle = ({ onClose }) => {
       reader.readAsDataURL(file);
     }
   };
+
   const sensorSelectHandler = (option) => setFieldValue("sensor", option);
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
@@ -53,7 +54,9 @@ const AddVehicle = ({ onClose }) => {
         formData.append("sensor", values.sensor);
         const response = await AddVehicle(formData).unwrap();
         if (response?.success) {
+          await Promise.all([refetch(), vehicleRefetch()]);
           toast.success(response.message);
+          onClose();
         }
       } catch (error) {
         console.log("Error while adding new vehicle ", error);
@@ -63,12 +66,14 @@ const AddVehicle = ({ onClose }) => {
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    if ((isSuccess, data?.data)) {
       const newData = [];
       data?.data?.forEach((sensor) => {
-        if (!sensor.isConnected) newData.push({ option: sensor?.name, value: sensor?._id });
+        if (!sensor.isConnected)
+          newData.push({ option: sensor?.name, value: sensor?._id, isConnected: sensor.isConnected });
       });
       setSensorsOptions(newData);
+      if (newData?.length == 0) newData.push({ option: "Not Any Sensor Available", value: "" });
     }
   }, [data?.data, isSuccess]);
 
