@@ -100,6 +100,11 @@ export const pages = [
         icon: <ScoreCardIcon />,
     },
     {
+        title: 'Users',
+        link: '/user/users',
+        icon: <UsersIcon />,
+    },
+    {
         title: 'Plans & Pricing',
         icon: <PlansAndPricingIcon />,
         subPages: [

@@ -39,6 +39,8 @@ const VehicleDetail = lazy(() => import("./pages/user/vehicles/VehicleDetail"));
 const LabourDetail = lazy(() => import("./pages/user/labours/LabourDetail"));
 const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
 const Attendance = lazy(() => import("./pages/user/attendance/Attendance"));
+const Users = lazy(() => import("./pages/user/users/Users"));
+const UserDetail = lazy(() => import("./pages/user/users/UserDetail"));
 
 // Admin Routes
 const AdminDashboard = lazy(() => import("./admin/layout/index"));
@@ -100,6 +102,8 @@ function App() {
             <Route path="vehicles/:id" element={<VehicleDetail />} />
             <Route path="labours" element={<Labours />} />
             <Route path="labours/:id" element={<LabourDetail />} />
+            <Route path="users" element={<Users />} />
+            <Route path="users/:id" element={<UserDetail />} />
             <Route path="sensors" element={<Sensors />} />
             <Route path="users-violation" element={<UsersViolations />} />
             <Route path="vehicles-violation" element={<VehiclesViolations />} />

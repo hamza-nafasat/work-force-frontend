@@ -1,19 +1,5 @@
 import * as Yup from "yup";
 
-export const usersSchema = Yup.object({
-  fullName: Yup.string().required("Full Name is required"),
-  phoneNumber: Yup.string().required("Phone Number is required"),
-  passportNumber: Yup.string().required("Passport Number is required"),
-  dateOfBirth: Yup.date().required("Date of Birth is required"),
-  nationality: Yup.string().required("Nationality is required"),
-  gender: Yup.string().required("Gender is required"),
-  profession: Yup.string().required("Profession is required"),
-  workingStatus: Yup.string().required("Working Status is required"),
-  workingHoursStartTime: Yup.string().required("Working hours start time is required"),
-  workingHoursEndTime: Yup.string().required("Working hours end time is required"),
-  image: Yup.mixed().required("Image is required"),
-});
-
 export const projectSchema = Yup.object({
   projectName: Yup.string().required("Project name is required"),
   startDate: Yup.date().required("Start date is required"),
@@ -71,4 +57,16 @@ export const configurationSchema = Yup.object({
 
 export const commentSchema = Yup.object({
   comment: Yup.string().required("comment is required"),
+});
+
+export const usersSchema = Yup.object({
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
+  email: Yup.string().required("Email is required"),
+  phone: Yup.string().required("Phone is required"),
+  password: Yup.string().required("Password is required"),
+  confirmPassword: Yup.string().required("Confirm password is required"),
+  role: Yup.string().required("Role is required"),
+  address: Yup.string().required("Address is required"),
+  image: Yup.mixed().required("Image is required")
 });

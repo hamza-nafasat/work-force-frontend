@@ -8,6 +8,8 @@ import { useGetSingleVehicleQuery } from "../../../redux/api/vehicleApi";
 import { useGetAllSensorsQuery, useUpdateSingleSensorMutation } from "../../../redux/api/sensorApi";
 import { toast } from "react-toastify";
 import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Modal from "../../../components/modals/Modal";
+import EditVehicle from "./EditVehicle";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -15,6 +17,10 @@ const VehicleDetail = () => {
   const { data, isSuccess, refetch, isLoading } = useGetSingleVehicleQuery({ vehicleId: id });
   const [updateSensor] = useUpdateSingleSensorMutation();
   const [vehicle, setVehicle] = useState({});
+  const [modal, setModal] = useState(false)
+
+  const vehicleOpenModalHandler = () => setModal(true);
+  const vehicleCloseModalHandler = () => setModal(false);
 
   const handleToggle = async (id, status) => {
     try {
@@ -46,7 +52,7 @@ const VehicleDetail = () => {
         <div>
           <Title title="Vehicle Detail" />
         </div>
-        <div className="cursor-pointer">
+        <div className="cursor-pointer" onClick={vehicleOpenModalHandler}>
           <EditIcon />
         </div>
       </div>
@@ -77,6 +83,11 @@ const VehicleDetail = () => {
           <img src={vehicle?.image?.url} className="w-full md:w-[70%] h-[full] object-cover m-auto" />
         </div>
       </div>
+      {modal && (
+        <Modal onClose={vehicleCloseModalHandler}>
+          <EditVehicle refetch={refetch} onClose={vehicleCloseModalHandler} selectedTruck={vehicle} />
+        </Modal>
+      )}
     </div>
   );
 };
