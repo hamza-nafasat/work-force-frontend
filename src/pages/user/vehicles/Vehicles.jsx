@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import { useDeleteSingleVehicleMutation, useGetAllVehiclesQuery } from "../../../redux/api/vehicleApi";
 import { toast } from "react-toastify";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
@@ -58,7 +59,7 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
 
 const Vehicles = () => {
   const [vehiclesData, setVehiclesData] = useState([]);
-  const { data, isSuccess, refetch } = useGetAllVehiclesQuery("");
+  const { data, isSuccess, refetch, isLoading } = useGetAllVehiclesQuery("");
   const [modal, setModal] = useState(false);
   const [deleteVehicle] = useDeleteSingleVehicleMutation();
   const [selectedTruck, setSelectedTruck] = useState({});
@@ -103,7 +104,9 @@ const Vehicles = () => {
     }
   }, [data, isSuccess]);
 
-  return (
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>

@@ -10,10 +10,17 @@ import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import { useGetAllSensorsQuery } from "../../../redux/api/sensorApi";
 import { useAddVehicleMutation } from "../../../redux/api/vehicleApi";
 import { vehicleSchema } from "../../../schemas";
+import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
 
 const AddVehicle = ({ vehicleRefetch, onClose }) => {
   const [sensorsOptions, setSensorsOptions] = useState([]);
   const { data, isSuccess, refetch } = useGetAllSensorsQuery("");
+  const [driversOptions, setDriversOptions] = useState([]);
+  const {
+    data: driverData,
+    isSuccess: isDriverSuccess,
+    refetch: driverRefetch,
+  } = useGetAllLaboursQuery("");
   const [imgSrc, setImgSrc] = useState("");
   const [AddVehicle, { isLoading }] = useAddVehicleMutation();
 
@@ -30,6 +37,7 @@ const AddVehicle = ({ vehicleRefetch, onClose }) => {
   };
 
   const sensorSelectHandler = (option) => setFieldValue("sensor", option);
+  const driverSelectHandler = (option) => setFieldValue("driver", option);
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
@@ -40,6 +48,7 @@ const AddVehicle = ({ vehicleRefetch, onClose }) => {
       color: "",
       image: "",
       sensor: "",
+      driver: "",
     },
     validationSchema: vehicleSchema,
     onSubmit: async (values) => {
@@ -52,9 +61,10 @@ const AddVehicle = ({ vehicleRefetch, onClose }) => {
         formData.append("file", values.image);
         formData.append("plateNumber", values.plateNumber);
         formData.append("sensor", values.sensor);
+        formData.append("driver", values.driver);
         const response = await AddVehicle(formData).unwrap();
         if (response?.success) {
-          await Promise.all([refetch(), vehicleRefetch()]);
+          await Promise.all([refetch(), vehicleRefetch(), driverRefetch()]);
           toast.success(response.message);
           onClose();
         }
@@ -76,6 +86,17 @@ const AddVehicle = ({ vehicleRefetch, onClose }) => {
       if (newData?.length == 0) newData.push({ option: "Not Any Sensor Available", value: "" });
     }
   }, [data?.data, isSuccess]);
+
+  useEffect(() => {
+    if ((isDriverSuccess, driverData?.data)) {
+      const newData = [];
+      driverData?.data?.forEach((driver) => {
+        if (!driver?.assignedVehicle) newData.push({ option: driver?.fullName, value: driver?._id });
+      });
+      setDriversOptions(newData);
+      if (newData?.length == 0) newData.push({ option: "Not Any Driver Available", value: "" });
+    }
+  }, [driverData?.data, isDriverSuccess]);
 
   return (
     <form
@@ -159,9 +180,13 @@ const AddVehicle = ({ vehicleRefetch, onClose }) => {
         />
         {touched.color && errors.color && <p className="text-red-500 text-xs mt-4">{errors.color}</p>}
       </div>
-      <div className="md:col-span-12">
+      <div className="md:col-span-6">
         <Label label="Add Sensor" />
         <Dropdown options={sensorsOptions} onSelect={sensorSelectHandler} />
+      </div>
+      <div className="md:col-span-6">
+        <Label label="Assign Driver" />
+        <Dropdown options={driversOptions} onSelect={driverSelectHandler} />
       </div>
       <div className="md:col-span-12">
         <div className="flex items-center justify-end gap-2">

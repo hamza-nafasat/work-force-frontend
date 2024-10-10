@@ -31,6 +31,7 @@ const vehicleApis = createApi({
         url: `/single/${vehicleId}`,
         method: "GET",
       }),
+      keepUnusedDataFor: 0.0001,
     }),
 
     // update vehicle

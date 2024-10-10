@@ -1,21 +1,21 @@
-import DataTable from "react-data-table-component";
-import DeleteIcon from "../../../assets/svgs/DeleteIcon";
-import AddIcon from "../../../assets/svgs/AddIcon";
-import Title from "../../../components/shared/title/Title";
-import Modal from "../../../components/modals/Modal";
 import { useEffect, useState } from "react";
-import EditIcon from "../../../assets/svgs/EditIcon";
-import AddSensor from "./AddSensor";
-import EditSensor from "./EditSensor";
-import ToggleButton from "../../../components/shared/toggle/ToggleButton";
 import { confirmAlert } from "react-confirm-alert";
+import DataTable from "react-data-table-component";
+import { toast } from "react-toastify";
+import AddIcon from "../../../assets/svgs/AddIcon";
+import DeleteIcon from "../../../assets/svgs/DeleteIcon";
+import EditIcon from "../../../assets/svgs/EditIcon";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Modal from "../../../components/modals/Modal";
+import Title from "../../../components/shared/title/Title";
+import ToggleButton from "../../../components/shared/toggle/ToggleButton";
 import {
   useDeleteSingleSensorMutation,
   useGetAllSensorsQuery,
   useUpdateSingleSensorMutation,
 } from "../../../redux/api/sensorApi";
-import { toast } from "react-toastify";
-import GlobalLoader from "../../../components/layout/GlobalLoader";
+import AddSensor from "./AddSensor";
+import EditSensor from "./EditSensor";
 
 const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
   {
@@ -127,6 +127,7 @@ const Sensors = () => {
       setSensorsData(sensors);
     }
   }, [data, isSuccess, refetch]);
+
   return isLoading ? (
     <GlobalLoader />
   ) : (
