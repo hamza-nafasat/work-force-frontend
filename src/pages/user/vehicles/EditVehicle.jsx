@@ -1,20 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import profile from "../../../assets/images/vehicles/vehicle.png";
 import CameraIcon from "../../../assets/svgs/vehicles/CameraIcon";
 import Input from "../../../components/auth/Input";
 import Button from "../../../components/shared/button/Button";
 import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import { useGetAllSensorsQuery } from "../../../redux/api/sensorApi";
-import { useAddVehicleMutation } from "../../../redux/api/vehicleApi";
-import { toast } from "react-toastify";
+import { useUpdateSingleVehicleMutation } from "../../../redux/api/vehicleApi";
 
 const EditVehicle = ({ vehicleRefetch, selectedTruck, onClose }) => {
   const [imgSrc, setImgSrc] = useState(selectedTruck?.image?.url);
   const [sensorsOptions, setSensorsOptions] = useState([]);
   const { data, isSuccess, refetch } = useGetAllSensorsQuery("");
-  const [updateVehicle, { isLoading }] = useAddVehicleMutation();
+  const [updateVehicle, { isLoading }] = useUpdateSingleVehicleMutation();
 
   const imgSrcHandler = (e) => {
     const file = e.target.files[0];
@@ -32,21 +32,22 @@ const EditVehicle = ({ vehicleRefetch, selectedTruck, onClose }) => {
     initialValues: {
       vehicleName: selectedTruck?.name,
       brand: selectedTruck?.brand,
-      identificationNumber: selectedTruck?.idNumber,
-      plateNumber: selectedTruck?.plateNumber,
+      identificationNumber: "",
+      plateNumber: "",
       color: selectedTruck?.color,
       image: "",
       sensor: "",
     },
     onSubmit: async (values) => {
       try {
+        console.log("Form Values: ", values);
         const formData = new FormData();
         formData.append("name", values.vehicleName);
-        formData.append("idNumber", values.identificationNumber);
+        if (values.identificationNumber) formData.append("idNumber", values.identificationNumber);
+        if (values.plateNumber) formData.append("plateNumber", values.plateNumber);
         formData.append("brand", values.brand);
         formData.append("color", values.color);
         if (values.image) formData.append("file", values.image);
-        formData.append("plateNumber", values.plateNumber);
         const response = await updateVehicle({ vehicleId: selectedTruck?._id, data: formData }).unwrap();
         if (response?.success) {
           await Promise.all([refetch(), vehicleRefetch()]);

@@ -10,7 +10,8 @@ import EditIcon from "../../../assets/svgs/EditIcon";
 import EditVehicle from "./EditVehicle";
 import { useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
-import { useGetAllVehiclesQuery } from "../../../redux/api/vehicleApi";
+import { useDeleteSingleVehicleMutation, useGetAllVehiclesQuery } from "../../../redux/api/vehicleApi";
+import { toast } from "react-toastify";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
@@ -59,6 +60,7 @@ const Vehicles = () => {
   const [vehiclesData, setVehiclesData] = useState([]);
   const { data, isSuccess, refetch } = useGetAllVehiclesQuery("");
   const [modal, setModal] = useState(false);
+  const [deleteVehicle] = useDeleteSingleVehicleMutation();
   const [selectedTruck, setSelectedTruck] = useState({});
   const navigate = useNavigate();
 
@@ -68,15 +70,24 @@ const Vehicles = () => {
   };
   const modalCloseHandler = () => setModal(false);
 
-  const deleteHandler = () => {
+  const deleteHandler = (id) => {
     confirmAlert({
       title: "Delete Vehicle",
       message: "Are you sure, you want to delete the vehicle?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            // console.log("project deleted")
+          onClick: async () => {
+            try {
+              const response = await deleteVehicle({ vehicleId: id }).unwrap();
+              if (response?.success && response?.message) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("error while deleting vehicle", error);
+              toast.error(error?.data?.message || "Some Error Occurred while deleting vehicle");
+            }
           },
         },
         {
