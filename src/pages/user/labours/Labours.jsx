@@ -12,8 +12,8 @@ import GlobalLoader from "../../../components/layout/GlobalLoader";
 import Modal from "../../../components/modals/Modal";
 import Title from "../../../components/shared/title/Title";
 import { useDeleteLabourMutation, useGetAllLaboursQuery } from "../../../redux/api/labourApi";
-import AddUser from "./AddUser";
-import EditUser from "./EditUser";
+import AddLabour from "./AddLabour";
+import EditLabour from "./EditLabour";
 
 const columns = (modalOpenHandler, navigate, deleteHandler, isDeleting) => [
   {
@@ -50,7 +50,7 @@ const columns = (modalOpenHandler, navigate, deleteHandler, isDeleting) => [
     name: "Action",
     selector: (row) => (
       <div className="flex items-center gap-2">
-        <div className="cursor-pointer" onClick={() => navigate(`/user/users/${row.id}`)}>
+        <div className="cursor-pointer" onClick={() => navigate(`/user/labours/${row.id}`)}>
           <IoEye fontSize={18} style={{ marginTop: "4px" }} />
         </div>
         <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
@@ -67,7 +67,7 @@ const columns = (modalOpenHandler, navigate, deleteHandler, isDeleting) => [
   },
 ];
 
-const Users = () => {
+const Labours = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
@@ -84,8 +84,8 @@ const Users = () => {
 
   const deleteHandler = (id) => {
     confirmAlert({
-      title: "Delete User",
-      message: "Are you sure, you want to delete the user?",
+      title: "Delete Labour",
+      message: "Are you sure, you want to delete the labour?",
       buttons: [
         {
           label: "Yes",
@@ -97,8 +97,8 @@ const Users = () => {
                 toast.success(response?.message);
               }
             } catch (error) {
-              console.log("error while deleting user", error);
-              toast.error(error?.data?.message || "Some Error Occurred while deleting user");
+              console.log("error while deleting labour", error);
+              toast.error(error?.data?.message || "Some Error Occurred while deleting labour");
             }
           },
         },
@@ -138,15 +138,15 @@ const Users = () => {
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
-          <Title title="Users" />
+          <Title title="Labours" />
         </div>
         <div className="flex items-center gap-2">
           <div className="cursor-pointer" onClick={() => modalOpenHandler("add")}>
             <AddIcon />
           </div>
-          <div className="cursor-pointer">
+          {/* <div className="cursor-pointer">
             <DeleteIcon />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="mt-5">
@@ -164,20 +164,20 @@ const Users = () => {
         )}
       </div>
       {modal === "add" && (
-        <Modal title="Add User" onClose={modalCloseHandler}>
-          <AddUser refetch={refetch} onClose={modalCloseHandler} />
+        <Modal title="Add Labour" onClose={modalCloseHandler}>
+          <AddLabour refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (
-        <Modal title="Edit User" onClose={modalCloseHandler}>
-          <EditUser selectedRow={selectedRow} refetch={refetch} onClose={modalCloseHandler} />
+        <Modal title="Edit Labour" onClose={modalCloseHandler}>
+          <EditLabour selectedRow={selectedRow} refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>
   );
 };
 
-export default Users;
+export default Labours;
 
 const tableStyles = {
   headCells: {

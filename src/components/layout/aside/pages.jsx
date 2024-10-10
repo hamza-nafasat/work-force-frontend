@@ -66,8 +66,8 @@ export const pages = [
         icon: <VehiclesIcon />,
     },  
     {
-        title: 'Users',
-        link: '/user/users',
+        title: 'Labours',
+        link: '/user/labours',
         icon: <UsersIcon />,
     },  
     {

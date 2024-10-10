@@ -6,7 +6,7 @@ import Modal from "../../../components/modals/Modal";
 import Button from "../../../components/shared/button/Button";
 import { useFormik } from "formik";
 import { configurationSchema } from "../../../schemas";
-import { timeIntervalOptions } from "../users/option";
+import { timeIntervalOptions } from "../labours/option";
 
 const Configuration = () => {
   const [modal, setModal] = useState(false);

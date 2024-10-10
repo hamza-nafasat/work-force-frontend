@@ -6,7 +6,7 @@ import Button from "../../../components/shared/button/Button";
 import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import { useUpdateSingleSensorMutation } from "../../../redux/api/sensorApi";
 import { sensorSchema } from "../../../schemas";
-import { sensorTypeOptions } from "../users/option";
+import { sensorTypeOptions } from "../labours/option";
 
 const EditSensor = ({ selectedSensor, refetch, onClose }) => {
   const [updateSensor, { isLoading }] = useUpdateSingleSensorMutation();

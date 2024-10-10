@@ -5,7 +5,7 @@ import GlobalLoader from "../../../components/layout/GlobalLoader";
 import Title from "../../../components/shared/title/Title";
 import { useGetSingleLabourQuery } from "../../../redux/api/labourApi";
 
-const UserDetail = () => {
+const LabourDetail = () => {
   const [singleUser, setSingleUser] = useState({});
   const { id } = useParams();
   const { data, isLoading, isSuccess } = useGetSingleLabourQuery({ labourId: id });
@@ -24,7 +24,7 @@ const UserDetail = () => {
         <div>
           <div className="flex items-center justify-between">
             <div>
-              <Title title="User Detail" />
+              <Title title="Labour Detail" />
             </div>
             <div className="cursor-pointer">
               <EditIcon />
@@ -60,7 +60,7 @@ const UserDetail = () => {
   );
 };
 
-export default UserDetail;
+export default LabourDetail;
 
 const LabelAndTitle = ({ label, title }) => {
   return (

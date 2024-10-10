@@ -25,7 +25,7 @@ const Projects = lazy(() => import("./pages/user/projects/Projects"));
 const Realtime = lazy(() => import("./pages/user/maps/realtime/Realtime"));
 const Geofence = lazy(() => import("./pages/user/maps/geofence/Geofence"));
 const Vehicles = lazy(() => import("./pages/user/vehicles/Vehicles"));
-const Users = lazy(() => import("./pages/user/users/Users"));
+const Labours = lazy(() => import("./pages/user/labours/Labours"));
 const Sensors = lazy(() => import("./pages/user/sensors/Sensors"));
 const UsersViolations = lazy(() => import("./pages/user/violations/UsersViolations"));
 const VehiclesViolations = lazy(() => import("./pages/user/violations/VehiclesViolations"));
@@ -36,7 +36,7 @@ const AddProject = lazy(() => import("./pages/user/projects/AddProject"));
 const UpdateProfile = lazy(() => import("./pages/user/settings/UpdateProfile"));
 const Configuration = lazy(() => import("./pages/user/settings/Configuration"));
 const VehicleDetail = lazy(() => import("./pages/user/vehicles/VehicleDetail"));
-const UserDetail = lazy(() => import("./pages/user/users/UserDetail"));
+const LabourDetail = lazy(() => import("./pages/user/labours/LabourDetail"));
 const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
 const Attendance = lazy(() => import("./pages/user/attendance/Attendance"));
 
@@ -98,8 +98,8 @@ function App() {
             <Route path="geofence" element={<Geofence />} />
             <Route path="vehicles" element={<Vehicles />} />
             <Route path="vehicles/:id" element={<VehicleDetail />} />
-            <Route path="users" element={<Users />} />
-            <Route path="users/:id" element={<UserDetail />} />
+            <Route path="labours" element={<Labours />} />
+            <Route path="labours/:id" element={<LabourDetail />} />
             <Route path="sensors" element={<Sensors />} />
             <Route path="users-violation" element={<UsersViolations />} />
             <Route path="vehicles-violation" element={<VehiclesViolations />} />

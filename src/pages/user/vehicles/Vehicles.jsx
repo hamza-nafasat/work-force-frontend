@@ -116,9 +116,9 @@ const Vehicles = () => {
           <div className="cursor-pointer" onClick={() => modalOpenHandler("add")}>
             <AddIcon />
           </div>
-          <div className="cursor-pointer">
+          {/* <div className="cursor-pointer">
             <DeleteIcon />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="mt-5">

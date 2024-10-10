@@ -7,7 +7,7 @@ import { scoreCardSchema } from "../../../schemas";
 import {
   violationCategoryOptions,
   violationNameOptions,
-} from "../users/option";
+} from "../labours/option";
 
 const AddNewScorecard = ({ onClose }) => {
   const violationNameSelect = (option) =>

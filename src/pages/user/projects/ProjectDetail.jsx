@@ -14,6 +14,8 @@ import GlobalLoader from "../../../components/layout/GlobalLoader";
 import Title from "../../../components/shared/title/Title";
 import { alertRecords } from "../../../data/data";
 import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
+import Modal from "../../../components/modals/Modal";
+import EditProject from "./EditProject";
 
 const createCustomIcon = (imgUrl) => {
   return L.divIcon({
@@ -30,7 +32,11 @@ const createCustomIcon = (imgUrl) => {
 const ProjectDetail = () => {
   const { id } = useParams();
   const [project, setProject] = useState({});
-  const { data, isLoading, isSuccess } = useGetSingleProjectQuery({ projectId: id });
+  const { data, isLoading, isSuccess, refetch } = useGetSingleProjectQuery({ projectId: id });
+  const [modal, setModal] = useState(false)
+
+  const editOpenModalHandler = () => setModal(true)
+  const editCloseModalHandler = () => setModal(false)
 
   // console.log("project", project);
   useEffect(() => {
@@ -69,7 +75,7 @@ const ProjectDetail = () => {
         <div>
           <Title title="Project Detail" />
         </div>
-        <div className="cursor-pointer">
+        <div className="cursor-pointer" onClick={editOpenModalHandler}>
           <EditIcon />
         </div>
       </div>
@@ -122,6 +128,11 @@ const ProjectDetail = () => {
           </div>
         </div>
       </div>
+      {modal && (
+        <Modal onClose={editCloseModalHandler}>
+          <EditProject refetch={refetch} selectedRow={project} onClose={editCloseModalHandler} />
+        </Modal>
+      )}
     </div>
   );
 };

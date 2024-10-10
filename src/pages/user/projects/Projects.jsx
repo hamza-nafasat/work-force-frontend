@@ -191,9 +191,9 @@ const Projects = () => {
           <Link to="/user/add-project">
             <AddIcon />
           </Link>
-          <div className="cursor-pointer">
+          {/* <div className="cursor-pointer">
             <DeleteIcon />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="mt-5">
