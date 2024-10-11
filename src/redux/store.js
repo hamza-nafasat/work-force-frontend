@@ -5,6 +5,7 @@ import authSlice from "./slice/authSlice";
 import projectApis from "./api/projectApi";
 import sensorApis from "./api/sensorApi";
 import vehicleApis from "./api/vehicleApi";
+import userApis from "./api/userApi";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     [projectApis.reducerPath]: projectApis.reducer,
     [sensorApis.reducerPath]: sensorApis.reducer,
     [vehicleApis.reducerPath]: vehicleApis.reducer,
+    [userApis.reducerPath]: userApis.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
@@ -23,7 +25,8 @@ const store = configureStore({
       .concat(labourApis.middleware)
       .concat(projectApis.middleware)
       .concat(sensorApis.middleware)
-      .concat(vehicleApis.middleware);
+      .concat(vehicleApis.middleware)
+      .concat(userApis.middleware)
   },
 });
 
