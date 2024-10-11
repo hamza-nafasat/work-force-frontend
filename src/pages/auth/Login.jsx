@@ -9,7 +9,7 @@ import logo from "../../assets/images/logo/logo.png";
 import Input from "../../components/auth/Input";
 import Button from "../../components/shared/button/Button";
 import { useLoginMutation } from "../../redux/api/authApi";
-import { userExist } from "../../redux/reducer/authReducer";
+import { userExist } from "../../redux/slice/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();

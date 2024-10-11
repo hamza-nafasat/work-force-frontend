@@ -9,7 +9,7 @@ import GlobalLoader from "./components/layout/GlobalLoader";
 import ScrollToTop from "./components/shared/scrollToTop/ScrollToTop";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetMyProfileQuery } from "./redux/api/authApi";
-import { userExist, userNotExist } from "./redux/reducer/authReducer";
+import { userExist, userNotExist } from "./redux/slice/authSlice";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const User = lazy(() => import("./pages/user"));
@@ -47,9 +47,7 @@ const AdminDashboard = lazy(() => import("./admin/layout/index"));
 const Dashboard = lazy(() => import("./admin/pages/dashboard/Dashboard"));
 const AdminUsers = lazy(() => import("./admin/pages/users/Users"));
 const AdminUserDetail = lazy(() => import("./admin/pages/users/UserDetail"));
-const AdminTransactions = lazy(() =>
-  import("./admin/pages/transactions/Transactions")
-);
+const AdminTransactions = lazy(() => import("./admin/pages/transactions/Transactions"));
 const AddUser = lazy(() => import("./admin/pages/users/AddUser"));
 const EditUser = lazy(() => import("./admin/pages/users/EditUser"));
 

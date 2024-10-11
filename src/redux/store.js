@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit/react";
 import authApis from "./api/authApi";
 import labourApis from "./api/labourApi";
-import authReducer from "./reducer/authReducer";
+import authSlice from "./slice/authSlice";
 import projectApis from "./api/projectApi";
 import sensorApis from "./api/sensorApi";
 import vehicleApis from "./api/vehicleApi";
@@ -9,7 +9,7 @@ import vehicleApis from "./api/vehicleApi";
 const store = configureStore({
   reducer: {
     // slices
-    [authReducer.reducerPath]: authReducer.reducer,
+    [authSlice.reducerPath]: authSlice.reducer,
     // apis
     [authApis.reducerPath]: authApis.reducer,
     [labourApis.reducerPath]: labourApis.reducer,
