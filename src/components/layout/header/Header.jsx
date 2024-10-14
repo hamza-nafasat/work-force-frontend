@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { IoMenuOutline } from "react-icons/io5";
-import NotificationIcon from "../../../assets/svgs/pagesIcons/NotificationIcon";
-import Aside from "../aside/Aside";
-import profilePic from "../../../assets/images/header/profilepic.webp";
 import { FaChevronDown } from "react-icons/fa";
 import { IoIosArrowForward, IoIosLogOut } from "react-icons/io";
+import { IoMenuOutline } from "react-icons/io5";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import profilePic from "../../../assets/images/header/profilepic.webp";
+import NotificationIcon from "../../../assets/svgs/pagesIcons/NotificationIcon";
+import { useLogoutMutation } from "../../../redux/api/authApi";
+import Aside from "../aside/Aside";
 import Notifications from "./Notifications";
+import { useDispatch } from "react-redux";
+import { userNotExist } from "../../../redux/slice/authSlice";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [profileActive, setProfileActive] = useState(false);
   const [notificationActive, setNotificationActive] = useState(false);
@@ -17,6 +23,23 @@ const Header = () => {
   const path = pathname[pathname.length - 1].replaceAll("-", " ");
   const profileRef = useRef();
   const notificationRef = useRef();
+  const [logout] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      const response = await logout().unwrap();
+      if (response?.success) {
+        toast.success(response?.message);
+        await dispatch(userNotExist());
+        return navigate("/login");
+      }
+    } catch (error) {
+      console.log("Error while logging out", error);
+      toast.error(error?.data?.message || "Error while logging out");
+    } finally {
+      setProfileActive(false);
+    }
+  };
 
   const handleModal = () => setModalOpen(!modalOpen);
   const handleProfile = () => {
@@ -107,7 +130,7 @@ const Header = () => {
                   </Link>
                   <button
                     className="flex items-center justify-between px-3 py-2 w-full text-left"
-                    onClick={() => setProfileActive(false)}
+                    onClick={logoutHandler}
                     aria-label="Logout"
                   >
                     Logout

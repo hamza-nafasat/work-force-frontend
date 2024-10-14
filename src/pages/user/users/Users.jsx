@@ -10,61 +10,62 @@ import { useNavigate } from "react-router-dom";
 import AddUser from "./AddUser";
 import EditUser from "./EditUser";
 import { confirmAlert } from "react-confirm-alert";
-import { useGetAllUsersQuery } from "../../../redux/api/userApi";
+import { useDeleteSingleUserMutation, useGetAllUsersQuery } from "../../../redux/api/userApi";
 import GlobalLoader from "../../../components/layout/GlobalLoader";
+import { toast } from "react-toastify";
 
 const columns = (modalOpenHandler, navigate, deleteHandler) => [
   {
-    name: "Profile Photo",
+    name: "Profile",
     selector: (row) => (
       <img
-        src={row.image}
+        src={row?.image?.url}
         alt="profile pic"
         className="w-[44px] h-[44px] object-cover rounded-full"
       />
     ),
+    width: "90px",
   },
   {
     name: "Full Name",
     selector: (row) => (
       <p>
-        {row.firstName} {row.lastName}
+        {row?.firstName} {row?.lastName}
       </p>
     ),
+    width: "130px",
   },
   {
     name: "Email Address",
-    selector: (row) => row.email,
+    selector: (row) => row?.email,
+    width: "200px",
   },
   {
     name: "Phone",
-    selector: (row) => row.phone,
+    selector: (row) => row?.phoneNumber,
+    width: "130px",
   },
   {
     name: "Address",
-    selector: (row) => row.address,
+    selector: (row) => row?.address,
+    width: "200px",
   },
   {
     name: "Role",
-    selector: (row) => row.role,
+    selector: (row) => row?.role,
+    width: "90px",
   },
   {
     name: "Action",
     selector: (row) => (
       <div className="flex items-center gap-2">
-        <div
-          className="cursor-pointer"
-          onClick={() => navigate(`/user/users/${row.id}`)}
-        >
+        <div className="cursor-pointer" onClick={() => navigate(`/user/users/${row?._id}`)}>
           <IoEye fontSize={18} style={{ marginTop: "4px" }} />
         </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => modalOpenHandler("edit")}
-        >
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler()}>
+        <div className="cursor-pointer" onClick={() => deleteHandler(row?._id)}>
           <DeleteIcon />
         </div>
       </div>
@@ -76,38 +77,35 @@ const Users = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const { data, isSuccess, isLoading, refetch } = useGetAllUsersQuery("");
+  const [deleteUser] = useDeleteSingleUserMutation();
+  const [selectedRow, setSelectedRow] = useState(null);
   const [userData, setUserData] = useState([]);
 
-  useEffect(() => {
-    if (isSuccess && data?.users) {
-      const users = data?.users.map((user) => ({
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phoneNumber,
-        address: user.address,
-        image: user.image.url,
-        role: user.role,
-      }));
-      setUserData(users);
-    }
-  }, [data, isSuccess]);
-
-  console.log("usersData", userData);
-
-  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalOpenHandler = (modalType, row) => {
+    setModal(modalType);
+    if (row) setSelectedRow(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
-  const deleteHandler = () => {
+  const deleteHandler = (id) => {
     confirmAlert({
       title: "Delete User",
       message: "Are you sure, you want to delete the user?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            console.log("project deleted");
+          onClick: async () => {
+            if (!id) toast.error("Error while deleting user");
+            try {
+              const response = await deleteUser({ userId: id }).unwrap();
+              if (response?.success) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("Error while deleting user", error);
+              toast.error(error?.data?.message || "Error while deleting user");
+            }
           },
         },
         {
@@ -117,6 +115,10 @@ const Users = () => {
     });
   };
 
+  useEffect(() => {
+    if (isSuccess) setUserData(data?.data);
+    console.log(data?.data);
+  }, [data, isSuccess]);
   return isLoading ? (
     <GlobalLoader />
   ) : (
@@ -126,10 +128,7 @@ const Users = () => {
           <Title title="Users" />
         </div>
         <div className="flex items-center gap-2">
-          <div
-            className="cursor-pointer"
-            onClick={() => modalOpenHandler("add")}
-          >
+          <div className="cursor-pointer" onClick={() => modalOpenHandler("add")}>
             <AddIcon />
           </div>
           <div className="cursor-pointer">
@@ -153,12 +152,12 @@ const Users = () => {
       </div>
       {modal === "add" && (
         <Modal title="Add User" onClose={modalCloseHandler}>
-          <AddUser onClose={modalCloseHandler} />
+          <AddUser refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (
         <Modal title="Edit User" onClose={modalCloseHandler}>
-          <EditUser onClose={modalCloseHandler} />
+          <EditUser refetch={refetch} selectedRow={selectedRow} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

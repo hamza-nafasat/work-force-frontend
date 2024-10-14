@@ -27,7 +27,7 @@ const authApis = createApi({
 
     // logout
     // ------
-    logout: builder.query({
+    logout: builder.mutation({
       query: () => ({
         url: "/logout",
         method: "GET",
@@ -36,5 +36,5 @@ const authApis = createApi({
   }),
 });
 
-export const { useLoginMutation, useGetMyProfileQuery, useLogoutQuery } = authApis;
+export const { useLoginMutation, useGetMyProfileQuery, useLogoutMutation } = authApis;
 export default authApis;

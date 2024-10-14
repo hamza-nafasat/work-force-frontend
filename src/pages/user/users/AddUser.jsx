@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import Input from "../../../components/auth/Input";
 import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import profileImg from "../../../assets/images/header/profilepic.webp";
@@ -6,19 +7,14 @@ import Button from "../../../components/shared/button/Button";
 import { IoCamera } from "react-icons/io5";
 import { useFormik } from "formik";
 import { usersSchema } from "../../../schemas";
+import { useAddUserMutation } from "../../../redux/api/userApi";
+import { toast } from "react-toastify";
 
-const AddUser = ({ onClose }) => {
+const AddUser = ({ onClose, refetch }) => {
   const [imgSrc, setImgSrc] = useState(null);
+  const [addUser, { isLoading }] = useAddUserMutation();
 
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-  } = useFormik({
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
@@ -31,12 +27,33 @@ const AddUser = ({ onClose }) => {
       image: "",
     },
     validationSchema: usersSchema,
-    onSubmit: (values) => console.log("Submitted values:", values),
+    onSubmit: async (values) => {
+      console.log("Form Values: ", values);
+      try {
+        const formData = new FormData();
+        formData.append("firstName", values.firstName);
+        formData.append("lastName", values.lastName);
+        formData.append("email", values.email);
+        formData.append("role", values.role);
+        formData.append("phoneNumber", values.phone);
+        formData.append("password", values.password);
+        formData.append("address", values.address);
+        formData.append("file", values.image);
+        const response = await addUser(formData).unwrap();
+        if (response?.success && response?.message) {
+          await refetch();
+          toast.success(response?.message);
+          console.log("user added successfully", response);
+          onClose();
+        }
+      } catch (error) {
+        console.log("error while adding new user", error);
+        toast.error(error?.data?.message || "Some Error Occurred while adding new User");
+      }
+    },
   });
 
-  const roleSelectHandler = (option) => {
-    setFieldValue("role", option.option);
-  };
+  const roleSelectHandler = (option) => setFieldValue("role", option);
 
   const uploadImgHandler = (e) => {
     const file = e.target.files[0];
@@ -53,10 +70,7 @@ const AddUser = ({ onClose }) => {
   };
 
   return (
-    <form
-      className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6"
-      onSubmit={handleSubmit}
-    >
+    <form className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6" onSubmit={handleSubmit}>
       <div className="lg:col-span-9">
         <div className="grid lg:grid-cols-12 gap-1 md:gap-4">
           <div className="lg:col-span-6">
@@ -100,9 +114,7 @@ const AddUser = ({ onClose }) => {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {touched.email && errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
+            {touched.email && errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -115,9 +127,7 @@ const AddUser = ({ onClose }) => {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {touched.phone && errors.phone && (
-              <p className="text-red-500 text-sm">{errors.phone}</p>
-            )}
+            {touched.phone && errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -156,9 +166,7 @@ const AddUser = ({ onClose }) => {
               defaultText="Select Role"
               onSelect={roleSelectHandler}
             />
-            {touched.role && errors.role && (
-              <p className="text-red-500 text-sm">{errors.role}</p>
-            )}
+            {touched.role && errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
           </div>
           <div className="lg:col-span-6">
             <Input
@@ -171,9 +179,7 @@ const AddUser = ({ onClose }) => {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {touched.address && errors.address && (
-              <p className="text-red-500 text-sm">{errors.address}</p>
-            )}
+            {touched.address && errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
           </div>
         </div>
       </div>
@@ -201,6 +207,7 @@ const AddUser = ({ onClose }) => {
             height="h-[45px] md:h-[60px]"
           />
           <Button
+            disabled={isLoading}
             type="submit"
             text="Add"
             width="w-[150px]"
@@ -215,9 +222,7 @@ const AddUser = ({ onClose }) => {
 export default AddUser;
 
 const Label = ({ label }) => (
-  <label className="text-[#000] text-base mb-2 block font-semibold">
-    {label}
-  </label>
+  <label className="text-[#000] text-base mb-2 block font-semibold">{label}</label>
 );
 
 const ChangePhoto = ({ onChange }) => (
@@ -227,10 +232,6 @@ const ChangePhoto = ({ onChange }) => (
   >
     Change Photo
     <IoCamera fontSize={20} />
-    <input
-      type="file"
-      onChange={onChange}
-      className="absolute inset-0 z-50 cursor-pointer opacity-0"
-    />
+    <input type="file" onChange={onChange} className="absolute inset-0 z-50 cursor-pointer opacity-0" />
   </button>
 );
