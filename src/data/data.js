@@ -1312,3 +1312,42 @@ export const attendanceData = [
     reasonForAbsence: "Personal leave",
   },
 ];
+
+export const alertsData = [
+  {
+    alert: 'outfence',
+    severity: 'high',
+    notificationType: 'on Email',
+    status: true,
+  },
+  {
+    alert: 'infence',
+    severity: 'high',
+    notificationType: 'on Email',
+    status: false,
+  },
+  {
+    alert: 'outfence',
+    severity: 'low',
+    notificationType: 'on platform',
+    status: true,
+  },
+  {
+    alert: 'speed',
+    severity: 'high',
+    notificationType: 'on Email',
+    status: true,
+  },
+  {
+    alert: 'outfence',
+    severity: 'low',
+    notificationType: 'on platform',
+    status: true,
+  },
+  {
+    alert: 'speed',
+    severity: 'high',
+    notificationType: 'on Email',
+    status: true,
+  },
+]

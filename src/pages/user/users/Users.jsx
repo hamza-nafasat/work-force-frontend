@@ -24,7 +24,7 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
         className="w-[44px] h-[44px] object-cover rounded-full"
       />
     ),
-    width: "90px",
+    width: "10%",
   },
   {
     name: "Full Name",
@@ -33,27 +33,27 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
         {row?.firstName} {row?.lastName}
       </p>
     ),
-    width: "130px",
+    width: "10%",
   },
   {
     name: "Email Address",
     selector: (row) => row?.email,
-    width: "200px",
+    width: "20%",
   },
   {
     name: "Phone",
     selector: (row) => row?.phoneNumber,
-    width: "130px",
+    width: "10%",
   },
   {
     name: "Address",
     selector: (row) => row?.address,
-    width: "200px",
+    width: "25%",
   },
   {
     name: "Role",
     selector: (row) => row?.role,
-    width: "90px",
+    width: "10%",
   },
   {
     name: "Action",
@@ -70,6 +70,7 @@ const columns = (modalOpenHandler, navigate, deleteHandler) => [
         </div>
       </div>
     ),
+    width: "15%",
   },
 ];
 

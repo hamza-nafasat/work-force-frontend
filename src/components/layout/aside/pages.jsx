@@ -130,6 +130,10 @@ export const pages = [
                 title: 'Configuration',
                 link: '/user/configuration'
             },
+            {
+                title: 'Alerts',
+                link: '/user/alerts'
+            },
         ]
     },
 ]

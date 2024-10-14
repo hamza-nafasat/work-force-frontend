@@ -41,6 +41,7 @@ const ProjectDetail = lazy(() => import("./pages/user/projects/ProjectDetail"));
 const Attendance = lazy(() => import("./pages/user/attendance/Attendance"));
 const Users = lazy(() => import("./pages/user/users/Users"));
 const UserDetail = lazy(() => import("./pages/user/users/UserDetail"));
+const Alerts = lazy(() => import("./pages/user/settings/Alerts"));
 
 // Admin Routes
 const AdminDashboard = lazy(() => import("./admin/layout/index"));
@@ -110,6 +111,7 @@ function App() {
             <Route path="transactions" element={<Transactions />} />
             <Route path="update-profile" element={<UpdateProfile />} />
             <Route path="configuration" element={<Configuration />} />
+            <Route path="alerts" element={<Alerts />} />
             <Route path="Sos" element={<Sos />} />
             <Route path="add-project" element={<AddProject />} />
             <Route path="attendance" element={<Attendance />} />
