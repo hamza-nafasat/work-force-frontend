@@ -1,5 +1,6 @@
 import React from "react";
 import ProfilePic from "../../../assets/images/header/profilepic.webp";
+import { Link } from "react-router-dom";
 
 const notificationLists = [
   {
@@ -61,7 +62,7 @@ const notificationLists = [
 const Notifications = () => {
   return (
     <div>
-      <h3 className="text-base md:text-md text-primary font-semibold px-3 pt-3 pb-2 border-b sticky top-0 left-0 bg-white">
+      <h3 className="text-sm md:text-base text-[#414141] font-semibold px-3 pt-3 pb-2 border-b sticky top-0 left-0 bg-white">
         Notifications
       </h3>
       <div className="mt-1">
@@ -93,6 +94,11 @@ const Notifications = () => {
           <p className="p-3 text-sm text-center">No notifications yet!</p>
         )}
       </div>
+      {notificationLists.length > 0 && (
+        <Link to='/user/notification-detail' className="text-center py-1 px-4 text-sm font-medium text-primary block sticky bottom-0 left-0 bg-white">
+          See all notifications
+        </Link>
+      )}
     </div>
   );
 };

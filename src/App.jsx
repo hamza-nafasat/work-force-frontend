@@ -42,6 +42,7 @@ const Attendance = lazy(() => import("./pages/user/attendance/Attendance"));
 const Users = lazy(() => import("./pages/user/users/Users"));
 const UserDetail = lazy(() => import("./pages/user/users/UserDetail"));
 const Alerts = lazy(() => import("./pages/user/settings/Alerts"));
+const NotificationDetail = lazy(() => import("./components/layout/header/NotificationDetail"));
 
 // Admin Routes
 const AdminDashboard = lazy(() => import("./admin/layout/index"));
@@ -115,6 +116,7 @@ function App() {
             <Route path="Sos" element={<Sos />} />
             <Route path="add-project" element={<AddProject />} />
             <Route path="attendance" element={<Attendance />} />
+            <Route path="notification-detail" element={<NotificationDetail />} />
           </Route>
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<Navigate replace to="dashboard" />} />

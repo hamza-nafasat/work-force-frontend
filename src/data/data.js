@@ -1351,3 +1351,119 @@ export const alertsData = [
     status: true,
   },
 ]
+
+export const notificationsData = [
+  {
+    id: 1,
+    notificationType: 'infence',
+    notificationMessage: 'Labour entered in marked area',
+    createdAt: '24-09-2024 at 10:05 pm',
+    operation: ''
+  },
+  {
+    id: 2,
+    notificationType: 'alert',
+    notificationMessage: 'Labour left the site without permission',
+    createdAt: '24-09-2024 at 11:15 pm',
+    operation: ''
+  },
+  {
+    id: 3,
+    notificationType: 'infence',
+    notificationMessage: 'Labour is within the safe zone',
+    createdAt: '25-09-2024 at 8:30 am',
+    operation: ''
+  },
+  {
+    id: 4,
+    notificationType: 'violation',
+    notificationMessage: 'Labour exceeded working hours limit',
+    createdAt: '25-09-2024 at 1:45 pm',
+    operation: ''
+  },
+  {
+    id: 5,
+    notificationType: 'alert',
+    notificationMessage: 'Labour’s sensor signal lost',
+    createdAt: '25-09-2024 at 3:05 pm',
+    operation: ''
+  },
+  {
+    id: 6,
+    notificationType: 'infence',
+    notificationMessage: 'Labour re-entered the work zone',
+    createdAt: '26-09-2024 at 9:00 am',
+    operation: ''
+  },
+  {
+    id: 4,
+    notificationType: 'violation',
+    notificationMessage: 'Labour exceeded working hours limit',
+    createdAt: '25-09-2024 at 1:45 pm',
+    operation: ''
+  },
+  {
+    id: 5,
+    notificationType: 'alert',
+    notificationMessage: 'Labour’s sensor signal lost',
+    createdAt: '25-09-2024 at 3:05 pm',
+    operation: ''
+  },
+  {
+    id: 6,
+    notificationType: 'infence',
+    notificationMessage: 'Labour re-entered the work zone',
+    createdAt: '26-09-2024 at 9:00 am',
+    operation: ''
+  },
+  {
+    id: 4,
+    notificationType: 'violation',
+    notificationMessage: 'Labour exceeded working hours limit',
+    createdAt: '25-09-2024 at 1:45 pm',
+    operation: ''
+  },
+  {
+    id: 5,
+    notificationType: 'alert',
+    notificationMessage: 'Labour’s sensor signal lost',
+    createdAt: '25-09-2024 at 3:05 pm',
+    operation: ''
+  },
+  {
+    id: 6,
+    notificationType: 'infence',
+    notificationMessage: 'Labour re-entered the work zone',
+    createdAt: '26-09-2024 at 9:00 am',
+    operation: ''
+  },
+  {
+    id: 4,
+    notificationType: 'violation',
+    notificationMessage: 'Labour exceeded working hours limit',
+    createdAt: '25-09-2024 at 1:45 pm',
+    operation: ''
+  },
+  {
+    id: 5,
+    notificationType: 'alert',
+    notificationMessage: 'Labour’s sensor signal lost',
+    createdAt: '25-09-2024 at 3:05 pm',
+    operation: ''
+  },
+  {
+    id: 6,
+    notificationType: 'infence',
+    notificationMessage: 'Labour re-entered the work zone',
+    createdAt: '26-09-2024 at 9:00 am',
+    operation: ''
+  },
+  {
+    id: 7,
+    notificationType: 'violation',
+    notificationMessage: 'Labour not wearing safety gear',
+    createdAt: '26-09-2024 at 10:30 am',
+    operation: ''
+  }
+];
+

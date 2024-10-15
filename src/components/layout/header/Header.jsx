@@ -98,7 +98,7 @@ const Header = () => {
               11
             </div>
             {notificationActive && (
-              <div className="absolute top-[45px] right-[-60px] sm:right-0 bg-white drop-shadow-md rounded-lg w-[280px] h-[300px] border z-10 overflow-y-scroll no-scrollbar">
+              <div className="absolute top-[45px] right-[-60px] sm:right-0 bg-white drop-shadow-lg rounded-xl w-[280px] h-[300px] border z-10 overflow-y-scroll no-scrollbar">
                 <Notifications />
               </div>
             )}
