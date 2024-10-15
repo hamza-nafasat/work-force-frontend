@@ -1,61 +1,46 @@
 import React from "react";
 import ProfilePic from "../../../assets/images/header/profilepic.webp";
 import { Link } from "react-router-dom";
+import Worker from "../../../assets/images/notifications/worker.png";
+import Absence from "../../../assets/images/notifications/absence.png";
+import Geofencing from "../../../assets/images/notifications/geofencing.png";
+import Outfence from "../../../assets/images/notifications/outfence.png";
+import Infence from "../../../assets/images/notifications/infence.png";
+import YellowDanger from "../../../assets/svgs/notification/YellowDanger";
+import Warning from "../../../assets/svgs/notification/Warning";
+import Tick from "../../../assets/svgs/notification/Tick";
+import RedDanger from "../../../assets/svgs/notification/RedDanger";
+import Done from "../../../assets/svgs/notification/Done";
 
 const notificationLists = [
   {
-    userProfile: ProfilePic,
-    title: "Exceeded Time Limit",
+    title: "worker exit alert",
     message: "Visitor stayed too long.",
     time: "2m",
   },
   {
     userProfile: ProfilePic,
-    title: "Exceeded Time Limit",
+    title: "worker absence report",
     message: "Visitor stayed too long.",
     time: "2m",
   },
   {
     userProfile: ProfilePic,
-    title: "Exceeded Time Limit",
+    title: "geo-fencing added",
     message: "Visitor stayed too long.",
     time: "2m",
   },
   {
     userProfile: ProfilePic,
-    title: "Exceeded Time Limit",
+    title: "out-fence",
     message: "Visitor stayed too long.",
     time: "2m",
   },
   {
     userProfile: ProfilePic,
-    title: "Vehicle Misuse Detected",
+    title: "in-fence",
     message: "Unauthorized vehicle use.",
     time: "5m",
-  },
-  {
-    userProfile: ProfilePic,
-    title: "Lost Smart Badge",
-    message: "Badge reported missing.",
-    time: "10m",
-  },
-  {
-    userProfile: ProfilePic,
-    title: "System Alert Triggered",
-    message: "Sensor detected issue.",
-    time: "15m",
-  },
-  {
-    userProfile: ProfilePic,
-    title: "Motion Detected Alert",
-    message: "Unexpected motion seen.",
-    time: "20m",
-  },
-  {
-    userProfile: ProfilePic,
-    title: "Low Battery Warning",
-    message: "Replace battery soon.",
-    time: "25m",
   },
 ];
 
@@ -70,24 +55,67 @@ const Notifications = () => {
           notificationLists.map((notification, i) => (
             <div
               key={i}
-              className="border-b py-1 px-2 flex items-center justify-between gap-1 cursor-pointer"
+              className="border-b py-2 px-2 flex items-start justify-between gap-1 cursor-pointer hover:bg-[#00000005] "
             >
-              <div className="flex items-center gap-1">
-                <img
-                  src={notification.userProfile}
-                  alt="profile"
-                  className="w-[25px] h-[25px] object-cover rounded-full"
-                />
+              <div className="flex items-start gap-3">
+                {notification.title === "worker exit alert" && (
+                  <img
+                    src={Worker}
+                    alt="profile"
+                    className="w-[30px] h-[30px] object-cover"
+                  />
+                )}
+                {notification.title === "worker absence report" && (
+                  <img
+                    src={Absence}
+                    alt="profile"
+                    className="w-[30px] h-[30px] object-cover"
+                  />
+                )}
+                {notification.title === "geo-fencing added" && (
+                  <img
+                    src={Geofencing}
+                    alt="profile"
+                    className="w-[30px] h-[30px] object-cover"
+                  />
+                )}
+                {notification.title === "out-fence" && (
+                  <img
+                    src={Outfence}
+                    alt="profile"
+                    className="w-[30px] h-[30px] object-cover"
+                  />
+                )}
+                {notification.title === "in-fence" && (
+                  <img
+                    src={Infence}
+                    alt="profile"
+                    className="w-[30px] h-[30px] object-cover"
+                  />
+                )}
                 <div>
-                  <h3 className="text-xs font-medium">{notification.title}</h3>
-                  <p className="text-[10px] text-[#00000099]">
+                  <div className="flex items-center gap-1">
+                    {notification.title === "worker exit alert" && (
+                      <YellowDanger />
+                    )}
+                    {notification.title === "worker absence report" && (
+                      <Warning />
+                    )}
+                    {notification.title === "geo-fencing added" && <Tick />}
+                    {notification.title === "out-fence" && <RedDanger />}
+                    {notification.title === "in-fence" && <Done />}
+
+                    <h3 className="text-sm font-[400] capitalize">
+                      {notification.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-[11px] text-[#7C7C7C] font-[400] ">
                     {notification.message}
                   </p>
                 </div>
               </div>
-              <p className="text-[#00000099] text-[10px]">
-                {notification.time}
-              </p>
+              <p className="text-[#7C7C7C] text-[10px]">{notification.time}</p>
             </div>
           ))
         ) : (
@@ -95,7 +123,10 @@ const Notifications = () => {
         )}
       </div>
       {notificationLists.length > 0 && (
-        <Link to='/user/notification-detail' className="text-center py-1 px-4 text-sm font-medium text-primary block sticky bottom-0 left-0 bg-white">
+        <Link
+          to="/user/notification-detail"
+          className="text-center py-1 px-4 text-sm font-medium text-primary block sticky bottom-0 left-0 bg-white"
+        >
           See all notifications
         </Link>
       )}

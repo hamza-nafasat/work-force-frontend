@@ -1,63 +1,43 @@
 import React from "react";
-import ProfilePic from '../../../assets/images/header/profilepic.webp'
+import ProfilePic from "../../../assets/images/header/profilepic.webp";
+import Worker from "../../../assets/svgs/notifications/worker.png";
+import Absence from "../../../assets/svgs/notifications/absence.png";
+import Geofencing from "../../../assets/svgs/notifications/geofencing.png";
+import Outfence from "../../../assets/svgs/notifications/outfence.png";
+import Infence from "../../../assets/svgs/notifications/infence.png";
 
 const notificationLists = [
-    {
-      userProfile: ProfilePic,
-      title: 'Exceeded Time Limit',
-      message: 'Visitor stayed too long.',
-      time: '2m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Exceeded Time Limit',
-      message: 'Visitor stayed too long.',
-      time: '2m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Exceeded Time Limit',
-      message: 'Visitor stayed too long.',
-      time: '2m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Exceeded Time Limit',
-      message: 'Visitor stayed too long.',
-      time: '2m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Vehicle Misuse Detected',
-      message: 'Unauthorized vehicle use.',
-      time: '5m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Lost Smart Badge',
-      message: 'Badge reported missing.',
-      time: '10m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'System Alert Triggered',
-      message: 'Sensor detected issue.',
-      time: '15m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Motion Detected Alert',
-      message: 'Unexpected motion seen.',
-      time: '20m'
-    },
-    {
-      userProfile: ProfilePic,
-      title: 'Low Battery Warning',
-      message: 'Replace battery soon.',
-      time: '25m'
-    }
-  ];
-  
+  {
+    userProfile: ProfilePic,
+    title: "worker exit alert",
+    message: "Visitor stayed too long.",
+    time: "2m",
+  },
+  {
+    userProfile: ProfilePic,
+    title: "worker absence report",
+    message: "Visitor stayed too long.",
+    time: "2m",
+  },
+  {
+    userProfile: ProfilePic,
+    title: "geo-fencing added",
+    message: "Visitor stayed too long.",
+    time: "2m",
+  },
+  {
+    userProfile: ProfilePic,
+    title: "out-fence",
+    message: "Visitor stayed too long.",
+    time: "2m",
+  },
+  {
+    userProfile: ProfilePic,
+    title: "in-fence",
+    message: "Unauthorized vehicle use.",
+    time: "5m",
+  },
+];
 
 const Notifications = () => {
   return (
@@ -67,20 +47,31 @@ const Notifications = () => {
       </h3>
       <div className="mt-1">
         {notificationLists.length > 0 ? (
-            notificationLists.map((notification, i) => (
-                <div key={i} className="border-b py-1 px-2 flex items-center justify-between gap-1 cursor-pointer">
-                <div className="flex items-center gap-1">
-                  <img src={notification.userProfile} alt="profile" className="w-[25px] h-[25px] object-cover rounded-full" />
-                  <div>
-                      <h3 className="text-xs font-medium">{notification.title}</h3>
-                      <p className="text-[10px] text-[#00000099]">{notification.message}</p>
-                  </div>
+          notificationLists.map((notification, i) => (
+            <div
+              key={i}
+              className="border-b py-1 px-2 flex items-start justify-between gap-1 cursor-pointer"
+            >
+              <div className="flex items-start gap-1">
+                <img
+                  src={notification.userProfile}
+                  alt="profile"
+                  className="w-[25px] h-[25px] object-cover rounded-full"
+                />
+                <div>
+                  <h3 className="text-xs font-medium">{notification.title}</h3>
+                  <p className="text-[10px] text-[#00000099]">
+                    {notification.message}
+                  </p>
                 </div>
-                <p className="text-[#00000099] text-[10px]">{notification.time}</p>
               </div>
-            ))
-        ):(
-            <p className="p-3 text-sm text-center">No notifications yet!</p>
+              <p className="text-[#00000099] text-[10px]">
+                {notification.time}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p className="p-3 text-sm text-center">No notifications yet!</p>
         )}
       </div>
     </div>
