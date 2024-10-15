@@ -1315,39 +1315,39 @@ export const attendanceData = [
 
 export const alertsData = [
   {
-    alert: 'outfence',
+    alert: 'damage',
     severity: 'high',
-    notificationType: 'on Email',
+    notificationType: 'on email',
     status: true,
   },
   {
     alert: 'infence',
     severity: 'high',
-    notificationType: 'on Email',
+    notificationType: 'on email',
     status: false,
   },
   {
-    alert: 'outfence',
+    alert: 'offline',
     severity: 'low',
     notificationType: 'on platform',
     status: true,
   },
   {
-    alert: 'speed',
+    alert: 'offline',
     severity: 'high',
-    notificationType: 'on Email',
+    notificationType: 'on email',
     status: true,
   },
   {
-    alert: 'outfence',
+    alert: 'infence',
     severity: 'low',
     notificationType: 'on platform',
-    status: true,
+    status: false,
   },
   {
-    alert: 'speed',
-    severity: 'high',
-    notificationType: 'on Email',
+    alert: 'damage',
+    severity: 'medium',
+    notificationType: 'on email',
     status: true,
   },
 ]

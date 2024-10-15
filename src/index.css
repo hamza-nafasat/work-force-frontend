@@ -60,6 +60,11 @@
     font-weight: 600 !important;
 }
 
+.react-confirm-alert-body {
+    background: #c6e4ff !important;
+    color: #343434 !important;
+}
+
 @media (max-width:1279px) {
     .user-dashboard::before {
         height: 115px;
