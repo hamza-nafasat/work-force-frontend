@@ -2,8 +2,8 @@
 import L from "leaflet";
 import { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { MapContainer, Marker, Polygon, TileLayer } from "react-leaflet";
-import { useParams } from "react-router-dom";
+import { MapContainer, Marker, Polygon, Popup, TileLayer } from "react-leaflet";
+import { Link, useParams } from "react-router-dom";
 import sensorImg from "../../../assets/images/projects/sensors.png";
 import workersImg from "../../../assets/images/projects/worker.png";
 import VehicleImg from "../../../assets/images/vehicles/vehicle.png";
@@ -32,11 +32,13 @@ const createCustomIcon = (imgUrl) => {
 const ProjectDetail = () => {
   const { id } = useParams();
   const [project, setProject] = useState({});
-  const { data, isLoading, isSuccess, refetch } = useGetSingleProjectQuery({ projectId: id });
-  const [modal, setModal] = useState(false)
+  const { data, isLoading, isSuccess, refetch } = useGetSingleProjectQuery({
+    projectId: id,
+  });
+  const [modal, setModal] = useState(false);
 
-  const editOpenModalHandler = () => setModal(true)
-  const editCloseModalHandler = () => setModal(false)
+  const editOpenModalHandler = () => setModal(true);
+  const editCloseModalHandler = () => setModal(false);
 
   // console.log("project", project);
   useEffect(() => {
@@ -81,20 +83,32 @@ const ProjectDetail = () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
         <div className="lg:col-span-8 bg-[#EBF6FE] p-4 rounded-xl">
-          <p className="text-base md:text-lg font-semibold">{project?.projectName}</p>
+          <p className="text-base md:text-lg font-semibold">
+            {project?.projectName}
+          </p>
           <div className="mt-4 md:mt-5">
             <p className="text-sm md:text-base text-[#111111cc]">Description</p>
-            <p className="text-sm text-[#111111] mt-1">{project?.projectDetail}</p>
+            <p className="text-sm text-[#111111] mt-1">
+              {project?.projectDetail}
+            </p>
           </div>
         </div>
         {/* second column */}
         <div className="lg:col-span-4">
           <div className="flex justify-between gap-4">
-            <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md grow text-center`}>
-              <p className="text-sm md:text-base text-[#111111cc]">Start Date</p>
-              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">{project?.startDate}</p>
+            <div
+              className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md grow text-center`}
+            >
+              <p className="text-sm md:text-base text-[#111111cc]">
+                Start Date
+              </p>
+              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">
+                {project?.startDate}
+              </p>
             </div>
-            <div className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md grow text-center`}>
+            <div
+              className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md grow text-center`}
+            >
               <p className="text-sm md:text-base text-white">Due Date</p>
               <p className="text-sm sm:text-base md:text-md font-semibold mt-1 text-white">
                 {project?.dueDate}
@@ -106,7 +120,9 @@ const ProjectDetail = () => {
               <FaMapMarkerAlt />
               Location
             </div>
-            <p className="text-sm sm:text-md lg:text-lg">Taetratech, Lakhpat Road, Lahore</p>
+            <p className="text-sm sm:text-md lg:text-lg">
+              Taetratech, Lakhpat Road, Lahore
+            </p>
           </div>
         </div>
       </div>
@@ -115,10 +131,18 @@ const ProjectDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <DetailWidget title="Total Vehicles" value="0" icon={VehicleImg} />
             <DetailWidget title="Total Sensors" value="0" icon={sensorImg} />
-            <DetailWidget title="Total Workers" value={project?.labours?.length} icon={workersImg} />
+            <DetailWidget
+              title="Total Workers"
+              value={project?.labours?.length}
+              icon={workersImg}
+            />
           </div>
           <div className="mt-4">
-            <Map position={project?.position} area={project?.area} labours={project?.labours} />
+            <Map
+              position={project?.position}
+              area={project?.area}
+              labours={project?.labours}
+            />
           </div>
         </div>
         <div className="lg:col-span-4">
@@ -130,7 +154,11 @@ const ProjectDetail = () => {
       </div>
       {modal && (
         <Modal onClose={editCloseModalHandler}>
-          <EditProject refetch={refetch} selectedRow={project} onClose={editCloseModalHandler} />
+          <EditProject
+            refetch={refetch}
+            selectedRow={project}
+            onClose={editCloseModalHandler}
+          />
         </Modal>
       )}
     </div>
@@ -166,9 +194,13 @@ const Worker = ({ name, img, id, gender, status, designation }) => {
       <div className="flex items-center gap-2">
         <img src={img} alt="image" className="w-[45px] h-[45px] object-cover" />
         <div>
-          <p className="text-sm md:text-base text-[#5C5B5B] leading-none">{name}</p>
+          <p className="text-sm md:text-base text-[#5C5B5B] leading-none">
+            {name}
+          </p>
           <p className="text-[12px] text-[#5C5B5B] leading-none">{id}</p>
-          <p className="text-[8px] text-[#41414199] leading-none mt-[2px]">{gender}</p>
+          <p className="text-[8px] text-[#41414199] leading-none mt-[2px]">
+            {gender}
+          </p>
         </div>
       </div>
       <div
@@ -180,7 +212,9 @@ const Worker = ({ name, img, id, gender, status, designation }) => {
       >
         {status}
       </div>
-      <p className="text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
+      <p className="text-[10px] font-semibold text-[#414141] flex justify-end">
+        {designation}
+      </p>
     </div>
   );
 };
@@ -210,7 +244,11 @@ const Alert = ({ title, id, img, time, alert }) => {
     <div className="relative p-2 border-b border-[#e5e5e5]">
       <div className="flex justify-between gap-2 pl-2">
         <div className="flex items-center gap-2">
-          <img src={img} alt="image" className="w-[30px] h-[30px] object-cover" />
+          <img
+            src={img}
+            alt="image"
+            className="w-[30px] h-[30px] object-cover"
+          />
           <div>
             <p className="text-[10px] text-[#5C5B5B]">{title}</p>
             <p className="text-[6px] text-[#5C5B5B]">{id}</p>
@@ -251,9 +289,22 @@ const Map = ({ area, labours }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {labours?.map((labour, i) => (
-        <Marker key={i} position={labour?.position} icon={createCustomIcon(labour?.image)}></Marker>
+        <Marker
+          key={i}
+          position={labour?.position}
+          icon={createCustomIcon(labour?.image)}
+        >
+          <Popup>
+            <UserPopup labour={labour} />
+          </Popup>
+        </Marker>
       ))}
-      {area && area.length > 0 && <Polygon positions={area.map(([lat, lng]) => [lng, lat])} color="blue" />}
+      {area && area.length > 0 && (
+        <Polygon
+          positions={area.map(([lat, lng]) => [lng, lat])}
+          color="blue"
+        />
+      )}
     </MapContainer>
   );
 };
@@ -262,10 +313,63 @@ const DetailWidget = ({ title, value, icon }) => {
   return (
     <div className="border border-[#8E8E8E99] shadow-md rounded-2xl p-4 flex items-center justify-between gap-4 flex-1 relative">
       <div className="flex flex-col items-center gap-2">
-        <p className="text-sm md:text-base font-semibold text-[#112C5F]">{title}</p>
+        <p className="text-sm md:text-base font-semibold text-[#112C5F]">
+          {title}
+        </p>
         <h3 className="text-[28px] lg:text-[40px]">{value}</h3>
       </div>
-      <img src={icon} className="w-20 2xl:w-[120px] h-20 md:h-[120px] object-contain" alt="image" />
+      <img
+        src={icon}
+        className="w-20 2xl:w-[120px] h-20 md:h-[120px] object-contain"
+        alt="image"
+      />
+    </div>
+  );
+};
+
+const UserPopup = ({ labour }) => {
+  return (
+    <div className="w-[233px] p-2">
+      <div className="flex items-center gap-2">
+        <img
+          src={labour?.image}
+          alt=""
+          className="size-8 rounded-full"
+        />
+        <div>
+          <h6 className="text-xs font-semibold capitalize">{labour?.fullName}</h6>
+          <p className="text-[9px] text-[#414141]">
+            current project: <span className="text-[11px]">building side</span>
+          </p>
+        </div>
+      </div>
+      <div className="mt-4">
+        <div className="flex justify-between gap-4">
+          <div>
+            <h6 className="text-xs font-medium text-[#414141]">Working hours:</h6>
+            <p className="text-xs text-[#414141]">{labour?.workingHour?.startTime} - {labour?.workingHour?.endTime}</p>
+          </div>
+          <div>
+            <h6 className="text-xs font-medium text-[#414141]">Status:</h6>
+            <p className="text-xs text-[#414141]">{labour?.status}</p>
+          </div>
+        </div>
+        <div className="mt-2">
+          <h6 className="text-xs font-medium text-[#414141]">
+            Recent Projects
+          </h6>
+          <ul className="mt-1">
+            <li className="text-[#414141] text-[10px] list-disc ml-4">Downtown Revamp</li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">Industrial Site</li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">Construction Site</li>
+          </ul>
+        </div>
+        <div className="mt-4 flex justify-center">
+          <Link to={`/user/labours/${labour?._id}`} className="bg-[#E75D50] py-1 px-3 rounded-md !text-white text-[11px] font-medium">
+            View All
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
