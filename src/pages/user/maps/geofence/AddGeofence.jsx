@@ -1,12 +1,6 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import Title from "../../../../components/shared/title/Title";
-import {
-  FeatureGroup,
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-} from "react-leaflet";
+import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import AddFenceProjectList from "./AddFenceProjectList";
 import FenceForm from "./FenceForm";
@@ -59,13 +53,7 @@ const AddGeofence = ({ onClose }) => {
         <AddFenceProjectList />
       </div>
       <div className="flex items-center justify-end gap-2 md:gap-4 mt-5">
-        <Button
-          text="Cancel"
-          color="#111111b3"
-          bg="#76767640"
-          width="w-[150px]"
-          onClick={onClose}
-        />
+        <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
         <Button text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
       </div>
     </form>

@@ -7,6 +7,7 @@ import sensorApis from "./api/sensorApi";
 import vehicleApis from "./api/vehicleApi";
 import userApis from "./api/userApi";
 import alertApis from "./api/alertApi";
+import geofenceApis from "./api/geofenceApi";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     [vehicleApis.reducerPath]: vehicleApis.reducer,
     [userApis.reducerPath]: userApis.reducer,
     [alertApis.reducerPath]: alertApis.reducer,
+    [geofenceApis.reducerPath]: geofenceApis.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
@@ -29,7 +31,8 @@ const store = configureStore({
       .concat(sensorApis.middleware)
       .concat(vehicleApis.middleware)
       .concat(userApis.middleware)
-      .concat(alertApis.middleware);
+      .concat(alertApis.middleware)
+      .concat(geofenceApis.middleware);
   },
 });
 
