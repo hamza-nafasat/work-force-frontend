@@ -497,8 +497,8 @@ export const usersData = [
     firstName: "Asif",
     lastName: "Zulfiqar",
     email: "asifzulfiqar@gmail.com",
-    address: 'Istanbul, Turkey',
-    phone: '12312412312',
+    address: "Istanbul, Turkey",
+    phone: "12312412312",
     action: "",
   },
   {
@@ -507,8 +507,8 @@ export const usersData = [
     firstName: "Ahmed",
     lastName: "Khan",
     email: "ahmedkhan@gmail.com",
-    address: 'Lahore, Pakistan',
-    phone: '3453453453',
+    address: "Lahore, Pakistan",
+    phone: "3453453453",
     action: "",
   },
   {
@@ -517,8 +517,8 @@ export const usersData = [
     firstName: "Sara",
     lastName: "Ali",
     email: "saraali@gmail.com",
-    address: 'Karachi, Pakistan',
-    phone: '5675675675',
+    address: "Karachi, Pakistan",
+    phone: "5675675675",
     action: "",
   },
   {
@@ -527,8 +527,8 @@ export const usersData = [
     firstName: "John",
     lastName: "Doe",
     email: "johndoe@gmail.com",
-    address: 'New York, USA',
-    phone: '6786786786',
+    address: "New York, USA",
+    phone: "6786786786",
     action: "",
   },
   {
@@ -537,8 +537,8 @@ export const usersData = [
     firstName: "Fatima",
     lastName: "Tariq",
     email: "fatimatariq@gmail.com",
-    address: 'Istanbul, Turkey',
-    phone: '7897897897',
+    address: "Istanbul, Turkey",
+    phone: "7897897897",
     action: "",
   },
   {
@@ -547,8 +547,8 @@ export const usersData = [
     firstName: "Michael",
     lastName: "Smith",
     email: "michaelsmith@gmail.com",
-    address: 'London, UK',
-    phone: '8908908908',
+    address: "London, UK",
+    phone: "8908908908",
     action: "",
   },
   {
@@ -557,8 +557,8 @@ export const usersData = [
     firstName: "Emily",
     lastName: "Jones",
     email: "emilyjones@gmail.com",
-    address: 'Berlin, Germany',
-    phone: '9019019019',
+    address: "Berlin, Germany",
+    phone: "9019019019",
     action: "",
   },
   {
@@ -567,8 +567,8 @@ export const usersData = [
     firstName: "David",
     lastName: "Wilson",
     email: "davidwilson@gmail.com",
-    address: 'Toronto, Canada',
-    phone: '2342342342',
+    address: "Toronto, Canada",
+    phone: "2342342342",
     action: "",
   },
 ];
@@ -1315,155 +1315,178 @@ export const attendanceData = [
 
 export const alertsData = [
   {
-    alert: 'damage',
-    severity: 'high',
-    notificationType: 'on email',
+    alert: "damage",
+    severity: "high",
+    notificationType: "on email",
     status: true,
   },
   {
-    alert: 'infence',
-    severity: 'high',
-    notificationType: 'on email',
+    alert: "infence",
+    severity: "high",
+    notificationType: "on email",
     status: false,
   },
   {
-    alert: 'offline',
-    severity: 'low',
-    notificationType: 'on platform',
+    alert: "offline",
+    severity: "low",
+    notificationType: "on platform",
     status: true,
   },
   {
-    alert: 'offline',
-    severity: 'high',
-    notificationType: 'on email',
+    alert: "offline",
+    severity: "high",
+    notificationType: "on email",
     status: true,
   },
   {
-    alert: 'infence',
-    severity: 'low',
-    notificationType: 'on platform',
+    alert: "infence",
+    severity: "low",
+    notificationType: "on platform",
     status: false,
   },
   {
-    alert: 'damage',
-    severity: 'medium',
-    notificationType: 'on email',
+    alert: "damage",
+    severity: "medium",
+    notificationType: "on email",
     status: true,
   },
-]
+];
 
 export const notificationsData = [
   {
     id: 1,
-    notificationType: 'infence',
-    notificationMessage: 'Labour entered in marked area',
-    createdAt: '24-09-2024 at 10:05 pm',
-    operation: ''
+    notificationType: "infence",
+    notificationMessage: "Labour entered in marked area",
+    createdAt: "24-09-2024 at 10:05 pm",
+    operation: "",
   },
   {
     id: 2,
-    notificationType: 'alert',
-    notificationMessage: 'Labour left the site without permission',
-    createdAt: '24-09-2024 at 11:15 pm',
-    operation: ''
+    notificationType: "alert",
+    notificationMessage: "Labour left the site without permission",
+    createdAt: "24-09-2024 at 11:15 pm",
+    operation: "",
   },
   {
     id: 3,
-    notificationType: 'infence',
-    notificationMessage: 'Labour is within the safe zone',
-    createdAt: '25-09-2024 at 8:30 am',
-    operation: ''
+    notificationType: "infence",
+    notificationMessage: "Labour is within the safe zone",
+    createdAt: "25-09-2024 at 8:30 am",
+    operation: "",
   },
   {
     id: 4,
-    notificationType: 'violation',
-    notificationMessage: 'Labour exceeded working hours limit',
-    createdAt: '25-09-2024 at 1:45 pm',
-    operation: ''
+    notificationType: "violation",
+    notificationMessage: "Labour exceeded working hours limit",
+    createdAt: "25-09-2024 at 1:45 pm",
+    operation: "",
   },
   {
     id: 5,
-    notificationType: 'alert',
-    notificationMessage: 'Labour’s sensor signal lost',
-    createdAt: '25-09-2024 at 3:05 pm',
-    operation: ''
+    notificationType: "alert",
+    notificationMessage: "Labour’s sensor signal lost",
+    createdAt: "25-09-2024 at 3:05 pm",
+    operation: "",
   },
   {
     id: 6,
-    notificationType: 'infence',
-    notificationMessage: 'Labour re-entered the work zone',
-    createdAt: '26-09-2024 at 9:00 am',
-    operation: ''
+    notificationType: "infence",
+    notificationMessage: "Labour re-entered the work zone",
+    createdAt: "26-09-2024 at 9:00 am",
+    operation: "",
   },
   {
     id: 4,
-    notificationType: 'violation',
-    notificationMessage: 'Labour exceeded working hours limit',
-    createdAt: '25-09-2024 at 1:45 pm',
-    operation: ''
+    notificationType: "violation",
+    notificationMessage: "Labour exceeded working hours limit",
+    createdAt: "25-09-2024 at 1:45 pm",
+    operation: "",
   },
   {
     id: 5,
-    notificationType: 'alert',
-    notificationMessage: 'Labour’s sensor signal lost',
-    createdAt: '25-09-2024 at 3:05 pm',
-    operation: ''
+    notificationType: "alert",
+    notificationMessage: "Labour’s sensor signal lost",
+    createdAt: "25-09-2024 at 3:05 pm",
+    operation: "",
   },
   {
     id: 6,
-    notificationType: 'infence',
-    notificationMessage: 'Labour re-entered the work zone',
-    createdAt: '26-09-2024 at 9:00 am',
-    operation: ''
+    notificationType: "infence",
+    notificationMessage: "Labour re-entered the work zone",
+    createdAt: "26-09-2024 at 9:00 am",
+    operation: "",
   },
   {
     id: 4,
-    notificationType: 'violation',
-    notificationMessage: 'Labour exceeded working hours limit',
-    createdAt: '25-09-2024 at 1:45 pm',
-    operation: ''
+    notificationType: "violation",
+    notificationMessage: "Labour exceeded working hours limit",
+    createdAt: "25-09-2024 at 1:45 pm",
+    operation: "",
   },
   {
     id: 5,
-    notificationType: 'alert',
-    notificationMessage: 'Labour’s sensor signal lost',
-    createdAt: '25-09-2024 at 3:05 pm',
-    operation: ''
+    notificationType: "alert",
+    notificationMessage: "Labour’s sensor signal lost",
+    createdAt: "25-09-2024 at 3:05 pm",
+    operation: "",
   },
   {
     id: 6,
-    notificationType: 'infence',
-    notificationMessage: 'Labour re-entered the work zone',
-    createdAt: '26-09-2024 at 9:00 am',
-    operation: ''
+    notificationType: "infence",
+    notificationMessage: "Labour re-entered the work zone",
+    createdAt: "26-09-2024 at 9:00 am",
+    operation: "",
   },
   {
     id: 4,
-    notificationType: 'violation',
-    notificationMessage: 'Labour exceeded working hours limit',
-    createdAt: '25-09-2024 at 1:45 pm',
-    operation: ''
+    notificationType: "violation",
+    notificationMessage: "Labour exceeded working hours limit",
+    createdAt: "25-09-2024 at 1:45 pm",
+    operation: "",
   },
   {
     id: 5,
-    notificationType: 'alert',
-    notificationMessage: 'Labour’s sensor signal lost',
-    createdAt: '25-09-2024 at 3:05 pm',
-    operation: ''
+    notificationType: "alert",
+    notificationMessage: "Labour’s sensor signal lost",
+    createdAt: "25-09-2024 at 3:05 pm",
+    operation: "",
   },
   {
     id: 6,
-    notificationType: 'infence',
-    notificationMessage: 'Labour re-entered the work zone',
-    createdAt: '26-09-2024 at 9:00 am',
-    operation: ''
+    notificationType: "infence",
+    notificationMessage: "Labour re-entered the work zone",
+    createdAt: "26-09-2024 at 9:00 am",
+    operation: "",
   },
   {
     id: 7,
-    notificationType: 'violation',
-    notificationMessage: 'Labour not wearing safety gear',
-    createdAt: '26-09-2024 at 10:30 am',
-    operation: ''
-  }
+    notificationType: "violation",
+    notificationMessage: "Labour not wearing safety gear",
+    createdAt: "26-09-2024 at 10:30 am",
+    operation: "",
+  },
 ];
 
+export const projectTrackerData = [
+  {
+    name: "Assigned",
+    value: 56,
+    color: "#094D8D",
+  },
+  { name: "Unassigned", value: 44, color: "#E1F0FE" },
+];
+
+export const vehiclesProjectPieChartData = [
+  { name: "Total Vehicles", value: 250, color: "rgba(64, 123, 255, 1)" },
+  {
+    name: "In Use",
+    value: 250,
+    color: "rgba(43, 193, 85, 1) ",
+  },
+  { name: "Need Maintenance", value: 215, color: "rgba(252, 231, 7, 1)" },
+  {
+    name: "Not In Use",
+    value: 35,
+    color: "rgba(225, 52, 30, 1)",
+  },
+];

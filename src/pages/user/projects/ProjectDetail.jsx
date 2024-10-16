@@ -12,10 +12,19 @@ import AlertSideIcon from "../../../assets/svgs/projects/AlertSideIcon";
 import TimeIcon from "../../../assets/svgs/projects/TimeIcon";
 import GlobalLoader from "../../../components/layout/GlobalLoader";
 import Title from "../../../components/shared/title/Title";
-import { alertRecords } from "../../../data/data";
+import {
+  alertRecords,
+  projectTrackerData,
+  smartTrackerData,
+  vehiclesPieChartData,
+  vehiclesProjectPieChartData,
+} from "../../../data/data";
 import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
 import Modal from "../../../components/modals/Modal";
 import EditProject from "./EditProject";
+import DonutChart from "../../../components/charts/donutChart/DonutChart";
+import PieChartComponent from "../../../components/charts/pieChart/PieChartComponent";
+import TruckIcon from "../../../assets/svgs/home/TruckIcon";
 
 const createCustomIcon = (imgUrl) => {
   return L.divIcon({
@@ -151,6 +160,36 @@ const ProjectDetail = () => {
             <Workers labours={project?.labours} />
           </div>
         </div>
+      </div>
+      {/* Newly */}
+      <div className="grid grid-cols-12 mt-6 gap-4">
+        <div className="col-span-12 lg:col-span-8 border-[1px]">dddsds</div>
+        <div className="col-span-12 lg:col-span-4">
+          <SmartTracker title="Smart Tracker" subTitle="Session by Device">
+            <DonutChart data={projectTrackerData} />
+          </SmartTracker>
+        </div>
+        <div className="col-span-12 lg:col-span-4 border-[1px]">
+          labour performennce chart
+        </div>
+        <div className="col-span-12 lg:col-span-8 border-[1px]">
+          labour performennce chart
+        </div>
+        <div className="col-span-12 lg:col-span-4 border-[1px]">chart</div>
+        <div className="col-span-12 lg:col-span-4 border-[1px] ">chart</div>
+        <div className="col-span-12 lg:col-span-4  bg-white rounded-[12px] p-4 lg:p-6 drop-shadow-xl">
+          <h3 className="text-[#000] text-lg md:text-[24px] font-semibold">
+            Vehicles
+          </h3>
+          <PieChartComponent
+            layout="layout-one"
+            data={vehiclesProjectPieChartData}
+            centerIcon={<TruckIcon />}
+            innerRadius={90}
+            outerRadius={120}
+          />
+        </div>
+        <div className="col-span-12 lg:col-span-12 border-[1px]">table</div>
       </div>
       {modal && (
         <Modal onClose={editCloseModalHandler}>
@@ -331,13 +370,11 @@ const UserPopup = ({ labour }) => {
   return (
     <div className="w-[233px] p-2">
       <div className="flex items-center gap-2">
-        <img
-          src={labour?.image}
-          alt=""
-          className="size-8 rounded-full"
-        />
+        <img src={labour?.image} alt="" className="size-8 rounded-full" />
         <div>
-          <h6 className="text-xs font-semibold capitalize">{labour?.fullName}</h6>
+          <h6 className="text-xs font-semibold capitalize">
+            {labour?.fullName}
+          </h6>
           <p className="text-[9px] text-[#414141]">
             current project: <span className="text-[11px]">building side</span>
           </p>
@@ -346,8 +383,12 @@ const UserPopup = ({ labour }) => {
       <div className="mt-4">
         <div className="flex justify-between gap-4">
           <div>
-            <h6 className="text-xs font-medium text-[#414141]">Working hours:</h6>
-            <p className="text-xs text-[#414141]">{labour?.workingHour?.startTime} - {labour?.workingHour?.endTime}</p>
+            <h6 className="text-xs font-medium text-[#414141]">
+              Working hours:
+            </h6>
+            <p className="text-xs text-[#414141]">
+              {labour?.workingHour?.startTime} - {labour?.workingHour?.endTime}
+            </p>
           </div>
           <div>
             <h6 className="text-xs font-medium text-[#414141]">Status:</h6>
@@ -359,16 +400,39 @@ const UserPopup = ({ labour }) => {
             Recent Projects
           </h6>
           <ul className="mt-1">
-            <li className="text-[#414141] text-[10px] list-disc ml-4">Downtown Revamp</li>
-            <li className="text-[#414141] text-[10px] list-disc ml-4">Industrial Site</li>
-            <li className="text-[#414141] text-[10px] list-disc ml-4">Construction Site</li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">
+              Downtown Revamp
+            </li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">
+              Industrial Site
+            </li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">
+              Construction Site
+            </li>
           </ul>
         </div>
         <div className="mt-4 flex justify-center">
-          <Link to={`/user/labours/${labour?._id}`} className="bg-[#E75D50] py-1 px-3 rounded-md !text-white text-[11px] font-medium">
+          <Link
+            to={`/user/labours/${labour?._id}`}
+            className="bg-[#E75D50] py-1 px-3 rounded-md !text-white text-[11px] font-medium"
+          >
             View All
           </Link>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// newly
+
+const SmartTracker = ({ title, subTitle, children }) => {
+  return (
+    <div className="p-4 md:p-5 bg-white rounded-[15px] drop-shadow-md h-[400px] sm:h-full">
+      <h3 className="text-base md:text-[20px] font-semibold">{title}</h3>
+      <p className="text-base font-light text-[#717579]">{subTitle}</p>
+      <div className="flex flex-col items-center justify-center h-[180px] lg:h-[75%]">
+        {children}
       </div>
     </div>
   );

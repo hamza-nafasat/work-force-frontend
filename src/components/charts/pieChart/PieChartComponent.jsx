@@ -17,7 +17,10 @@ const PieChartComponent = ({
   return (
     <>
       <div className="flex flex-col items-center p-4">
-        <div className="relative w-[257px]" style={{ height: layout === "layout-one" ? "257px" : "180px" }}>
+        <div
+          className="relative w-[257px]"
+          style={{ height: layout === "layout-one" ? "257px" : "180px" }}
+        >
           <ResponsiveContainer width="100%" height={"100%"}>
             <PieChart>
               <Pie
@@ -60,14 +63,18 @@ const PieChartComponent = ({
                 key={index}
                 className="flex items-center justify-between bg-[#0b60ae12] p-3 rounded-lg mb-2 w-64"
               >
-                <div className="flex items-center">
+                <div className="flex items-center ">
                   <div
                     className="w-[22px] h-[22px] sm:w-[32px] sm:h-[32px] rounded-[5px] mr-2"
                     style={{ backgroundColor: entry.color }}
                   ></div>
-                  <span className="text-sm sm:text-base font-semibold">{entry.name}</span>
+                  <span className="text-sm sm:text-base font-semibold">
+                    {entry.name}
+                  </span>
                 </div>
-                <span className="font-semibold text-base sm:text-[20px]">{entry.value}</span>
+                <span className="font-semibold text-base sm:text-[20px]">
+                  {entry.value}
+                </span>
               </div>
             ))
           ) : layout === "layout-two" ? (
@@ -79,7 +86,10 @@ const PieChartComponent = ({
                     style={{ background: entry.color }}
                   ></div>
                   <p className="text-sm text-[#030229]">
-                    {entry.name} <span className="text-sm font-semibold">{entry.value}%</span>
+                    {entry.name}{" "}
+                    <span className="text-sm font-semibold">
+                      {entry.value}%
+                    </span>
                   </p>
                 </div>
               ))}

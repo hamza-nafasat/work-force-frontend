@@ -1,48 +1,80 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../../../components/auth/Input";
+import Dropdown from "../../../../components/shared/dropdown/Dropdown";
 
-const FenceForm = () => {
+const FenceForm = ({ onFormChange }) => {
+  const [geofenceName, setGeofenceName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [fenceType, setFenceType] = useState("");
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    onFormChange({
+      geofenceName,
+      startDate,
+      dueDate,
+      fenceType,
+      status,
+    });
+  }, [geofenceName, startDate, dueDate, fenceType, status, onFormChange]);
+
   return (
     <div className="mt-4 md:mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4">
       <div className="lg:col-span-6">
         <Input
           type="text"
-          label="Group"
-          labelWeight="font-semibold"
-          placeholder="Customer Test"
-        />
-      </div>
-      <div className="lg:col-span-6">
-        <Input
-          type="text"
           label="Geofence Name"
           labelWeight="font-semibold"
-          placeholder="Customer Test"
+          placeholder="Geofence name"
+          value={geofenceName}
+          onChange={(e) => setGeofenceName(e.target.value)}
         />
       </div>
-      <div className="lg:col-span-6">
-        <Input type="date" label="Start Date" labelWeight="font-semibold" />
-      </div>
-      <div className="lg:col-span-6">
-        <Input type="date" label="Due Date" labelWeight="font-semibold" />
-      </div>
-      <div className="lg:col-span-6 flex items-center justify-between">
-        <Label label="Alert " />
-        <div className="flex items-center gap-4 md:gap-8">
-          <label className="text-[#000] text-sm md:text-base mb-2 block font-semibold">
-            <input type="radio" name="fence" value="in-fence" /> In-Fence
-          </label>
-          <label className="text-[#000] text-sm md:text-base mb-2 block font-semibold">
-            <input type="radio" name="fence" value="out-fence" /> Out-InFence
-          </label>
-        </div>
-      </div>
+
       <div className="lg:col-span-6">
         <Input
-          type="text"
-          label="Remarks"
+          type="date"
+          label="Start Date"
           labelWeight="font-semibold"
-          placeholder="Input Remarks "
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+      </div>
+
+      <div className="lg:col-span-6">
+        <Input
+          type="date"
+          label="Due Date"
+          labelWeight="font-semibold"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
+      </div>
+
+      <div className="lg:col-span-6">
+        <Dropdown
+          options={[
+            { option: "Infence", value: "infence" },
+            { option: "Out-infence", value: "out-infence" },
+          ]}
+          label="Type"
+          labelWeight="font-[600]"
+          value={fenceType}
+          onSelect={(value) => setFenceType(value)}
+        />
+      </div>
+
+      <div className="lg:col-span-6">
+        <Dropdown
+          options={[
+            { option: "Enable", value: "enable" },
+            { option: "Disable", value: "disable" },
+          ]}
+          label="Status"
+          labelWeight="font-[600]"
+          value={status}
+          onSelect={(value) => setStatus(value)}
         />
       </div>
     </div>
@@ -50,11 +82,3 @@ const FenceForm = () => {
 };
 
 export default FenceForm;
-
-const Label = ({ label }) => {
-  return (
-    <label className="text-[#000] text-sm md:text-base mb-2 block font-semibold">
-      {label}
-    </label>
-  );
-};
