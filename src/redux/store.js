@@ -6,6 +6,7 @@ import projectApis from "./api/projectApi";
 import sensorApis from "./api/sensorApi";
 import vehicleApis from "./api/vehicleApi";
 import userApis from "./api/userApi";
+import alertApis from "./api/alertApi";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     [sensorApis.reducerPath]: sensorApis.reducer,
     [vehicleApis.reducerPath]: vehicleApis.reducer,
     [userApis.reducerPath]: userApis.reducer,
+    [alertApis.reducerPath]: alertApis.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
@@ -27,6 +29,7 @@ const store = configureStore({
       .concat(sensorApis.middleware)
       .concat(vehicleApis.middleware)
       .concat(userApis.middleware)
+      .concat(alertApis.middleware);
   },
 });
 

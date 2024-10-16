@@ -38,7 +38,7 @@ const alertApis = createApi({
     // ------------
     updateAlert: builder.mutation({
       query: ({ alertId, data }) => ({
-        url: `/update/${alertId}`,
+        url: `/single/${alertId}`,
         method: "PUT",
         body: data,
       }),
@@ -48,7 +48,7 @@ const alertApis = createApi({
     // ------------
     deleteAlert: builder.mutation({
       query: ({ alertId }) => ({
-        url: `/delete/${alertId}`,
+        url: `/single/${alertId}`,
         method: "DELETE",
       }),
     }),

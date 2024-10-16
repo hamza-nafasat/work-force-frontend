@@ -10,7 +10,7 @@ const Dropdown = ({ options, defaultText = "Select", onSelect }) => {
   const selectHandler = (option) => {
     setSelected(option);
     setIsOpen(false);
-    if (onSelect) onSelect(option?.value || "not set");
+    if (onSelect) onSelect(option?.value);
   };
 
   useEffect(() => {
