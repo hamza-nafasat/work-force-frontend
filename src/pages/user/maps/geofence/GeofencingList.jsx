@@ -1,19 +1,18 @@
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import DataTable from "react-data-table-component";
 import DeleteIcon from "../../../../assets/svgs/DeleteIcon";
-import Modal from "../../../../components/modals/Modal";
-import { useState } from "react";
 import EditIcon from "../../../../assets/svgs/EditIcon";
-import { geofencingListData } from "../../../../data/data";
-// import AddSensor from "./AddSensor";
-// import EditSensor from "./EditSensor";
+import DateIcon from "../../../../assets/svgs/projects/DateIcon";
+import GlobalLoader from "../../../../components/layout/GlobalLoader";
 import ToggleButton from "../../../../components/shared/toggle/ToggleButton";
-import DateIcon from '../../../../assets/svgs/projects/DateIcon'
+import { useGetAllGeofencesQuery } from "../../../../redux/api/geofenceApi";
 
-const columns = (modalOpenHandler, sensorStatus, statusToggleHandler) => [
+const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
   {
-    name: "Geofence Name",
-    selector: (row) => row.geofenceName,
-    width: '15%'
+    name: "Name",
+    selector: (row) => row.name,
+    width: "15%",
   },
   {
     name: "Start Date",
@@ -22,13 +21,11 @@ const columns = (modalOpenHandler, sensorStatus, statusToggleHandler) => [
         <DateIcon />
         <div>
           <p className="text-[12px] text-[#11111199]">Start Date:</p>
-          <p className="text-sm font-medium text-[#11111199] mt-1">
-            {row.startDate}
-          </p>
+          <p className="text-sm font-medium text-[#11111199] mt-1">{row?.startDate?.split("T")[0]}</p>
         </div>
       </div>
     ),
-    width: '22%'
+    width: "22%",
   },
   {
     name: "Due Date",
@@ -37,52 +34,45 @@ const columns = (modalOpenHandler, sensorStatus, statusToggleHandler) => [
         <DateIcon />
         <div>
           <p className="text-[12px] text-[#11111199]">Due Date:</p>
-          <p className="text-sm font-medium text-[#11111199] mt-1">
-            {row.dueDate}
-          </p>
+          <p className="text-sm font-medium text-[#11111199] mt-1">{row?.endDate?.split("T")[0]}</p>
         </div>
       </div>
     ),
-    width: '22%'
+    width: "22%",
   },
   {
     name: "Type",
-    selector: (row) => row.type,
-    width: '10%'
+    selector: (row) => row?.alertType,
+    width: "10%",
   },
-  {
-    name: "Project",
-    selector: (row) => row.project,
-    width: '10%'
-  },
+  // {
+  //   name: "Project",
+  //   selector: (row) => row.project,
+  //   width: "10%",
+  // },
   {
     name: "Status",
     selector: (row) => (
-      <ToggleButton
-        isChecked={sensorStatus[row._id] || false}
-        onToggle={() => statusToggleHandler(row._id)}
-      />
+      <ToggleButton isChecked={row?.status == "enable"} onToggle={() => statusToggleHandler(row?._id)} />
     ),
   },
   {
     name: "Action",
-    selector: () => (
+    selector: (row) => (
       <div className="flex items-center gap-2">
-        <div
-          className="cursor-pointer"
-          onClick={() => modalOpenHandler("edit")}
-        >
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
         <div className="cursor-pointer">
-          <DeleteIcon />
+          <DeleteIcon onClick={() => deleteHandler(row?._id)} />
         </div>
       </div>
     ),
   },
 ];
 
-const GeofencingList = ({modalOpenHandler}) => {
+const GeofencingList = ({ modalOpenHandler }) => {
+  const { data, isLoading } = useGetAllGeofencesQuery();
   const [sensorStatus, setSensorStatus] = useState({});
 
   const statusToggleHandler = (sensorId) => {
@@ -91,12 +81,18 @@ const GeofencingList = ({modalOpenHandler}) => {
       [sensorId]: !prevState[sensorId],
     }));
   };
-  return (
+
+  const deleteHandler = (sensorId) => {
+    console.log(sensorId);
+  };
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="h-[calc(100vh-80px)] overflow-hidden">
       <div className="mt-5">
         <DataTable
-          columns={columns(modalOpenHandler, sensorStatus, statusToggleHandler)}
-          data={geofencingListData}
+          columns={columns(modalOpenHandler, sensorStatus, statusToggleHandler, deleteHandler)}
+          data={data?.data}
           selectableRows
           selectableRowsHighlight
           customStyles={tableStyles}
