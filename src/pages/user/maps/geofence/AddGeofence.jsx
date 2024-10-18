@@ -9,7 +9,7 @@ import Button from "../../../../components/shared/button/Button";
 import { toast } from "react-toastify";
 import { useAddGeofenceMutation } from "../../../../redux/api/geofenceApi";
 
-const AddGeofence = ({ onClose }) => {
+const AddGeofence = ({ onClose, refetch }) => {
   const [addGeofence, { isLoading }] = useAddGeofenceMutation();
   const [fenceData, setFenceData] = useState({
     name: "",
@@ -44,7 +44,7 @@ const AddGeofence = ({ onClose }) => {
       const response = await addGeofence(fenceData).unwrap();
       if (response?.success) {
         toast.success(response?.message);
-        // await refetch();
+        await refetch();
         onClose();
       }
     } catch (error) {

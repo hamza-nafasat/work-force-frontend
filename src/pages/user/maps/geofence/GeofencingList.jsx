@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
 import DataTable from "react-data-table-component";
+import { toast } from "react-toastify";
 import DeleteIcon from "../../../../assets/svgs/DeleteIcon";
 import EditIcon from "../../../../assets/svgs/EditIcon";
 import DateIcon from "../../../../assets/svgs/projects/DateIcon";
-import GlobalLoader from "../../../../components/layout/GlobalLoader";
 import ToggleButton from "../../../../components/shared/toggle/ToggleButton";
-import { useGetAllGeofencesQuery } from "../../../../redux/api/geofenceApi";
+import {
+  useDeleteSingleGeofenceMutation,
+  useUpdateSingleGeofenceMutation,
+} from "../../../../redux/api/geofenceApi";
+import { confirmAlert } from "react-confirm-alert";
 
 const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
   {
@@ -21,7 +24,9 @@ const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
         <DateIcon />
         <div>
           <p className="text-[12px] text-[#11111199]">Start Date:</p>
-          <p className="text-sm font-medium text-[#11111199] mt-1">{row?.startDate?.split("T")[0]}</p>
+          <p className="text-sm font-medium text-[#11111199] mt-1">
+            {row?.startDate?.split("T")[0]?.split("-")?.reverse().join("-")}
+          </p>
         </div>
       </div>
     ),
@@ -34,7 +39,9 @@ const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
         <DateIcon />
         <div>
           <p className="text-[12px] text-[#11111199]">Due Date:</p>
-          <p className="text-sm font-medium text-[#11111199] mt-1">{row?.endDate?.split("T")[0]}</p>
+          <p className="text-sm font-medium text-[#11111199] mt-1">
+            {row?.endDate?.split("T")[0]?.split("-")?.reverse().join("-")}
+          </p>
         </div>
       </div>
     ),
@@ -45,15 +52,13 @@ const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
     selector: (row) => row?.alertType,
     width: "10%",
   },
-  // {
-  //   name: "Project",
-  //   selector: (row) => row.project,
-  //   width: "10%",
-  // },
   {
     name: "Status",
     selector: (row) => (
-      <ToggleButton isChecked={row?.status == "enable"} onToggle={() => statusToggleHandler(row?._id)} />
+      <ToggleButton
+        isChecked={row?.status == "enable"}
+        onToggle={() => statusToggleHandler(row?._id, row?.status)}
+      />
     ),
   },
   {
@@ -63,36 +68,68 @@ const columns = (modalOpenHandler, statusToggleHandler, deleteHandler) => [
         <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer">
-          <DeleteIcon onClick={() => deleteHandler(row?._id)} />
+        <div className="cursor-pointer" onClick={() => deleteHandler(row?._id)}>
+          <DeleteIcon />
         </div>
       </div>
     ),
   },
 ];
 
-const GeofencingList = ({ modalOpenHandler }) => {
-  const { data, isLoading } = useGetAllGeofencesQuery();
-  const [sensorStatus, setSensorStatus] = useState({});
+const GeofencingList = ({ modalOpenHandler, refetch, data }) => {
+  const [updateGeofence] = useUpdateSingleGeofenceMutation("");
+  const [deleteGeofence] = useDeleteSingleGeofenceMutation("");
 
-  const statusToggleHandler = (sensorId) => {
-    setSensorStatus((prevState) => ({
-      ...prevState,
-      [sensorId]: !prevState[sensorId],
-    }));
+  const statusToggleHandler = async (fenceId, status) => {
+    try {
+      const response = await updateGeofence({
+        geofenceId: fenceId,
+        data: { status: status == "enable" ? "disable" : "enable" },
+      }).unwrap();
+      if (response?.success) {
+        await refetch();
+        toast.success(response?.message);
+      }
+    } catch (error) {
+      console.log("Error while updating geofence status", error);
+      toast.error(error?.data?.message || "Error while updating geofence status");
+    }
   };
 
-  const deleteHandler = (sensorId) => {
-    console.log(sensorId);
+  const deleteHandler = (id) => {
+    confirmAlert({
+      title: "Delete Geofence",
+      message: "Are you sure, you want to delete this geofence?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            if (!id) return toast.error("Error while deleting Geofence");
+            try {
+              const response = await deleteGeofence({ geofenceId: id }).unwrap();
+              if (response?.success) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("Error while deleting geofence", error);
+              toast.error(error?.data?.message || "Error while deleting geofence");
+            }
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
-  return isLoading ? (
-    <GlobalLoader />
-  ) : (
+
+  return (
     <div className="h-[calc(100vh-80px)] overflow-hidden">
       <div className="mt-5">
         <DataTable
-          columns={columns(modalOpenHandler, sensorStatus, statusToggleHandler, deleteHandler)}
-          data={data?.data}
+          columns={columns(modalOpenHandler, statusToggleHandler, deleteHandler)}
+          data={data}
           selectableRows
           selectableRowsHighlight
           customStyles={tableStyles}

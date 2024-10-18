@@ -1,22 +1,28 @@
 import { Fragment, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Polygon, Popup, TileLayer } from "react-leaflet";
 import AddIcon from "../../../../assets/svgs/AddIcon";
 import DeleteIcon from "../../../../assets/svgs/DeleteIcon";
+import GlobalLoader from "../../../../components/layout/GlobalLoader";
 import Modal from "../../../../components/modals/Modal";
 import Title from "../../../../components/shared/title/Title";
+import { useGetAllGeofencesQuery } from "../../../../redux/api/geofenceApi";
 import AddGeofence from "./AddGeofence";
 import EditGeofence from "./EditGeofence";
 import GeofencingList from "./GeofencingList";
 
 const Geofence = () => {
+  const { data, isLoading, refetch } = useGetAllGeofencesQuery();
   const [modal, setModal] = useState(false);
   const [selectedFence, setSelectedFence] = useState(null);
-  const position = [25.276987, 55.296249];
-
-  const modalOpenHandler = (type) => setModal(type);
+  const modalOpenHandler = (type, row) => {
+    setModal(type);
+    if (row) setSelectedFence(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
-  return (
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <Fragment>
       <div className="bg-white rounded-[15px] p-4 lg:p-6">
         <div>
@@ -24,9 +30,8 @@ const Geofence = () => {
         </div>
         <div className="mt-5 md:mt-8">
           <MapContainer
-            center={position}
-            zoom={6}
-            scrollWheelZoom={false}
+            center={[20.5937, 78.9629]}
+            zoom={3}
             style={{
               height: "480px",
               width: "100%",
@@ -39,9 +44,13 @@ const Geofence = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
-              <Popup>Location Dubai</Popup>
-            </Marker>
+            {data?.data?.map((fence, i) => (
+              <Polygon key={i} pathOptions={{ color: "red" }} positions={fence?.area}>
+                <Popup>
+                  <div className="text-black text-[16px]">{fence?.name}</div>
+                </Popup>
+              </Polygon>
+            ))}
           </MapContainer>
         </div>
       </div>
@@ -59,16 +68,16 @@ const Geofence = () => {
             </div>
           </div>
         </div>
-        <GeofencingList modalOpenHandler={modalOpenHandler} />
+        <GeofencingList data={data?.data || []} refetch={refetch} modalOpenHandler={modalOpenHandler} />
       </div>
       {modal === "add" && (
         <Modal title="Add Geofence Detail" onClose={modalCloseHandler}>
-          <AddGeofence onClose={modalCloseHandler} />
+          <AddGeofence refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "edit" && (
         <Modal title="Edit Geofence Detail" onClose={modalCloseHandler}>
-          <EditGeofence onClose={modalCloseHandler} />
+          <EditGeofence refetch={refetch} selectedFence={selectedFence} onClose={modalCloseHandler} />
         </Modal>
       )}
     </Fragment>

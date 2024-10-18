@@ -42,7 +42,9 @@ export const MapComponent = ({ position, formik, area }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {area && area.length > 0 && <Polygon positions={area.map(([lat, lng]) => [lng, lat])} color="blue" />}
+      {area && area.length > 0 && (
+        <Polygon positions={area?.map(([lat, lng]) => [lng, lat])} color="blue" />
+      )}
       <LocationMarker position={position} />
     </MapContainer>
   );

@@ -21,7 +21,7 @@ const FenceForm = ({ fenceData, setFenceData }) => {
           type="date"
           label="Start Date"
           labelWeight="font-semibold"
-          value={fenceData.startDate}
+          value={fenceData?.startDate}
           onChange={(e) => setFenceData({ ...fenceData, startDate: e.target.value })}
         />
       </div>
@@ -31,7 +31,7 @@ const FenceForm = ({ fenceData, setFenceData }) => {
           type="date"
           label="Due Date"
           labelWeight="font-semibold"
-          value={fenceData.dueDate}
+          value={fenceData?.dueDate}
           onChange={(e) => setFenceData({ ...fenceData, dueDate: e.target.value })}
         />
       </div>
@@ -44,6 +44,7 @@ const FenceForm = ({ fenceData, setFenceData }) => {
           ]}
           label="Alert Type"
           labelWeight="font-[600]"
+          defaultText={fenceData?.alertType || "Select Type"}
           value={fenceData.alertType}
           onSelect={(value) => setFenceData({ ...fenceData, alertType: value })}
         />
@@ -56,6 +57,7 @@ const FenceForm = ({ fenceData, setFenceData }) => {
             { option: "Disable", value: "disable" },
           ]}
           label="Status"
+          defaultText={fenceData?.status || "Select Status"}
           labelWeight="font-[600]"
           value={fenceData.status}
           onSelect={(value) => setFenceData({ ...fenceData, status: value })}
