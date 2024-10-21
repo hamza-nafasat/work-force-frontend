@@ -1,16 +1,20 @@
 /* eslint-disable react/prop-types */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Title from "../../../../components/shared/title/Title";
 import { FeatureGroup, MapContainer, TileLayer } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
-import AddFenceProjectList from "./AddFenceProjectList";
 import FenceForm from "./FenceForm";
 import Button from "../../../../components/shared/button/Button";
 import { toast } from "react-toastify";
 import { useAddGeofenceMutation } from "../../../../redux/api/geofenceApi";
+import { useGetAllProjectsQuery } from "../../../../redux/api/projectApi";
+import Select from "react-select";
+import GlobalLoader from "../../../../components/layout/GlobalLoader";
 
 const AddGeofence = ({ onClose, refetch }) => {
   const [addGeofence, { isLoading }] = useAddGeofenceMutation();
+  const { data, isSuccess, isLoading: isLoadingProjects } = useGetAllProjectsQuery("");
+  const [projectsData, setProjectsData] = useState([]);
   const [fenceData, setFenceData] = useState({
     name: "",
     startDate: "",
@@ -53,7 +57,21 @@ const AddGeofence = ({ onClose, refetch }) => {
     }
   };
 
-  return (
+  useEffect(() => {
+    if (isSuccess) {
+      const projects = data?.data?.map((project) => {
+        return {
+          label: project?.name,
+          value: project?._id,
+        };
+      });
+      setProjectsData(projects);
+    }
+  }, [data, isSuccess]);
+
+  console.log('projectsdata', projectsData);
+
+  return (isLoadingProjects? <GlobalLoader /> :
     <form onSubmit={handleAddClick}>
       <FenceForm fenceData={fenceData} setFenceData={setFenceData} />
       <div className="mt-5">
@@ -94,14 +112,70 @@ const AddGeofence = ({ onClose, refetch }) => {
         </div>
       </div>
       <div className="mt-5">
-        <AddFenceProjectList />
+        <Title title="Add Projects" />
+        <div className="mt-4">
+          <Select
+            options={projectsData}
+            placeholder="Select Project"
+            isMulti={true}
+            styles={customStyles}
+          />
+        </div>
       </div>
       <div className="flex items-center justify-end gap-2 md:gap-4 mt-5">
-        <Button text="Cancel" color="#111111b3" bg="#76767640" width="w-[150px]" onClick={onClose} />
-        <Button disabled={isLoading} text="Add" width="w-[150px]" height="h-[50px] sm:h-[60px]" />
+        <Button
+          text="Cancel"
+          color="#111111b3"
+          bg="#76767640"
+          width="w-[150px]"
+          onClick={onClose}
+        />
+        <Button
+          disabled={isLoading}
+          text="Add"
+          width="w-[150px]"
+          height="h-[50px] sm:h-[60px]"
+        />
       </div>
     </form>
   );
 };
 
 export default AddGeofence;
+
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    borderRadius: "0.375rem",
+    padding: "0.25rem",
+    display: "flex",
+    alignItems: "center",
+  }),
+  multiValue: (provided) => ({
+    ...provided,
+    backgroundColor: "rgba(12, 106, 193, 0.13)",
+    borderRadius: "34px",
+    display: "flex",
+    alignItems: "center",
+    padding: "0.35rem 1rem",
+    color: "rgba(17, 17, 17, 0.6)",
+    position: "relative",
+  }),
+  multiValueLabel: (provided) => ({
+    ...provided,
+    color: "rgba(17, 17, 17, 0.6)",
+    fontSize: "14px",
+  }),
+  multiValueRemove: (provided) => ({
+    ...provided,
+    color: "#fff",
+    cursor: "pointer",
+    width: "18px",
+    height: "18px",
+    borderRadius: "50%",
+    top: "-4px",
+    position: "absolute",
+    right: "0px",
+    background: "rgba(112, 112, 112, 1)",
+  }),
+};
