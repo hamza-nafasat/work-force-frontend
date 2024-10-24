@@ -9,6 +9,7 @@ import EditIcon from "../../../assets/svgs/EditIcon";
 import { usersViolationData } from "../../../data/data";
 import EditReport from "./EditReport";
 import { confirmAlert } from "react-confirm-alert";
+import AddReport from "./AddReport";
 
 const columns = (modalOpenHandler, deleteHandler) => [
   {
@@ -39,6 +40,9 @@ const columns = (modalOpenHandler, deleteHandler) => [
     name: "Action",
     selector: (row) => (
       <div className="flex items-center gap-2">
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("add")}>
+          <AddIcon />
+        </div>
         <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
           <EditIcon />
         </div>
@@ -102,8 +106,13 @@ const UsersViolations = () => {
         />
       </div>
       {modal === "edit" && (
-        <Modal title="Violation Report" width="w-[300px] md:w-[600px]" onClose={modalCloseHandler}>
+        <Modal title="Edit Violation Report" width="w-[300px] md:w-[600px] lg:w-[750px]" onClose={modalCloseHandler}>
           <EditReport onClose={modalCloseHandler} />
+        </Modal>
+      )}
+      {modal === "add" && (
+        <Modal title="Add Violation Report" width="w-[300px] md:w-[600px] lg:w-[750px]" onClose={modalCloseHandler}>
+          <AddReport onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>
