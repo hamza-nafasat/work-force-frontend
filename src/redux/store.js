@@ -10,6 +10,7 @@ import alertApis from "./api/alertApi";
 import geofenceApis from "./api/geofenceApi";
 import notificationApis from "./api/notificationApi";
 import userViolationApis from "./api/userViolationApi";
+import vehicleViolationApis from "./api/vehicleViolationApi";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     [geofenceApis.reducerPath]: geofenceApis.reducer,
     [notificationApis.reducerPath]: notificationApis.reducer,
     [userViolationApis.reducerPath]: userViolationApis.reducer,
+    [vehicleViolationApis.reducerPath]: vehicleViolationApis.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
@@ -38,7 +40,8 @@ const store = configureStore({
       .concat(alertApis.middleware)
       .concat(geofenceApis.middleware)
       .concat(notificationApis.middleware)
-      .concat(userViolationApis.middleware);
+      .concat(userViolationApis.middleware)
+      .concat(vehicleViolationApis.middleware);
   },
 });
 
