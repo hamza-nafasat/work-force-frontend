@@ -2,13 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import ChevronIcon from "../../../assets/svgs/vehicles/ChevronIcon";
 
-const Dropdown = ({
-  options,
-  defaultText = "Select",
-  onSelect,
-  label,
-  labelWeight,
-}) => {
+const Dropdown = ({ options, defaultText = "Select", onSelect, label, labelWeight }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const dropdownRef = useRef(null);
@@ -16,7 +10,7 @@ const Dropdown = ({
   const selectHandler = (option) => {
     setSelected(option);
     setIsOpen(false);
-    if (onSelect) onSelect(option.value); // Pass the correct value to onSelect
+    if (onSelect) onSelect(option.value);
   };
 
   useEffect(() => {
@@ -47,14 +41,8 @@ const Dropdown = ({
         className="w-full bg-[#7bc0f726] border border-[#e2e5ff] flex items-center justify-between rounded-[14px] h-[50px] sm:h-[60px] p-4 text-sm md:text-base text-[#111111e4]"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-sm">
-          {selected ? selected.option : defaultText}
-        </span>
-        <div
-          className={`transition-all duration-300 ${
-            isOpen ? "rotate-0" : "rotate-180"
-          }`}
-        >
+        <span className="text-sm">{selected ? selected.option : defaultText}</span>
+        <div className={`transition-all duration-300 ${isOpen ? "rotate-0" : "rotate-180"}`}>
           <ChevronIcon />
         </div>
       </button>

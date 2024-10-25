@@ -31,7 +31,7 @@ const Geofence = () => {
         <div className="mt-5 md:mt-8">
           <MapContainer
             center={[20.5937, 78.9629]}
-            zoom={3}
+            zoom={1}
             style={{
               height: "480px",
               width: "100%",
