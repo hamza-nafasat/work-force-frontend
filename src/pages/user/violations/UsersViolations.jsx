@@ -1,52 +1,50 @@
-import DataTable from "react-data-table-component";
-import DeleteIcon from "../../../assets/svgs/DeleteIcon";
-import AddIcon from "../../../assets/svgs/AddIcon";
-import Title from "../../../components/shared/title/Title";
-import Modal from "../../../components/modals/Modal";
 import { useState } from "react";
-import { IoEye } from "react-icons/io5";
-import EditIcon from "../../../assets/svgs/EditIcon";
-import { usersViolationData } from "../../../data/data";
-import EditReport from "./EditReport";
 import { confirmAlert } from "react-confirm-alert";
-import AddReport from "./AddReport";
+import DataTable from "react-data-table-component";
+import AddIcon from "../../../assets/svgs/AddIcon";
+import DeleteIcon from "../../../assets/svgs/DeleteIcon";
+import EditIcon from "../../../assets/svgs/EditIcon";
+import Modal from "../../../components/modals/Modal";
+import Title from "../../../components/shared/title/Title";
+
+import AddUserViolations from "./AddUserViolations";
+import EditUserViolations from "./EditUserViolations";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
+import { toast } from "react-toastify";
+import {
+  useDeleteSingleUserViolationMutation,
+  useGetAllUserViolationsQuery,
+} from "../../../redux/api/userViolationApi";
 
 const columns = (modalOpenHandler, deleteHandler) => [
   {
-    name: "Violoation Type",
-    selector: (row) => row.violationType,
+    name: "Violation Type",
+    selector: (row) => row?.violationType,
   },
   {
     name: "Date/Time",
-    selector: (row) => row.dateTime,
+    selector: (row) => row?.createdAt?.split("T")[0] + "/" + row?.createdAt?.split("T")[1].split(".")[0],
   },
   {
-    name: "Workforce",
-    selector: (row) => row.workforce,
+    name: "Project",
+    selector: (row) => row?.project?.name,
   },
   {
-    name: "Contractor",
-    selector: (row) => row.contractor,
+    name: "Labour",
+    selector: (row) => row?.labour?.fullName,
   },
   {
     name: "Nationality",
-    selector: (row) => row.nationality,
-  },
-  {
-    name: "Plate Number",
-    selector: (row) => row.plateNumber,
+    selector: (row) => row?.labour?.nationality,
   },
   {
     name: "Action",
     selector: (row) => (
       <div className="flex items-center gap-2">
-        <div className="cursor-pointer" onClick={() => modalOpenHandler("add")}>
-          <AddIcon />
-        </div>
-        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit")}>
+        <div className="cursor-pointer" onClick={() => modalOpenHandler("edit", row)}>
           <EditIcon />
         </div>
-        <div className="cursor-pointer" onClick={() => deleteHandler()}>
+        <div className="cursor-pointer" onClick={() => deleteHandler(row?._id)}>
           <DeleteIcon />
         </div>
       </div>
@@ -55,20 +53,35 @@ const columns = (modalOpenHandler, deleteHandler) => [
 ];
 
 const UsersViolations = () => {
+  const { data, isLoading, refetch } = useGetAllUserViolationsQuery("");
+  const [deleteViolation] = useDeleteSingleUserViolationMutation();
+  const [selectedRow, setSelectedRow] = useState(null);
   const [modal, setModal] = useState(false);
 
-  const modalOpenHandler = (modalType) => setModal(modalType);
+  const modalOpenHandler = (modalType, row) => {
+    setModal(modalType);
+    if (row) setSelectedRow(row);
+  };
   const modalCloseHandler = () => setModal(false);
 
-  const deleteHandler = () => {
+  const deleteHandler = (id) => {
     confirmAlert({
       title: "Delete Violation",
       message: "Are you sure, you want to delete the violation?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            // console.log("project deleted")
+          onClick: async () => {
+            try {
+              const response = await deleteViolation({ userViolationId: id }).unwrap();
+              if (response?.success && response?.message) {
+                await refetch();
+                toast.success(response?.message);
+              }
+            } catch (error) {
+              console.log("error while deleting violation", error);
+              toast.error(error?.data?.message || "Some Error Occurred while deleting violation");
+            }
           },
         },
         {
@@ -78,7 +91,9 @@ const UsersViolations = () => {
     });
   };
 
-  return (
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className="bg-white rounded-[15px] p-4 lg:p-6 h-[calc(100vh-80px)] overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
@@ -96,7 +111,7 @@ const UsersViolations = () => {
       <div className="mt-5">
         <DataTable
           columns={columns(modalOpenHandler, deleteHandler)}
-          data={usersViolationData}
+          data={data?.data || []}
           selectableRows
           selectableRowsHighlight
           customStyles={tableStyles}
@@ -106,13 +121,21 @@ const UsersViolations = () => {
         />
       </div>
       {modal === "edit" && (
-        <Modal title="Edit Violation Report" width="w-[300px] md:w-[600px] lg:w-[750px]" onClose={modalCloseHandler}>
-          <EditReport onClose={modalCloseHandler} />
+        <Modal
+          title="Edit Violation Report"
+          width="w-[300px] md:w-[600px] lg:w-[750px]"
+          onClose={modalCloseHandler}
+        >
+          <EditUserViolations refetch={refetch} selectedRow={selectedRow} onClose={modalCloseHandler} />
         </Modal>
       )}
       {modal === "add" && (
-        <Modal title="Add Violation Report" width="w-[300px] md:w-[600px] lg:w-[750px]" onClose={modalCloseHandler}>
-          <AddReport onClose={modalCloseHandler} />
+        <Modal
+          title="Add Violation Report"
+          width="w-[300px] md:w-[600px] lg:w-[750px]"
+          onClose={modalCloseHandler}
+        >
+          <AddUserViolations refetch={refetch} onClose={modalCloseHandler} />
         </Modal>
       )}
     </div>

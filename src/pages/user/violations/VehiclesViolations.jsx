@@ -7,7 +7,7 @@ import { useState } from "react";
 import { IoEye } from "react-icons/io5";
 import EditIcon from "../../../assets/svgs/EditIcon";
 import { usersViolationData } from "../../../data/data";
-import EditReport from "./EditReport";
+import EditReport from "./EditUserViolations";
 import { confirmAlert } from "react-confirm-alert";
 
 const columns = (modalOpenHandler, deleteHandler) => [
