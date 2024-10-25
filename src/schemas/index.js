@@ -55,10 +55,15 @@ export const configurationSchema = Yup.object({
   db: Yup.string().required("database name is required"),
 });
 
-export const violationReportSchema = Yup.object({
+export const userViolationSchema = Yup.object({
   violationType: Yup.string().required("Violation Type is required"),
   workforce: Yup.string().required("Workforce is required"),
   labour: Yup.string().required("labour is required"),
+});
+export const vehicleViolationSchema = Yup.object({
+  violationType: Yup.string().required("Violation Type is required"),
+  workforce: Yup.string().required("Workforce is required"),
+  vehicle: Yup.string().required("Vehicle is required"),
 });
 
 export const usersSchema = Yup.object({
