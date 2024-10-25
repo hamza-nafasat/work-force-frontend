@@ -9,7 +9,7 @@ import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
 import { useGetAllProjectsQuery } from "../../../redux/api/projectApi";
 import { useUpdateSingleUserViolationMutation } from "../../../redux/api/userViolationApi";
-import { violationReportSchema } from "../../../schemas";
+import { userViolationSchema } from "../../../schemas";
 
 const EditUserViolations = ({ onClose, selectedRow, refetch }) => {
   const [updateViolation, { isLoading }] = useUpdateSingleUserViolationMutation();
@@ -26,7 +26,7 @@ const EditUserViolations = ({ onClose, selectedRow, refetch }) => {
 
   const { values, errors, touched, handleSubmit, setFieldValue } = useFormik({
     initialValues,
-    validationSchema: violationReportSchema,
+    validationSchema: userViolationSchema,
     onSubmit: async (values) => {
       try {
         const data = {};

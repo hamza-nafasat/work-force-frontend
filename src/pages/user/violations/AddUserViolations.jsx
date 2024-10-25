@@ -8,8 +8,8 @@ import Button from "../../../components/shared/button/Button";
 import Dropdown from "../../../components/shared/dropdown/Dropdown";
 import { useGetAllLaboursQuery } from "../../../redux/api/labourApi";
 import { useGetAllProjectsQuery } from "../../../redux/api/projectApi";
-import { violationReportSchema } from "../../../schemas";
 import { useAddUserViolationMutation } from "../../../redux/api/userViolationApi";
+import { userViolationSchema } from "../../../schemas";
 
 const AddViolations = ({ onClose, refetch }) => {
   const [AddViolation, { isLoading }] = useAddUserViolationMutation();
@@ -26,7 +26,7 @@ const AddViolations = ({ onClose, refetch }) => {
 
   const { errors, touched, handleSubmit, setFieldValue } = useFormik({
     initialValues,
-    validationSchema: violationReportSchema,
+    validationSchema: userViolationSchema,
     onSubmit: async (values) => {
       try {
         const data = {
