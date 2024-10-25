@@ -57,10 +57,8 @@ export const configurationSchema = Yup.object({
 
 export const violationReportSchema = Yup.object({
   violationType: Yup.string().required("Violation Type is required"),
-  date: Yup.date().required("Date is required").nullable(),
   workforce: Yup.string().required("Workforce is required"),
-  contractor: Yup.string().required("Contractor is required"),
-  plateNumber: Yup.string().required("Plate Number is required"),
+  labour: Yup.string().required("labour is required"),
 });
 
 export const usersSchema = Yup.object({
@@ -72,5 +70,5 @@ export const usersSchema = Yup.object({
   confirmPassword: Yup.string().required("Confirm password is required"),
   role: Yup.string().required("Role is required"),
   address: Yup.string().required("Address is required"),
-  image: Yup.mixed().required("Image is required")
+  image: Yup.mixed().required("Image is required"),
 });

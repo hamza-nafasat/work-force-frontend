@@ -9,6 +9,7 @@ import userApis from "./api/userApi";
 import alertApis from "./api/alertApi";
 import geofenceApis from "./api/geofenceApi";
 import notificationApis from "./api/notificationApi";
+import userViolationApis from "./api/userViolationApi";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     [alertApis.reducerPath]: alertApis.reducer,
     [geofenceApis.reducerPath]: geofenceApis.reducer,
     [notificationApis.reducerPath]: notificationApis.reducer,
+    [userViolationApis.reducerPath]: userViolationApis.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
@@ -35,7 +37,8 @@ const store = configureStore({
       .concat(userApis.middleware)
       .concat(alertApis.middleware)
       .concat(geofenceApis.middleware)
-      .concat(notificationApis.middleware);
+      .concat(notificationApis.middleware)
+      .concat(userViolationApis.middleware);
   },
 });
 
