@@ -8,23 +8,17 @@ import sensorImg from "../../../assets/images/projects/sensors.png";
 import workersImg from "../../../assets/images/projects/worker.png";
 import VehicleImg from "../../../assets/images/vehicles/vehicle.png";
 import EditIcon from "../../../assets/svgs/EditIcon";
+import TruckIcon from "../../../assets/svgs/home/TruckIcon";
 import AlertSideIcon from "../../../assets/svgs/projects/AlertSideIcon";
 import TimeIcon from "../../../assets/svgs/projects/TimeIcon";
-import GlobalLoader from "../../../components/layout/GlobalLoader";
-import Title from "../../../components/shared/title/Title";
-import {
-  alertRecords,
-  projectTrackerData,
-  smartTrackerData,
-  vehiclesPieChartData,
-  vehiclesProjectPieChartData,
-} from "../../../data/data";
-import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
-import Modal from "../../../components/modals/Modal";
-import EditProject from "./EditProject";
 import DonutChart from "../../../components/charts/donutChart/DonutChart";
 import PieChartComponent from "../../../components/charts/pieChart/PieChartComponent";
-import TruckIcon from "../../../assets/svgs/home/TruckIcon";
+import GlobalLoader from "../../../components/layout/GlobalLoader";
+import Modal from "../../../components/modals/Modal";
+import Title from "../../../components/shared/title/Title";
+import { alertRecords, projectTrackerData, vehiclesProjectPieChartData } from "../../../data/data";
+import { useGetSingleProjectQuery } from "../../../redux/api/projectApi";
+import EditProject from "./EditProject";
 import NewScoreCard from "./NewScoreCard";
 
 const createCustomIcon = (imgUrl) => {
@@ -89,44 +83,33 @@ const ProjectDetail = () => {
           <Title title="Project Detail" />
         </div>
         <div className="flex items-center gap-4">
-          <button
-            className="bg-primary rounded-lg py-[6px] px-4 text-base text-white"
-            onClick={() => completeModalHandler("complete")}
-          >
-            Completed
-          </button>
-          <div
-            className="cursor-pointer"
-            onClick={() => editProjectModalHandler("edit-project")}
-          >
+          {!project?.isCompleted && (
+            <button
+              className="bg-primary rounded-lg py-[6px] px-4 text-base text-white"
+              onClick={() => completeModalHandler("complete")}
+            >
+              Completed
+            </button>
+          )}
+          <div className="cursor-pointer" onClick={() => editProjectModalHandler("edit-project")}>
             <EditIcon />
           </div>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
         <div className="lg:col-span-8 bg-[#EBF6FE] p-4 rounded-xl">
-          <p className="text-base md:text-lg font-semibold">
-            {project?.projectName}
-          </p>
+          <p className="text-base md:text-lg font-semibold">{project?.projectName}</p>
           <div className="mt-4 md:mt-5">
             <p className="text-sm md:text-base text-[#111111cc]">Description</p>
-            <p className="text-sm text-[#111111] mt-1">
-              {project?.projectDetail}
-            </p>
+            <p className="text-sm text-[#111111] mt-1">{project?.projectDetail}</p>
           </div>
         </div>
         {/* second column */}
         <div className="lg:col-span-4">
           <div className="flex justify-between gap-4">
-            <div
-              className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md grow text-center`}
-            >
-              <p className="text-sm md:text-base text-[#111111cc]">
-                Start Date
-              </p>
-              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">
-                {project?.startDate}
-              </p>
+            <div className={`border border-[#8E8E8E] rounded-xl p-2 shadow-md grow text-center`}>
+              <p className="text-sm md:text-base text-[#111111cc]">Start Date</p>
+              <p className="text-sm sm:text-base md:text-md font-semibold mt-1">{project?.startDate}</p>
             </div>
             <div
               className={`border border-[#FF1313] bg-[#F55656] rounded-xl p-2 shadow-md grow text-center`}
@@ -142,9 +125,7 @@ const ProjectDetail = () => {
               <FaMapMarkerAlt />
               Location
             </div>
-            <p className="text-sm sm:text-md lg:text-lg">
-              Taetratech, Lakhpat Road, Lahore
-            </p>
+            <p className="text-sm sm:text-md lg:text-lg">Taetratech, Lakhpat Road, Lahore</p>
           </div>
         </div>
       </div>
@@ -153,18 +134,10 @@ const ProjectDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <DetailWidget title="Total Vehicles" value="0" icon={VehicleImg} />
             <DetailWidget title="Total Sensors" value="0" icon={sensorImg} />
-            <DetailWidget
-              title="Total Workers"
-              value={project?.labours?.length}
-              icon={workersImg}
-            />
+            <DetailWidget title="Total Workers" value={project?.labours?.length} icon={workersImg} />
           </div>
           <div className="mt-4">
-            <Map
-              position={project?.position}
-              area={project?.area}
-              labours={project?.labours}
-            />
+            <Map position={project?.position} area={project?.area} labours={project?.labours} />
           </div>
         </div>
         <div className="lg:col-span-4">
@@ -182,18 +155,12 @@ const ProjectDetail = () => {
             <DonutChart data={projectTrackerData} />
           </SmartTracker>
         </div>
-        <div className="col-span-12 lg:col-span-4 border-[1px]">
-          labour performennce chart
-        </div>
-        <div className="col-span-12 lg:col-span-8 border-[1px]">
-          labour performennce chart
-        </div>
+        <div className="col-span-12 lg:col-span-4 border-[1px]">labour performance chart</div>
+        <div className="col-span-12 lg:col-span-8 border-[1px]">labour performance chart</div>
         <div className="col-span-12 lg:col-span-4 border-[1px]">chart</div>
         <div className="col-span-12 lg:col-span-4 border-[1px] ">chart</div>
         <div className="col-span-12 lg:col-span-4  bg-white rounded-[12px] p-4 lg:p-6 drop-shadow-xl">
-          <h3 className="text-[#000] text-lg md:text-[24px] font-semibold">
-            Vehicles
-          </h3>
+          <h3 className="text-[#000] text-lg md:text-[24px] font-semibold">Vehicles</h3>
           <PieChartComponent
             layout="layout-one"
             data={vehiclesProjectPieChartData}
@@ -206,16 +173,16 @@ const ProjectDetail = () => {
       </div>
       {modal === "edit-project" && (
         <Modal title="Edit Project" onClose={closeModalHandler}>
-          <EditProject
-            refetch={refetch}
-            selectedRow={project}
-            onClose={closeModalHandler}
-          />
+          <EditProject refetch={refetch} selectedRow={project} onClose={closeModalHandler} />
         </Modal>
       )}
-      {modal === 'complete' && (
-        <Modal title="New Score Card" onClose={closeModalHandler} width="w-[320px] md:w-[600px] lg:w-[1000px]">
-          <NewScoreCard onClose={closeModalHandler} /> 
+      {modal === "complete" && (
+        <Modal
+          title="New Score Card"
+          onClose={closeModalHandler}
+          width="w-[320px] md:w-[600px] lg:w-[1000px]"
+        >
+          <NewScoreCard labours={project?.labours} onClose={closeModalHandler} />
         </Modal>
       )}
     </div>
@@ -251,13 +218,9 @@ const Worker = ({ name, img, id, gender, status, designation }) => {
       <div className="flex items-center gap-2">
         <img src={img} alt="image" className="w-[45px] h-[45px] object-cover" />
         <div>
-          <p className="text-sm md:text-base text-[#5C5B5B] leading-none">
-            {name}
-          </p>
+          <p className="text-sm md:text-base text-[#5C5B5B] leading-none">{name}</p>
           <p className="text-[12px] text-[#5C5B5B] leading-none">{id}</p>
-          <p className="text-[8px] text-[#41414199] leading-none mt-[2px]">
-            {gender}
-          </p>
+          <p className="text-[8px] text-[#41414199] leading-none mt-[2px]">{gender}</p>
         </div>
       </div>
       <div
@@ -269,9 +232,7 @@ const Worker = ({ name, img, id, gender, status, designation }) => {
       >
         {status}
       </div>
-      <p className="text-[10px] font-semibold text-[#414141] flex justify-end">
-        {designation}
-      </p>
+      <p className="text-[10px] font-semibold text-[#414141] flex justify-end">{designation}</p>
     </div>
   );
 };
@@ -301,11 +262,7 @@ const Alert = ({ title, id, img, time, alert }) => {
     <div className="relative p-2 border-b border-[#e5e5e5]">
       <div className="flex justify-between gap-2 pl-2">
         <div className="flex items-center gap-2">
-          <img
-            src={img}
-            alt="image"
-            className="w-[30px] h-[30px] object-cover"
-          />
+          <img src={img} alt="image" className="w-[30px] h-[30px] object-cover" />
           <div>
             <p className="text-[10px] text-[#5C5B5B]">{title}</p>
             <p className="text-[6px] text-[#5C5B5B]">{id}</p>
@@ -346,22 +303,13 @@ const Map = ({ area, labours }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {labours?.map((labour, i) => (
-        <Marker
-          key={i}
-          position={labour?.position}
-          icon={createCustomIcon(labour?.image)}
-        >
+        <Marker key={i} position={labour?.position} icon={createCustomIcon(labour?.image)}>
           <Popup>
             <UserPopup labour={labour} />
           </Popup>
         </Marker>
       ))}
-      {area && area.length > 0 && (
-        <Polygon
-          positions={area.map(([lat, lng]) => [lng, lat])}
-          color="blue"
-        />
-      )}
+      {area && area.length > 0 && <Polygon positions={area.map(([lat, lng]) => [lng, lat])} color="blue" />}
     </MapContainer>
   );
 };
@@ -370,16 +318,10 @@ const DetailWidget = ({ title, value, icon }) => {
   return (
     <div className="border border-[#8E8E8E99] shadow-md rounded-2xl p-4 flex items-center justify-between gap-4 flex-1 relative">
       <div className="flex flex-col items-center gap-2">
-        <p className="text-sm md:text-base font-semibold text-[#112C5F]">
-          {title}
-        </p>
+        <p className="text-sm md:text-base font-semibold text-[#112C5F]">{title}</p>
         <h3 className="text-[28px] lg:text-[40px]">{value}</h3>
       </div>
-      <img
-        src={icon}
-        className="w-20 2xl:w-[120px] h-20 md:h-[120px] object-contain"
-        alt="image"
-      />
+      <img src={icon} className="w-20 2xl:w-[120px] h-20 md:h-[120px] object-contain" alt="image" />
     </div>
   );
 };
@@ -390,9 +332,7 @@ const UserPopup = ({ labour }) => {
       <div className="flex items-center gap-2">
         <img src={labour?.image} alt="" className="size-8 rounded-full" />
         <div>
-          <h6 className="text-xs font-semibold capitalize">
-            {labour?.fullName}
-          </h6>
+          <h6 className="text-xs font-semibold capitalize">{labour?.fullName}</h6>
           <p className="text-[9px] text-[#414141]">
             current project: <span className="text-[11px]">building side</span>
           </p>
@@ -401,9 +341,7 @@ const UserPopup = ({ labour }) => {
       <div className="mt-4">
         <div className="flex justify-between gap-4">
           <div>
-            <h6 className="text-xs font-medium text-[#414141]">
-              Working hours:
-            </h6>
+            <h6 className="text-xs font-medium text-[#414141]">Working hours:</h6>
             <p className="text-xs text-[#414141]">
               {labour?.workingHour?.startTime} - {labour?.workingHour?.endTime}
             </p>
@@ -414,19 +352,11 @@ const UserPopup = ({ labour }) => {
           </div>
         </div>
         <div className="mt-2">
-          <h6 className="text-xs font-medium text-[#414141]">
-            Recent Projects
-          </h6>
+          <h6 className="text-xs font-medium text-[#414141]">Recent Projects</h6>
           <ul className="mt-1">
-            <li className="text-[#414141] text-[10px] list-disc ml-4">
-              Downtown Revamp
-            </li>
-            <li className="text-[#414141] text-[10px] list-disc ml-4">
-              Industrial Site
-            </li>
-            <li className="text-[#414141] text-[10px] list-disc ml-4">
-              Construction Site
-            </li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">Downtown Revamp</li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">Industrial Site</li>
+            <li className="text-[#414141] text-[10px] list-disc ml-4">Construction Site</li>
           </ul>
         </div>
         <div className="mt-4 flex justify-center">
@@ -449,9 +379,7 @@ const SmartTracker = ({ title, subTitle, children }) => {
     <div className="p-4 md:p-5 bg-white rounded-[15px] drop-shadow-md h-[400px] sm:h-full">
       <h3 className="text-base md:text-[20px] font-semibold">{title}</h3>
       <p className="text-base font-light text-[#717579]">{subTitle}</p>
-      <div className="flex flex-col items-center justify-center h-[180px] lg:h-[75%]">
-        {children}
-      </div>
+      <div className="flex flex-col items-center justify-center h-[180px] lg:h-[75%]">{children}</div>
     </div>
   );
 };
