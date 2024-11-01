@@ -4,7 +4,13 @@ import StarIcon from "../../../assets/svgs/projects/StarIcon";
 import { useState } from "react";
 
 const NewScoreCard = ({ onClose }) => {
-  const [isReviewSelected, setIsReviewSelected] = useState(false);
+  const [isReviewSelected, setIsReviewSelected] = useState(0);
+
+  const reviewSelectHandler = (index) => {
+    setIsReviewSelected(index);
+  }
+
+  console.log('isReviewSelected', isReviewSelected)
 
   return (
     <div className="px-0 md:px-4">
@@ -26,7 +32,7 @@ const NewScoreCard = ({ onClose }) => {
         <div className="grid grid-cols-12 gap-4 mb-2">
           <List title="011" />
           <List title="Mason" />
-          <Reviews />
+          <Reviews isReviewSelected={isReviewSelected} reviewSelectHandler={reviewSelectHandler} />
         </div>
       </div>
       <div className="flex items-center justify-end gap-4 mt-4">
@@ -51,11 +57,11 @@ const NewScoreCard = ({ onClose }) => {
 
 export default NewScoreCard;
 
-const Reviews = () => {
+const Reviews = ({isReviewSelected, reviewSelectHandler}) => {
   return (
     <div className="flex items-center justify-center gap-4 bg-[#EBF3FA] rounded-lg px-3 py-1 col-span-12 lg:col-span-6">
       {[1, 2, 3, 4, 5].map((item) => (
-        <button key={item}>
+        <button key={item} onClick={() => reviewSelectHandler(item)} className={`${item <= isReviewSelected ? 'opacity-100':'opacity-50'}`}>
           <StarIcon />
         </button>
       ))}
