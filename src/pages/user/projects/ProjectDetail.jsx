@@ -25,6 +25,7 @@ import EditProject from "./EditProject";
 import DonutChart from "../../../components/charts/donutChart/DonutChart";
 import PieChartComponent from "../../../components/charts/pieChart/PieChartComponent";
 import TruckIcon from "../../../assets/svgs/home/TruckIcon";
+import NewScoreCard from "./NewScoreCard";
 
 const createCustomIcon = (imgUrl) => {
   return L.divIcon({
@@ -46,8 +47,9 @@ const ProjectDetail = () => {
   });
   const [modal, setModal] = useState(false);
 
-  const editOpenModalHandler = () => setModal(true);
-  const editCloseModalHandler = () => setModal(false);
+  const editProjectModalHandler = (type) => setModal(type);
+  const completeModalHandler = (type) => setModal(type);
+  const closeModalHandler = () => setModal(false);
 
   // console.log("project", project);
   useEffect(() => {
@@ -86,8 +88,19 @@ const ProjectDetail = () => {
         <div>
           <Title title="Project Detail" />
         </div>
-        <div className="cursor-pointer" onClick={editOpenModalHandler}>
-          <EditIcon />
+        <div className="flex items-center gap-4">
+          <button
+            className="bg-primary rounded-lg py-[6px] px-4 text-base text-white"
+            onClick={() => completeModalHandler("complete")}
+          >
+            Completed
+          </button>
+          <div
+            className="cursor-pointer"
+            onClick={() => editProjectModalHandler("edit-project")}
+          >
+            <EditIcon />
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
@@ -191,13 +204,18 @@ const ProjectDetail = () => {
         </div>
         <div className="col-span-12 lg:col-span-12 border-[1px]">table</div>
       </div>
-      {modal && (
-        <Modal onClose={editCloseModalHandler}>
+      {modal === "edit-project" && (
+        <Modal title="Edit Project" onClose={closeModalHandler}>
           <EditProject
             refetch={refetch}
             selectedRow={project}
-            onClose={editCloseModalHandler}
+            onClose={closeModalHandler}
           />
+        </Modal>
+      )}
+      {modal === 'complete' && (
+        <Modal title="New Score Card" onClose={closeModalHandler} width="w-[320px] md:w-[600px] lg:w-[1000px]">
+          <NewScoreCard onClose={closeModalHandler} /> 
         </Modal>
       )}
     </div>
