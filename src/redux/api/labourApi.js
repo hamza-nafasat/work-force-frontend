@@ -51,6 +51,17 @@ const labourApis = createApi({
         method: "DELETE",
       }),
     }),
+    // get labour score card
+    // ------------
+    getLabourScoreCard: builder.query({
+      query: (time) => ({
+        url: "/labour-score-card",
+        method: "GET",
+        params: {
+          time: time,
+        },
+      }),
+    }),
   }),
 });
 
@@ -60,5 +71,6 @@ export const {
   useGetSingleLabourQuery,
   useUpdateLabourMutation,
   useDeleteLabourMutation,
+  useGetLabourScoreCardQuery,
 } = labourApis;
 export default labourApis;

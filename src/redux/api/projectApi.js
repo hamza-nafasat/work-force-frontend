@@ -51,6 +51,15 @@ const projectApis = createApi({
         method: "DELETE",
       }),
     }),
+    // add review to project
+    // --------------
+    addReviewToProject: builder.mutation({
+      query: ({ projectId, reviews }) => ({
+        url: `/add-reviews/${projectId}`,
+        method: "POST",
+        body: { reviews },
+      }),
+    }),
   }),
 });
 
@@ -60,5 +69,6 @@ export const {
   useGetSingleProjectQuery,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
+  useAddReviewToProjectMutation,
 } = projectApis;
 export default projectApis;

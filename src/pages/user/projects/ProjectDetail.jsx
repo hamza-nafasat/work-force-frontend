@@ -68,6 +68,7 @@ const ProjectDetail = () => {
         location: singleProject?.location,
         projectDetail: singleProject?.description,
         status: singleProject?.status,
+        isCompleted: singleProject?.isCompleted ? true : false,
       });
     }
   }, [data, isSuccess]);
@@ -88,7 +89,7 @@ const ProjectDetail = () => {
               className="bg-primary rounded-lg py-[6px] px-4 text-base text-white"
               onClick={() => completeModalHandler("complete")}
             >
-              Completed
+              Complete
             </button>
           )}
           <div className="cursor-pointer" onClick={() => editProjectModalHandler("edit-project")}>
@@ -182,7 +183,12 @@ const ProjectDetail = () => {
           onClose={closeModalHandler}
           width="w-[320px] md:w-[600px] lg:w-[1000px]"
         >
-          <NewScoreCard labours={project?.labours} onClose={closeModalHandler} />
+          <NewScoreCard
+            refetch={refetch}
+            projectId={project?.id}
+            labours={project?.labours}
+            onClose={closeModalHandler}
+          />
         </Modal>
       )}
     </div>

@@ -2,10 +2,38 @@
 import Button from "../../../components/shared/button/Button";
 import StarIcon from "../../../assets/svgs/projects/StarIcon";
 import { useEffect, useState } from "react";
+import { useAddReviewToProjectMutation } from "../../../redux/api/projectApi";
+import { toast } from "react-toastify";
 
-const NewScoreCard = ({ onClose, labours }) => {
+const NewScoreCard = ({ onClose, labours, projectId, refetch }) => {
   const [projectLabourReviews, setProjectLabourReviews] = useState({});
-  console.log("projectLabourReviews", projectLabourReviews);
+  const [addReviewsInProject, { isLoading }] = useAddReviewToProjectMutation();
+
+  const addReviewsHandler = async () => {
+    console.log("projectLabourReviews", projectLabourReviews);
+    // only add those reviews in modifiedReviews which have value >
+    const modifiedReviews = [];
+    for (const [labourId, review] of Object.entries(projectLabourReviews)) {
+      if (review > 0) modifiedReviews.push({ [labourId]: review });
+    }
+    console.log("ProjectModifiedReviews", modifiedReviews);
+    try {
+      if (!modifiedReviews?.length) return toast.error("Please give atleast one review");
+      if (!projectId) return toast.error("Project Id not found");
+      const response = await addReviewsInProject({
+        projectId,
+        reviews: modifiedReviews,
+      }).unwrap();
+      if (response?.success && response?.message) {
+        await refetch();
+        toast.success(response?.message);
+        onClose();
+      }
+    } catch (error) {
+      console.log("Error while adding reviews", error);
+      toast.error(error?.data?.message || "Error while adding reviews");
+    }
+  };
 
   useEffect(() => {
     if (labours) {
@@ -43,6 +71,7 @@ const NewScoreCard = ({ onClose, labours }) => {
       </div>
       <div className="flex items-center justify-end gap-4 mt-4">
         <Button
+          disabled={isLoading}
           text="Cancel"
           color="#111111b3"
           bg="#76767640"
@@ -50,7 +79,7 @@ const NewScoreCard = ({ onClose, labours }) => {
           height="h-[40px] sm:h-[50px]"
           onClick={onClose}
         />
-        <Button type="submit" text="Update" width="w-[150px]" height="h-[40px] sm:h-[50px]" />
+        <Button onClick={addReviewsHandler} text="Update" width="w-[150px]" height="h-[40px] sm:h-[50px]" />
       </div>
     </div>
   );
